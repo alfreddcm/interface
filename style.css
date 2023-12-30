@@ -1,0 +1,219 @@
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: url(bg.png);
+  font-family: "Lato", sans-serif;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+
+.landing-page {
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.landing-page:before {
+  content: '';
+  top: 0;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+  
+  .sidebar {
+    margin-top: 50px;
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #253855b7;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 0px;
+  }
+
+  .sidebar a {
+    padding: 11px 8px 8px 15px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #ffffff;
+    display: block;
+    transition: 0.3s;
+    white-space: nowrap;
+  }
+  
+  #mySidebar img {
+    vertical-align: middle;
+    margin-right: 10px;
+    height: 20px;
+    width: 20px;
+  }
+
+  
+  .sidebar a:hover {
+    color: #f1f1f1;
+  }
+  
+  .sidebar .openbtn {
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #111;
+    color: white;
+    padding: 10px 15px ;
+    border: none;
+  }
+  
+  .sidebar a:hover {
+    background-color: #6262629d;
+  }
+
+  header{
+    z-index: 1;
+    background-color: #3333336f;
+    color: white;
+    position: fixed;
+    width: 100%;
+    display: inline;
+    padding: 1px 8px 8px 15px;
+    margin-bottom: 10px;
+    height: 50px;
+  }
+  header h4 {
+    font-size: 25px;
+    display: inline;
+  }
+  header img {
+    display: inline;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    height: 20px;
+    width: 20px;
+  }
+  header .logo{
+    height: 30px;
+    width: 30px;
+  }
+  
+  #main{
+    transition: margin-left .5s;
+    padding: 50px 16px 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 200px;
+  }
+ .card{
+    filter: drop-shadow(0 0 0.2rem black);
+  }
+
+.dropdown .btn, p{
+  color: #ffffff;
+  display: inline;
+}
+
+.dropdown .p{
+  outline: 1px solid rgb(255, 255, 255);
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+}
+
+.dropdown .p:hover{
+outline: 9px solid rgba(255, 255, 255, 0.279);
+transition: outline 1s ease;
+}
+
+
+
+.dropdown-menu p{
+  color: #111;
+  line-height: 1px;
+  font-size: 14px;
+  padding-left: 13px;
+  padding-right: 13px;
+  display: block;
+}
+ul{
+  margin-top: 12px;
+
+}
+.dropdown-item img{
+height: 20px;
+width: 20px;
+margin-right: 5px;
+} 
+  
+  
+
+  @media screen and (max-width: 600px) {
+    .sidebar a {
+      font-size: 18px;}
+    .sidebar {
+      width: 50px;
+    }
+
+  
+    #main {
+      margin-left: 50px;
+    }
+
+    .container-lg {
+      width: 100%; 
+      margin: auto;
+      height: fit-content;
+  }
+
+}
+
+/* hmbi */
+
+.hamburger {
+  cursor: pointer;
+  padding: -115px 15px ;
+}
+
+.hamburger input {
+  display: none;
+}
+
+.hamburger svg {
+  /* The size of the SVG defines the overall size */
+  height: 2em;
+  /* Define the transition for transforming the SVG */
+  transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.line {
+  fill: none;
+  stroke: white;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+  /* Define the transition for transforming the Stroke */
+  transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1),
+              stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.line-top-bottom {
+  stroke-dasharray: 12 63;
+}
+
+.hamburger input:checked + svg {
+  transform: rotate(-45deg);
+}
+
+.hamburger input:checked + svg .line-top-bottom {
+  stroke-dasharray: 20 300;
+  stroke-dashoffset: -32.42;
+}

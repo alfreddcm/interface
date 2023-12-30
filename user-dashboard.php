@@ -1,5 +1,31 @@
 <?php
-include("php-userinfo.php");
+include("php/php-userinfo.php");
+function time_elapsed_string($datetime)
+{
+    $now = new DateTime;
+    $ago = new DateTime($datetime);
+    $diff = $now->diff($ago);
+
+    $diff_str = array(
+        'y' => 'year',
+        'm' => 'month',
+        'd' => 'day',
+        'h' => 'hour',
+        'i' => 'minute',
+        's' => 'second',
+    );
+
+    foreach ($diff_str as $key => &$value) {
+        if ($diff->$key) {
+            $value = $diff->$key . ' ' . $value . ($diff->$key > 1 ? 's' : '');
+        } else {
+            unset($diff_str[$key]);
+        }
+    }
+
+    return $diff_str ? implode(', ', $diff_str) . ' ago' : 'just now';
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -36,7 +62,7 @@ include("php-userinfo.php");
 
         <a href="User-dashboard.php" style="background-color: white; "><img src="icons/dashboard-icon.png" height="30px" width="30px" style="filter:invert(100);"><b style="color:black;"> Dashboard</b></a>
         <a href="user-profile.php"><img src="icons/profile-icon.png" height="30px" width="30px"> Profile</a>
-        <a href="php-logout.php"><img src="icons/logout-icon.png" height="30px" width="30px"> Log out</a>
+        <a href="php/php-logout.php"><img src="icons/logout-icon.png" height="30px" width="30px"> Log out</a>
     </div>
 
 
@@ -93,14 +119,25 @@ include("php-userinfo.php");
                                     <center>
                                         <h1 class="card-text loader">
                                             <h5>Access Count Today</h5>
-                                            <b class="number"><?php
-                                                                $sqlacc = mysqli_query($conn, "SELECT * from Log_history WHERE locker_id = " . $locker_id);
-                                                                $count = mysqli_num_rows($sqlacc);
-                                                                echo $count;
-                                                                ?></b>
+                                            <b class="number">
+                                                <?php
+                                                $today_start = date("Y-m-d 00:00:00");
+                                                $today_end = date("Y-m-d 23:59:59");
+                                                $sqlacc = mysqli_query($conn, "SELECT * FROM log_history WHERE locker_id = $locker_id AND date_time BETWEEN '$today_start' AND '$today_end'");
+                                                $count = mysqli_num_rows($sqlacc);
+                                                echo $count;
+                                                ?>
+                                            </b>
                                         </h1>
-                                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                        <p class="card-text"><small class="text-muted">
+                                                <?php
+                                                $last_access = mysqli_fetch_assoc(mysqli_query($conn, "SELECT MAX(date_time) AS last_access FROM log_history WHERE locker_id = $locker_id"));
+                                                echo "Last updated " . time_elapsed_string($last_access['last_access']) . " ago";
+                                                ?>
+                                            </small></p>
                                     </center>
+
+
                                 </div>
                             </div>
                         </div>
@@ -109,42 +146,42 @@ include("php-userinfo.php");
             </div>
 
             <div class="row justify-content-center align-items-center g-2">
-                <div class="col-lg-6 scroll" >
+                <div class="col-lg-6 scroll">
                     <div class="card text-start">
                         <div class="card-body">
                             <h6><img src="icons/project-icon.png" height="20px"> Activities</h6>
                             <hr>
                             <p class="card-text">
                             <table class="table ">
-                               
-                                    <?php
-                                   $showhistory = mysqli_query($conn, "SELECT * FROM log_history WHERE locker_id = $locker_id ORDER BY date_time DESC");
 
-                                    $currentDay = '';
-                                    if ($showhistory->num_rows > 0) {
-                                        while ($row = $showhistory->fetch_assoc()) {
-                                            $formattedDate = date('F j, Y', strtotime($row["date_time"])); // Format "December 4th 2023"
-                                            $formattedTime = date('h:i A', strtotime($row["date_time"])); // Format "12:00 PM"
-                                            
-                                            $dayText = '';
-                                            if (date('Y-m-d') == date('Y-m-d', strtotime($row["date_time"]))) {
-                                                $dayText = 'Today';
-                                            } elseif (date('Y-m-d', strtotime('yesterday')) == date('Y-m-d', strtotime($row["date_time"]))) {
-                                                $dayText = 'Yesterday';
-                                            }
-                            
-                                            echo "<tr>";
-                                            echo "<td scope='row'>$dayText</td>";
-                                            echo "<td>" . $formattedDate . "</td>";
-                                            echo "<td>" . $formattedTime . "</td>";
-                                            echo "<td>" . $row['access']. "</td>";
+                                <?php
+                                $showhistory = mysqli_query($conn, "SELECT * FROM log_history WHERE locker_id = $locker_id ORDER BY date_time DESC");
 
-                                            echo "</tr>";
+                                $currentDay = '';
+                                if ($showhistory->num_rows > 0) {
+                                    while ($row = $showhistory->fetch_assoc()) {
+                                        $formattedDate = date('F j, Y', strtotime($row["date_time"])); // Format "December 4th 2023"
+                                        $formattedTime = date('h:i A', strtotime($row["date_time"])); // Format "12:00 PM"
+
+                                        $dayText = '';
+                                        if (date('Y-m-d') == date('Y-m-d', strtotime($row["date_time"]))) {
+                                            $dayText = 'Today';
+                                        } elseif (date('Y-m-d', strtotime('yesterday')) == date('Y-m-d', strtotime($row["date_time"]))) {
+                                            $dayText = 'Yesterday';
                                         }
-                                    } else {
-                                        echo "<tr><td colspan='3'> No data found</td></tr>";
+
+                                        echo "<tr>";
+                                        echo "<td scope='row'>$dayText</td>";
+                                        echo "<td>" . $formattedDate . "</td>";
+                                        echo "<td>" . $formattedTime . "</td>";
+                                        echo "<td>" . $row['access'] . "</td>";
+
+                                        echo "</tr>";
                                     }
-                                    ?>
+                                } else {
+                                    echo "<tr><td colspan='3'> No data found</td></tr>";
+                                }
+                                ?>
                                 </tbody>
                             </table>
 
@@ -156,9 +193,8 @@ include("php-userinfo.php");
                 <div class="col-lg-6 scroll">
                     <div class="card">
                         <div class="card-body">
-                            <h6><img src="icons/project-icon.png" height="20px"> To does</h6>
+                            <h6><img src="icons/project-icon.png" height="20px"> To do</h6>
                             <hr>
-
                             <div class="add-items d-flex">
                                 <input type="text" class="form-control todo-list-input" placeholder="What do you need to do today?">
                                 <button class="add btn btn-gradient-primary font-weight-bold todo-list-add-btn" id="add-task">Add</button>
@@ -218,13 +254,21 @@ include("php-userinfo.php");
 
 
         <style>
-            .list-wrapper input[type=checkbox]{
+            .scroll{
+                height: auto;
+            }
+            .scroll .card{
+                height: 300px;
+            }
+            .list-wrapper input[type=checkbox] {
                 margin-right: 4px;
             }
-            .col-lg-6 .card{
+
+            .col-lg-6 .card {
                 max-height: 300px;
-                overflow-y: auto; 
-                       }
+                overflow-y: auto;
+            }
+
             .top .card {
                 height: 200px;
             }
@@ -253,10 +297,8 @@ include("php-userinfo.php");
 
             .gradient-custom {
                 background: #f6d365;
-                /* Chrome 10-25, Safari 5.1-6 */
                 background: -webkit-linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1));
 
-                /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
                 background: linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1))
             }
 
