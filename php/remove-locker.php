@@ -15,14 +15,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             if ($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
-                $userId = $row['id'];
+                $lockerid = $row['id'];
 
                 $updateStmt = $conn->prepare("UPDATE user_data SET locker_id = null WHERE locker_id = ?");
-                $updateStmt->bind_param("i", $userId);
+                $updateStmt->bind_param("i", $lockerid);
                 $updateStmt->execute();
 
                 $deleteStmt = $conn->prepare("DELETE FROM locker_data WHERE id = ?");
-                $deleteStmt->bind_param("s", $id);
+                $deleteStmt->bind_param("s", $lockerid);
                 $deleteStmt->execute();
 
                 echo "User with uid $uid has been deleted and locker_data updated.";

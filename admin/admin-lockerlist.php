@@ -116,7 +116,7 @@ if (!isset($_SESSION['email'])) {
                         Option
                       </button>
                       <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Change User</a></li>
+                        <li><a class="dropdown-item" href="../php/locker-changceuser.php?id=<?php echo $row['id']?>">Change User</a></li>
                         <li><a class="dropdown-item" href="#">Change Locker Id</a></li>
                       </ul>
                     </div>

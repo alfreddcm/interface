@@ -14,9 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     } else {
         $email = $_POST["email"];
-        $checkemail = mysqli_query($conn, "SELECT * FROM requestlist WHERE email = '$email' ");
-
-        if (mysqli_num_rows($checkemail) > 0){
+       
             $password = $_POST["psw"];
             $idno = $_POST["idno"];
             $mi = $_POST["mi"];
@@ -47,7 +45,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if ($updatelocker) {
                         echo "<script>alert('$email Account added! You can now log in.'); 
                         </script>";
-                        $deleteEmail = mysqli_query($conn, "DELETE FROM emails WHERE email = '$email'");
                     } else {
                         echo "<script>alert('ID number is already in use!'); </script>";
                     }
@@ -55,10 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     echo "<script>alert('Error executing the query: " . mysqli_error($conn) . "')</script>";
                 }
             }
-        } else {
-            echo "<script>alert(' Email should be approved by the admin before creating account.'); 
-                        </script>";
-        }
+      
     }
 }
 ?>
