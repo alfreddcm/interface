@@ -1,4 +1,4 @@
-<?phpaa
+<?php
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 include("../user-connection.php");
@@ -6,10 +6,9 @@ include("../user-connection.php");
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $uid = isset($_POST['uid']) ? $_POST['uid'] : null;
     
-
+// paano
     if (!empty($uid)) {
         try {
-
             $stmt = $conn->prepare("SELECT * FROM locker_data WHERE uid = ?");
             $stmt->bind_param("s", $uid);
             $stmt->execute();
