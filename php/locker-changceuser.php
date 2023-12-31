@@ -1,4 +1,5 @@
 <?php
+
 include("../user-connection.php");
 include('../php/php-admininfo.php');
 ini_set('display_errors', 1);
@@ -17,9 +18,10 @@ if (isset($_GET['id'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $selectedUserId = $_POST['user'];
+    $lid=$_POST['lid'];
 
     // Check if the locker is already assigned to a user
-    $checkQuery = "SELECT user_id FROM locker_data WHERE id = $lockerid";
+    $checkQuery = "SELECT user_id FROM locker_data WHERE id = $lid";
     $checkResult = mysqli_query($conn, $checkQuery);
 
     if ($checkResult) {
@@ -27,27 +29,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $existingUserId = $row['user_id'];
 
         if ($selectedUserId === '0') {
-            $updateQuery = "UPDATE locker_data SET user_id = null WHERE id = $lockerid";
+            $updateQuery = "UPDATE locker_data SET user_id = null WHERE id = $lid";
         } elseif ($existingUserId === null) {
-            $updateQuery = "UPDATE locker_data SET user_id = $selectedUserId WHERE id = $lockerid";
+            $updateQuery = "UPDATE locker_data SET user_id = $selectedUserId WHERE id = $lid";
         } else {
             // Swap locker IDs
-            $swapQuery1 = "UPDATE locker_data SET user_id = $existingUserId WHERE user_id = $selectedUserId";
-            $swapQuery2 = "UPDATE locker_data SET user_id = $selectedUserId WHERE id = $lockerid";
+            $swapQuery = "
+    UPDATE locker_data 
+    SET user_id = 
+        CASE 
+            WHEN user_id = $selectedUserId THEN $existingUserId
+            WHEN id = $lid THEN $selectedUserId
+            ELSE user_id 
+        END;
 
-            $swapQuery3 = "UPDATE user_data SET locker_id = $existingUserId WHERE locker_id = $selectedUserId";
-            $swapQuery4 = "UPDATE user_data SET locker_data = $selectedUserId WHERE locker_id = $lockerid";
+    UPDATE user_data 
+    SET locker_id = 
+        CASE 
+            WHEN locker_id = $selectedUserId THEN $existingUserId
+            WHEN locker_id = $lid THEN $selectedUserId
+            ELSE locker_id 
+        END;
+    
+    UPDATE user_data 
+    SET locker_id = $selectedUserId 
+    WHERE locker_id = $existingUserId;
+";
 
-            $updateResult1 = mysqli_query($conn, $swapQuery1);
-            $updateResult2 = mysqli_query($conn, $swapQuery2);
-            $updateResult3 = mysqli_query($conn, $swapQuery3);
-            $updateResult4 = mysqli_query($conn, $swapQuery4);
+$multiQueryResult = mysqli_multi_query($conn, $swapQuery);
 
-            if (!$updateResult1 || !$updateResult2 || !$updateResult3 || !$updateResult4) {
-                echo "Error updating database: " . mysqli_error($conn);
-                
-                exit();
-            }
+if (!$multiQueryResult) {
+    echo "Error updating database: " . mysqli_error($conn);
+    exit();
+}
+
         }
 
         echo "updated";
@@ -156,6 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
                         ?>
                     </select>
+                    <input hidden type="text" value="<?php echo $lockerid; ?>" name="lid" id="lid">
                 </form>
                 <a name="" id="" class="btn btn-primary" href="#" role="button">Return</a>
                 <button id="submitBtn" class="btn btn-success" type="button">Submit</button>
@@ -170,14 +186,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $(document).ready(function() {
             function submitForm() {
                 var selectedUserId = $("#user").val();
+                var lid = $("#lid").val();
+
 
                 $.ajax({
                     type: "POST",
                     url: "<?php echo $_SERVER['PHP_SELF']; ?>",
                     data: {
-                        user: selectedUserId
+                        user: selectedUserId,
+                        lid: lid, 
                     },
                     success: function(response) {
+                        console.log(response);
+
                         Swal.fire({
                             title: "Success",
                             text: "Database updated successfully",
@@ -222,3 +243,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </body>
 
 </html>
+
+
+
+
+
+
