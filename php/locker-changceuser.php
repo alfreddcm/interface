@@ -18,7 +18,7 @@ if (isset($_GET['id'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $selectedUserId = $_POST['user'];
-    $lid=$_POST['lid'];
+    $lid = $_POST['lid'];
 
     // Check if the locker is already assigned to a user
     $checkQuery = "SELECT user_id FROM locker_data WHERE id = $lid";
@@ -28,51 +28,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $row = mysqli_fetch_assoc($checkResult);
         $existingUserId = $row['user_id'];
 
-        if ($selectedUserId === '0') {
-            $updateQuery = "UPDATE locker_data SET user_id = null WHERE id = $lid";
-        } elseif ($existingUserId === null) {
-            $updateQuery = "UPDATE locker_data SET user_id = $selectedUserId WHERE id = $lid";
-        } else {
-            // Swap locker IDs
-            $swapQuery = "
-    UPDATE locker_data 
-    SET user_id = 
-        CASE 
-            WHEN user_id = $selectedUserId THEN $existingUserId
-            WHEN id = $lid THEN $selectedUserId
-            ELSE user_id 
-        END;
+            $swapQuery1=mysqli_query($conn,"UPDATE locker_data 
 
-    UPDATE user_data 
-    SET locker_id = 
-        CASE 
-            WHEN locker_id = $selectedUserId THEN $existingUserId
-            WHEN locker_id = $lid THEN $selectedUserId
-            ELSE locker_id 
-        END;
-    
-    UPDATE user_data 
-    SET locker_id = $selectedUserId 
-    WHERE locker_id = $existingUserId;
-";
+            ");
 
-$multiQueryResult = mysqli_multi_query($conn, $swapQuery);
 
-if (!$multiQueryResult) {
-    echo "Error updating database: " . mysqli_error($conn);
-    exit();
-}
 
+            $result1 = mysqli_query($conn, $swapQuery1);
+            $result2 = mysqli_query($conn, $swapQuery2);
+
+            // Commit the transaction if both updates were successful
+            if ($result1 && $result2) {
+                mysqli_commit($conn);
+                echo "Update successful!";
+            } else {
+                // Rollback the transaction if there was an error
+                mysqli_rollback($conn);
+                echo "Error updating database: " . mysqli_error($conn);
+            }
+
+            // Close the connection
+            mysqli_close($conn);
+
+            exit(); // Terminate script after processing the form
         }
 
-        echo "updated";
+        $updateResult = mysqli_query($conn, $updateQuery);
+
+        if (!$updateResult) {
+            echo "Error updating database: " . mysqli_error($conn);
+            exit();
+        }
+
+        echo "Updated";
     } else {
         // Send an error message to the client
     }
 
+    // Close the connection
+    mysqli_close($conn);
+
     exit(); // Terminate script after processing the form
 }
-
 
 ?>
 
@@ -139,7 +136,7 @@ if (!$multiQueryResult) {
                 <h5 class="card-title">
                     <?php
                     echo "Locker ID: $lockerid";
-                    $seluser = mysqli_query($conn, "SELECT * FROM locker_data AS ld RIGHT JOIN user_data AS ud ON ld.id = ud.locker_id WHERE ld.id = $lockerid");
+                    $seluser = mysqli_query($conn, "SELECT * FROM locker_data AS ld inner JOIN user_data AS ud ON ld.id = ud.locker_id WHERE ld.id = $lockerid");
                     if ($seluser) {
                         $row = mysqli_fetch_assoc($seluser);
                     } else {
@@ -149,13 +146,23 @@ if (!$multiQueryResult) {
                 <p class="card-text text-black ">
                 <table>
                     <tr>
+
                         <td class="text-end">Current User:</td>
-                        <td class="text-start"><?php echo $row['fname'] . " " . $row['mi'] . ". " . $row['lname']; ?></td>
+                        <?php
+                        if ($row['user_id'] == null) {
+                            echo  '<td class="text-start"> No user </td>';
+                        } else {
+                        ?>
+                            <td class="text-start"><?php echo $row['fname'] . " " . $row['mi'] . ". " . $row['lname']; ?></td>
+                        <?php
+                        }
+                        ?>
                     </tr>
                 </table>
                 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="mb-3">
                     <select class="form-select" id="user" name="user" required>
                         <?php
+
                         $sql = "SELECT * FROM user_data";
                         $result = $conn->query($sql);
 
@@ -194,7 +201,7 @@ if (!$multiQueryResult) {
                     url: "<?php echo $_SERVER['PHP_SELF']; ?>",
                     data: {
                         user: selectedUserId,
-                        lid: lid, 
+                        lid: lid,
                     },
                     success: function(response) {
                         console.log(response);
@@ -243,9 +250,3 @@ if (!$multiQueryResult) {
 </body>
 
 </html>
-
-
-
-
-
-
