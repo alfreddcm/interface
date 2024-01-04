@@ -88,8 +88,10 @@ if (!isset($_SESSION['email'])) {
                     ?>
 
                         <div class="col mb-5 mt-4">
-                            <div class="card ">
-                                <?php echo "<b class='num'>{$user['locker_id']}</b><br>"; ?>
+                            <div class="card">
+                                <?php        
+                                 echo "<span>Locker</span>"; 
+                                echo "<b class='num'>{$user['locker_id']}</b><br>"; ?>
                                 <div class="card-body text-center text">
                                     <img src="../uploads/<?php echo $user['user_profile'] ?>" alt="user" class="img-fluid img  img-thumbnail rounded-circle border-0 mb-3">
                                     <h5 class="card-title"> <?php echo "{$user['fname']} {$user['mi']}. {$user['lname']}"; ?> </h5>
@@ -135,75 +137,72 @@ if (!isset($_SESSION['email'])) {
                     ?>
                 </div>
             </div>
+
             <div class="row justify-content-center align-items-center g-2">
-                <h3 class="mb-2">Unsigned Users</h3>
-                <?php
-                $fetchuser = mysqli_query($conn, "SELECT * FROM user_data where locker_id is null ORDER BY id");
-                while ($user = mysqli_fetch_assoc($fetchuser)) {
-                    $userid = $user['id'];
 
-                    $fetchlastaccess = mysqli_query($conn, "SELECT MAX(date_time) AS last_access FROM Log_history WHERE locker_id = '{$user['locker_id']}'");
-                    $lastAccessResult = mysqli_fetch_assoc($fetchlastaccess);
-                    $lastAccess = $lastAccessResult['last_access'];
+    <?php
+    $fetchuser = mysqli_query($conn, "SELECT * FROM user_data where locker_id is null ORDER BY id");
+    while ($user = mysqli_fetch_assoc($fetchuser)) {
+        $userid = $user['id'];
 
-                    $courseid = $user['course_id'];
-                    $sqlcourse = mysqli_query($conn, "SELECT program FROM course WHERE id = $courseid ");
-                    $course = mysqli_fetch_assoc($sqlcourse);
-                ?>
+        $fetchlastaccess = mysqli_query($conn, "SELECT MAX(date_time) AS last_access FROM Log_history WHERE locker_id = '{$user['locker_id']}'");
+        $lastAccessResult = mysqli_fetch_assoc($fetchlastaccess);
+        $lastAccess = $lastAccessResult['last_access'];
 
-                    <div class="col mb-5 mt-4">
-                        <div class="card">
-                            <?php echo "<b class='num'>{$user['locker_id']}</b><br>"; ?>
-                            <div class="card-body text-center text">
-                                <img src="../uploads/<?php echo $user['user_profile'] ?>" alt="User" class="img-fluid img img-thumbnail rounded-circle border-0 mb-3">
-                                <h5 class="card-title"> <?php echo "{$user['fname']} {$user['mi']}. {$user['lname']}"; ?> </h5>
-                                <p class="text-secondary"> <?php echo $user['email'] ?> </p><br>
-                                <p class="text-muted font-size-sm"><?php echo $user['idno'] ?></p><br>
-                                <p class="text-muted font-size-sm"><?php echo  $user['yrsec'] ?></p>
-                                <p class="text-muted font-size-sm"><?php echo  $course['program'] ?></p><br>
+        $courseid = $user['course_id'];
+        $sqlcourse = mysqli_query($conn, "SELECT program FROM course WHERE id = $courseid ");
+        $course = mysqli_fetch_assoc($sqlcourse);
+    ?>
+               <h3 class="mb-2">Unsigned Users</h3>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 gutters-sm ">
+        <div class="col mb-5 mt-4">
+            <div class="card">
+                <?php echo "<b class='num'>{$user['locker_id']}</b><br>"; ?>
+                <div class="card-body text-center text">
+                    <img src="../uploads/<?php echo $user['user_profile'] ?>" alt="User" class="img-fluid img img-thumbnail rounded-circle border-0 mb-3">
+                    <h5 class="card-title"><?php echo "{$user['fname']} {$user['mi']}. {$user['lname']}"; ?></h5>
+                    <p class="text-secondary"><?php echo $user['email'] ?></p><br>
+                    <p class="text-muted font-size-sm"><?php echo $user['idno'] ?></p><br>
+                    <p class="text-muted font-size-sm"><?php echo  $user['yrsec'] ?></p>
+                    <p class="text-muted font-size-sm"><?php echo  $course['program'] ?></p><br>
+                    <p class="text-muted font-size-sm"><?php echo "Last Access: " . ($lastAccess ? date('F j, Y g:i a', strtotime($lastAccess)) : 'Never') ?></p>
+                </div>
 
-                                <p class="text-muted font-size-sm"><?php echo "Last Access: " . ($lastAccess ? date('F j, Y g:i a', strtotime($lastAccess)) : 'Never') ?></p>
-                            </div>
-
-                            <div class="card-footer">
-                                <div class="btn-group">
-
-                                    <button type="button" class="btn btn-success dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img src="../icons/edit.png" style="filter:invert(100);" alt="" height="20px"> Manage
-                                    </button>
-
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a name="editbutton" id="editbutton" class="editbutton dropdown-item" data-email="<?php echo $user['email'] ?>" role="button">Update User Info</a>
-                                        </li>
-                                        <li>
-                                            <a name="changelocker" id="changelocker" class="changelocker dropdown-item" href="admin-lockerlist.php" role="button">Set Locker No</a>
-                                        </li>
-                                        <li>
-                                            <a name="updatepass" id="updatepass" class="updatepass dropdown-item" data-email="<?php echo $user['email'] ?>" role="button">Reset Password</a>
-                                        </li>
-                                    </ul>
-                                    <a name="removeButton" id="removeButton" class="remove-button" data-email="<?php echo $user['email'] ?>" role="button">
-                                        <button type="button" class="btn btn-danger " aria-expanded="false">
-                                            Remove
-                                        </button>
-                                    </a>
-                                </div>
-                            </div>
-                            
-                        </div>
-
+                <div class="card-footer">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="../icons/edit.png" style="filter:invert(100);" alt="" height="20px"> Manage
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a name="editbutton" id="editbutton" class="editbutton dropdown-item" data-email="<?php echo $user['email'] ?>" role="button">Update User Info</a>
+                            </li>
+                            <li>
+                                <a name="changelocker" id="changelocker" class="changelocker dropdown-item" href="admin-lockerlist.php" role="button">Set Locker No</a>
+                            </li>
+                            <li>
+                                <a name="updatepass" id="updatepass" class="updatepass dropdown-item" data-email="<?php echo $user['email'] ?>" role="button">Reset Password</a>
+                            </li>
+                        </ul>
+                        <a name="removeButton" id="removeButton" class="remove-button" data-email="<?php echo $user['email'] ?>" role="button">
+                            <button type="button" class="btn btn-danger" aria-expanded="false">
+                                Remove
+                            </button>
+                        </a>
                     </div>
-                <?php
-                }
-                ?>
+                </div>
             </div>
-        </div>
+        </div><?php
+    }
+    ?>
+            </div>
+            </div>
+</div>
 
-        <div class="form-group" style="margin-top: 12%; float:right; position: relative; ">
+        <div class="form-group" style="margin-top: 12%; float:right; position: relative; z-index:2;;">
             <div class="col ">
                 <a href="../php/add-user.php" class="text-center ">
-                    <button class="btn btn-light addb"><img src="../icons/male-add-icon.png" alt=""> Add user</button>
+                    <button class="btn btn-light addb"><img src="../icons/male-add-icon.png" alt="">Add user</button>
                 </a>
             </div>
         </div>
@@ -312,18 +311,9 @@ if (!isset($_SESSION['email'])) {
         });
     </script>
     <style>
-        .card {
-            z-index: 999;
-            /* Adjust the value as needed */
-        }
-
-        .dropdown-menu {
-            z-index: 1000;
-            /* Adjust the value as needed */
-        }
-
         .container .card {
             min-height: 300px;
+
         }
 
         .img {
@@ -371,6 +361,15 @@ if (!isset($_SESSION['email'])) {
             font-size: 70px;
             text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
         }
+        span {
+            /* outline-color: 1px solid black; */
+            position: absolute;
+            text-align: left;
+            right: 15px;
+            color: black;
+            font-size: 20px;
+            /* text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; */
+        }
 
         .dropdown .btn {
             color: #000;
@@ -395,6 +394,7 @@ if (!isset($_SESSION['email'])) {
             background-clip: border-box;
             border: 0 solid rgba(0, 0, 0, .125);
             border-radius: .25rem;
+            width: 280px;
         }
 
         .card-body {

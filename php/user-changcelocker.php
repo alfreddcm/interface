@@ -13,8 +13,17 @@ if (!isset($_SESSION['email'])) {
 }
 
 if (isset($_GET['id'])) {
-    $lockerid = urldecode($_GET['id']);
+    $userid = urldecode($_GET['id']);
+    $fetch=mysqli_query($conn,"SELECT * from user_data where id = $userid");
+
+    $fe = mysqli_fetch_assoc($fetch);
+    $f = $fe['fname'];
+    $mi = $fe['mi'];    
+    $ln = $fe['lname'];
+    
+    $name = $f . " " . ($mi ? $mi . ". " : "") . $ln;
 }
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $selectedUserId = $_POST['user'];
     $lid = $_POST['lid'];
@@ -133,8 +142,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="card-body">
                 <h5 class="card-title">
                     <?php
-                    echo "Locker ID: $lockerid";
-                    $seluser = mysqli_query($conn, "SELECT * FROM locker_data AS ld left JOIN user_data AS ud ON ld.id = ud.locker_id WHERE ld.id = $lockerid");
+                    echo "User: $name";
+                    $seluser = mysqli_query($conn, "SELECT * FROM locker_data AS ld left JOIN user_data AS ud ON ld.id = ud.locker_id WHERE ud.id = $userid");
                     if ($seluser) {
                         $row = mysqli_fetch_assoc($seluser);
                     } else {
@@ -145,13 +154,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <table>
                     <tr>
 
-                        <td class="text-end">Current User:</td>
+                        <td class="text-end">Current Locker : </td>
                         <?php
                         if (!$seluser) {
                             echo  '<td class="text-start"> No user </td>';
                         } else {
                         ?>
-                            <td class="text-start"><?php echo $row['fname'] . " " . $row['mi'] . ". " . $row['lname']." " .$row['idno']; ?></td>
+                            <td class="text-start"><?php echo $row['locker_id'] ?></td>
                         <?php
                         }
                         ?>
@@ -162,7 +171,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <select class="form-select" id="user" name="user" required>
                         <?php
 
-                        $sql = "SELECT * FROM user_data";
+                    $sql = "SELECT ld.id, ud.fname, ud.mi, ud.lname 
+                            FROM locker_data as ld
+                            INNER JOIN user_data as ud ON ld.user_id = ud.id where ld.id is not null";
+
                         $result = $conn->query($sql);
 
                         if ($result->num_rows > 0) {
@@ -171,16 +183,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             while ($row = $result->fetch_assoc()) {
                                 $selected = ($selectedUserId == $row["id"]) ? 'selected' : '';
                                 $optionValue = htmlspecialchars($row["id"]);
-                                $fullName = htmlspecialchars($row["fname"] . " " . $row["mi"] . ". " . $row["lname"]);
+                                $user = htmlspecialchars($row["fname"] . " " . $row["mi"] . ". " . $row["lname"]);
 
-                                echo '<option value="' . $optionValue . '" ' . $selected . '>' . $optionValue . ". " . $fullName ." " .$row['idno'].'</option>';
+                                echo '<option value="' . $optionValue . '" ' . $selected . '>' ."Locker " . $row["id"] ." User: " .$user.'</option>';
                             }
                         } else {
-                            echo '<option value="" disabled >No User data found</option>';
+                            echo '<option value="" disabled >No locker data found</option>';
                         }
                         ?>
                     </select>
-                    <input hidden type="text" value="<?php echo $lockerid; ?>" name="lid" id="lid">
+                    <input hidden type="text" value="<?php echo $userid; ?>" name="lid" id="lid">
                 </form>
                 <a name="" id="" class="btn btn-primary" href="../admin/admin-lockerlist.php" role="button">Return</a>
                 <button id="submitBtn" class="btn btn-success" type="button">Submit</button>

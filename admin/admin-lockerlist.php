@@ -77,7 +77,6 @@ if (!isset($_SESSION['email'])) {
     <div class="container">
       <div class="row">
         <h3 class="mb-2">Locker List</h3>
-
         <?php
         // Display each row in Bootstrap cards
         while ($row = $result->fetch_assoc()) {
@@ -89,7 +88,9 @@ if (!isset($_SESSION['email'])) {
                 <div class="row justify-content-center align-items-center g-1">
                   <div class="col-md-4 text-center">
                     <img class="img" src="../icons/locker-icon.png" height="100px">
-                    <?php echo "<b class='num'>{$row['locker_id']}</b><br>"; ?>
+                    <?php 
+
+                    echo "<b class='num'>{$row['locker_id']}</b><br>"; ?>
                   </div>
 
                   <div class="col-md-8">
