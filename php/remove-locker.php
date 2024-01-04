@@ -19,14 +19,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $updateStmt = $conn->prepare("UPDATE user_data SET locker_id = null WHERE locker_id = ?");
                 $updateStmt->bind_param("i", $lockerid);
-                $updateStmt->execute();
-
-                $deleteStmt = $conn->prepare("DELETE FROM locker_data WHERE id = ?");
+                if(  $updateStmt->execute()){
+                   $deleteStmt = $conn->prepare("DELETE FROM locker_data WHERE id = ?");
                 $deleteStmt->bind_param("s", $lockerid);
                 $deleteStmt->execute();
 
                 $resetAutoIncrement = "ALTER TABLE locker_data AUTO_INCREMENT = 1";
-                $conn->query($resetAutoIncrement);
+                $conn->query($resetAutoIncrement); 
+                }
+
+                
                 
                 echo "User with uid $uid has been deleted and locker_data updated.";
             } else {

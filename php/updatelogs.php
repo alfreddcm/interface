@@ -17,7 +17,7 @@ require '../user-connection.php';
 
 <body>
   <main>
-    <div style="height: 200px; overflow: auto;">
+    <div style="height: 200px; overflow: auto; ">
       <table class="table table-striped" border="1px" style="border-collapse: collapse; width: 100%;">
         <thead class="thead-dark" style="position: sticky; top: 0;">
           <tr>
@@ -30,7 +30,7 @@ require '../user-connection.php';
             <th>Action</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody style="font-size: 13px;">
           <?php
           $filterDate = isset($_POST['filterDate']) ? $_POST['filterDate'] : null;
           $query = "SELECT *
@@ -60,7 +60,7 @@ require '../user-connection.php';
 
               echo '<td>' . $row['idno'] . '</td>';
               echo '<td>' . $row['fname'] . ' ' . $row['mi'] . ' ' . $row['lname'] . '</td>';
-              echo '<td>' . date('M d y | h:i A', strtotime($row['date_time'])) . '</td>';
+              echo '<td>' . date(' h:i A', strtotime($row['date_time'])) . '</td>';
               echo '<td>' . $row['access'] . '</td>';
               echo '<td>' . $row['action'] . '</td>';
               echo '</tr>';

@@ -333,7 +333,6 @@
        position: absolute;
        width: fit-content;
      }
-
      .scroll .card {
        height: 250px;
      }

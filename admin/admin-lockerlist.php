@@ -21,8 +21,7 @@ if (!isset($_SESSION['email'])) {
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="../style.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
   <link rel="stylesheet" href="../sweet/sweetalert2.css" class="rel">
   <script src="../sweet/jquery-1.10.2.min.js"></script>
   <script src="../sweet/sweetalert2.all.min.js"></script>
@@ -70,7 +69,7 @@ if (!isset($_SESSION['email'])) {
   <div id="main">
     <!--  -->
     <?php
-    $sql = "SELECT * FROM locker_data as ld RIGHT JOIN user_data as ud ON ld.id = ud.locker_id WHERE ud.locker_id IS NOT NULL";
+    $sql = "SELECT * FROM locker_data as ld RIGHT JOIN user_data as ud ON ld.id = ud.locker_id WHERE ud.locker_id IS NOT NULL order by ud.id desc";
     $result = $conn->query($sql);
 
     ?>
@@ -90,16 +89,16 @@ if (!isset($_SESSION['email'])) {
                 <div class="row justify-content-center align-items-center g-1">
                   <div class="col-md-4 text-center">
                     <img class="img" src="../icons/locker-icon.png" height="100px">
-                    <?php echo "<b class='num'>{$row['id']}</b><br>"; ?>
+                    <?php echo "<b class='num'>{$row['locker_id']}</b><br>"; ?>
                   </div>
-                  <div class="col-md-8">
 
+                  <div class="col-md-8">
                     <p class="card-text">
                       <?php
                       $userid = $row['id'];
                       $sql = mysqli_query($conn, "SELECT * from user_data where id= $userid ");
                       $res = mysqli_fetch_assoc($sql);
-
+                      
                       echo $res['fname'] . ' ' . $res['mi'] . '. ' . $res['lname'];
                       $course_id = $res['course_id'];
 
@@ -116,10 +115,10 @@ if (!isset($_SESSION['email'])) {
                         Option
                       </button>
                       <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="../php/locker-changceuser.php?id=<?php echo $row['id'] ?>">Change User</a></li>
+                        <li><a class="dropdown-item" href="../php/locker-changceuser.php?id=<?php echo $row['locker_id'] ?>">Set User</a></li>
                       </ul>
                     </div>
-                    <a name="" id="" class="btn btn-danger remove-button" data-iud="<?php echo $row['uid'] ?>" data-id="<?php echo $row['id'] ?>" role="button">Remove</a>
+                    <a name="" id="" class="btn btn-danger remove-button" data-uid="<?php echo $row['uid'] ?>" data-id="<?php echo $row['id'] ?>" role="button">Remove</a>
                   </div>
                 </div>
               </div>
@@ -130,15 +129,15 @@ if (!isset($_SESSION['email'])) {
         ?>
       </div>
 
-   
-        <?php
-        $sql = "SELECT * FROM locker_data as ld LEFT JOIN user_data as ud ON ld.id = ud.locker_id WHERE ud.locker_id IS NULL";
-        $result = $conn->query($sql);   
-        if ($result->num_rows > 0) {
+      <?php
+      $sql = "SELECT ld.id, ld.uid, ld.status FROM locker_data as ld LEFT JOIN user_data as ud ON ld.id = ud.locker_id WHERE ud.id IS NULL";
+      
+      $result = $conn->query($sql);
+      if ($result->num_rows > 0) {
         echo '<div class="row g-2">';
         echo '<h3 class="mb-2"> New Lockers </h3> ';
         while ($row = $result->fetch_assoc()) {
-        ?>
+      ?>
           <div class="col-md-4 mb-4">
             <div class="card">
 
@@ -157,8 +156,7 @@ if (!isset($_SESSION['email'])) {
                       Option
                     </button>
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">Change User</a></li>
-                      <li><a class="dropdown-item" href="#">Change Locker Id</a></li>
+                      <li><a class="dropdown-item" href="../php/locker-changceuser.php?id=<?php echo $row['id'] ?>" >Set User</a></li>
                     </ul>
                   </div>
                   <a name="" id="" class="btn btn-danger remove-button" data-uid="<?php echo $row['uid'] ?>" data-id="<?php echo $row['id'] ?>" role="button">Remove</a>
@@ -169,140 +167,147 @@ if (!isset($_SESSION['email'])) {
             </div>
 
           </div>
-        <?php
+      <?php
         }
-              }        ?>
-      </div>
+      }
+      ?>
 
 
-      <!--  -->
-      <div class="form-group" style="margin-top: 12%; float:right; position: relative; ">
-        <div class="col ">
-          <a href="../php/add-locker.php" class="text-center">
-            <button class="btn btn-light addb"><img src="../icons/locker.png" style="filter:invert(100);" alt=""> Add Locker</button>
-          </a>
-        </div>
-      </div>
-      <!--  -->
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script>
-      var loadingIndicator = // ... code to create/loading spinner element;
 
-        $(document).on('click', '.remove-button', function() {
-          event.preventDefault();
-          var uid = $(this).data('uid');
-          var id = $(this).data('id');
-          Swal.fire({
-            title: 'Are you sure?',
-            text: 'You are about to remove the locker id: ' + id,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, remove it!'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              $.ajax({
-                url: '../php/remove-locker.php',
-                type: 'POST',
-                data: {
-                  uid: uid,
-                },
-                success: function(response) {
-                  console.log(response);
-                  Swal.fire('Removed!', 'The locker has been removed.', 'success');
-                  location.reload();
-                },
-                error: function() {
-                  Swal.fire('Error!', 'Failed to communicate with the server.', 'error');
-                }
-              });
-            }
-          });
+
+    <!--  -->
+    <div class="form-group" style="margin-top: 12%; float:right; position: relative; ">
+      <div class="col ">
+        <a href="../php/add-locker.php" class="text-center">
+          <button class="btn btn-light addb"><img src="../icons/locker.png" style="filter:invert(100);" alt=""> Add Locker</button>
+        </a>
+      </div>
+    </div>
+    <!--  -->
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+  <script src="../sweet/jquery-1.10.2.min.js"></script>
+  <script>
+    var loadingIndicator = // ... code to create/loading spinner element;
+
+      $(document).on('click', '.remove-button', function() {
+        event.preventDefault();
+        var uid = $(this).data('uid');
+        var id = $(this).data('id');
+        Swal.fire({
+          title: 'Are you sure?',
+          text: 'You are about to remove the locker id: ' + id,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, remove it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $.ajax({
+              url: '../php/remove-locker.php',
+              type: 'POST',
+              data: {
+                uid: uid,
+              },
+              success: function(response) {
+                console.log(response);
+                Swal.fire('Removed!', 'The locker has been removed.', 'success');
+                location.reload();
+              },
+              error: function() {
+                Swal.fire('Error!', 'Failed to communicate with the server.', 'error');
+              }
+            });
+          }
         });
-    </script>
+      });
+  </script>
 
 
-    <style>
-      /*  */
-      .addb {
-        display: inline;
-        position: fixed;
-        right: 20px;
-        bottom: 20px;
-        color: black;
-        background: white;
-      }
+  <style>
+    /*  */
+    .addb {
+      display: inline;
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      color: black;
+      background: white;
+    }
 
-      .addb :hover {
+    .addb :hover {
 
-        right: 21px;
-        bottom: 21px;
-        color: black;
-        background: gray;
-      }
+      right: 21px;
+      bottom: 21px;
+      color: black;
+      background: gray;
+    }
 
-      .addb img {
-        display: inline;
-        width: 30px;
-        height: 30px;
-      }
+    .addb img {
+      display: inline;
+      width: 30px;
+      height: 30px;
+    }
+
+    .num {
+      outline-color: 1px solid black;
+      position: absolute;
+      text-align: right;
+      top: 40px;
+      left: 50px;
+      color: white;
+      font-size: 70px;
+      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    }
+
+    .num2 {
+      outline-color: 1px solid black;
+      position: absolute;
+      text-align: left;
+      left: 40px;
+      bottom: 5px;
+      color: white;
+      font-size: 70px;
+      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    }
+
+    hr {
+      margin-bottom: 5px;
+      margin-top: 5px;
+    }
+
+    .card p {
+      color: #000;
+    }
+
+    .img {
+      filter: drop-shadow(0 0 0.2rem black);
+    }
+
+    h3 {
+      color: white;
+      background: #253855b7;
+      border-radius: 3px;
+    }
+
+    @media screen and (max-width: 500px) {
 
       .num {
-        outline-color: 1px solid black;
-        position: absolute;
-        text-align: right;
-        top: 40px;
-        left: 50px;
-        color: white;
-        font-size: 70px;
-        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        top: 9px;
+        left: 45%;
       }
 
-      .num2 {
-        outline-color: 1px solid black;
-        position: absolute;
-        text-align: left;
-        left: 40px;
-        bottom: 5px;
-        color: white;
-        font-size: 70px;
-        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+      .card {
+        transform: scale(0.9);
       }
 
-      hr {
-        margin-bottom: 5px;
-        margin-top: 5px;
-      }
-
-      .card p {
-        color: #000;
-      }
-
-      .img {
-        filter: drop-shadow(0 0 0.2rem black);
-      }
-
-      h3 {
-        color: white;
-        background: #253855b7;
-        border-radius: 3px;
-      }
-
-      @media screen and (max-width: 500px) {
-
-        .num {
-          top: 9px;
-          left: 45%;
-        }
-
-        .card {
-          transform: scale(0.9);
-        }
-
-      }
-    </style>
+    }
+  </style>
 </body>
 
 </html>
+

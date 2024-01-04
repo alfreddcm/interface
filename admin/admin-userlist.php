@@ -17,7 +17,9 @@ if (!isset($_SESSION['email'])) {
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="../style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <meta charset="UTF-8">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <link rel="stylesheet" href="../sweet/sweetalert2.css" class="rel">
     <script src="../sweet/jquery-1.10.2.min.js"></script>
     <script src="../sweet/sweetalert2.all.min.js"></script>
@@ -89,7 +91,7 @@ if (!isset($_SESSION['email'])) {
                             <div class="card ">
                                 <?php echo "<b class='num'>{$user['locker_id']}</b><br>"; ?>
                                 <div class="card-body text-center text">
-                                    <img src="../uploads/<?php echo $user['user_profile'] ?>" alt="user" class="img-fluid img-thumbnail rounded-circle border-0 mb-3">
+                                    <img src="../uploads/<?php echo $user['user_profile'] ?>" alt="user" class="img-fluid img  img-thumbnail rounded-circle border-0 mb-3">
                                     <h5 class="card-title"> <?php echo "{$user['fname']} {$user['mi']}. {$user['lname']}"; ?> </h5>
                                     <p class="text-secondary"> <?php echo $user['email'] ?> </p><br>
                                     <p class="text-muted font-size-sm"><?php echo $user['idno'] ?></p><br>
@@ -98,11 +100,11 @@ if (!isset($_SESSION['email'])) {
 
                                     <p class="text-muted font-size-sm"><?php echo "Last Access: " . ($lastAccess ? date('F j, Y g:i a', strtotime($lastAccess)) : 'Never') ?></p>
                                 </div>
-                                <div class="card-footer">
+                                <div class="card-footer text-center">
                                     <div class="btn-group">
 
                                         <button type="button" class="btn btn-success dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
-                                            <img src="../icons/edit.png" alt="" height="20px"> Manage
+                                            <img src="../icons/edit.png" alt="" height="20px" style="filter:invert(100);"> Manage
                                         </button>
 
                                         <ul class="dropdown-menu">
@@ -110,19 +112,20 @@ if (!isset($_SESSION['email'])) {
                                                 <a name="editbutton" id="editbutton" class="editbutton dropdown-item" data-email="<?php echo $user['email'] ?>" role="button">Update User Info</a>
                                             </li>
                                             <li>
-                                                <a name="changelocker" id="changelocker" class="changelocker dropdown-item" data-email="<?php echo $user['email'] ?>" role="button">Change Locker No</a>
+                                                <a name="changelocker" id="changelocker" class="changelocker dropdown-item" href="admin-lockerlist.php" role="button">Set Locker No</a>
                                             </li>
                                             <li>
                                                 <a name="updatepass" id="updatepass" class="updatepass dropdown-item" data-email="<?php echo $user['email'] ?>" role="button">Reset Password</a>
                                             </li>
-                                            <li>
-                                                <hr class="dropdown-divider">
-                                            </li>
-                                            <li>
-                                                <a name="removeButton" id="removeButton" class="remove-button dropdown-item" data-email="<?php echo $user['email'] ?>" role="button">Remove</a>
 
-                                            </li>
                                         </ul>
+                                        <a name="removeButton" id="removeButton" class="remove-button" data-email="<?php echo $user['email'] ?>" role="button">
+                                            <button type="button" class="btn btn-danger " aria-expanded="false">
+
+                                                Remove
+                                            </button>
+                                        </a>
+
                                     </div>
                                 </div>
                             </div>
@@ -132,84 +135,81 @@ if (!isset($_SESSION['email'])) {
                     ?>
                 </div>
             </div>
+            <div class="row justify-content-center align-items-center g-2">
+                <h3 class="mb-2">Unsigned Users</h3>
+                <?php
+                $fetchuser = mysqli_query($conn, "SELECT * FROM user_data where locker_id is null ORDER BY id");
+                while ($user = mysqli_fetch_assoc($fetchuser)) {
+                    $userid = $user['id'];
 
-            <?php
-            $fetchuser = mysqli_query($conn, "SELECT * FROM user_data where locker_id is null ORDER BY id");
-            while ($user = mysqli_fetch_assoc($fetchuser)) {
-                $userid = $user['id'];
+                    $fetchlastaccess = mysqli_query($conn, "SELECT MAX(date_time) AS last_access FROM Log_history WHERE locker_id = '{$user['locker_id']}'");
+                    $lastAccessResult = mysqli_fetch_assoc($fetchlastaccess);
+                    $lastAccess = $lastAccessResult['last_access'];
 
-                $fetchlastaccess = mysqli_query($conn, "SELECT MAX(date_time) AS last_access FROM Log_history WHERE locker_id = '{$user['locker_id']}'");
-                $lastAccessResult = mysqli_fetch_assoc($fetchlastaccess);
-                $lastAccess = $lastAccessResult['last_access'];
+                    $courseid = $user['course_id'];
+                    $sqlcourse = mysqli_query($conn, "SELECT program FROM course WHERE id = $courseid ");
+                    $course = mysqli_fetch_assoc($sqlcourse);
+                ?>
 
-                $courseid = $user['course_id'];
-                $sqlcourse = mysqli_query($conn, "SELECT program FROM course WHERE id = $courseid ");
-                $course = mysqli_fetch_assoc($sqlcourse);
-            ?>
+                    <div class="col mb-5 mt-4">
+                        <div class="card">
+                            <?php echo "<b class='num'>{$user['locker_id']}</b><br>"; ?>
+                            <div class="card-body text-center text">
+                                <img src="../uploads/<?php echo $user['user_profile'] ?>" alt="User" class="img-fluid img img-thumbnail rounded-circle border-0 mb-3">
+                                <h5 class="card-title"> <?php echo "{$user['fname']} {$user['mi']}. {$user['lname']}"; ?> </h5>
+                                <p class="text-secondary"> <?php echo $user['email'] ?> </p><br>
+                                <p class="text-muted font-size-sm"><?php echo $user['idno'] ?></p><br>
+                                <p class="text-muted font-size-sm"><?php echo  $user['yrsec'] ?></p>
+                                <p class="text-muted font-size-sm"><?php echo  $course['program'] ?></p><br>
 
-                <div class="row justify-content-center align-items-center g-2">
-                    <h3 class="mb-2">Unsigned Users</h3>
+                                <p class="text-muted font-size-sm"><?php echo "Last Access: " . ($lastAccess ? date('F j, Y g:i a', strtotime($lastAccess)) : 'Never') ?></p>
+                            </div>
 
-                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 gutters-sm">
+                            <div class="card-footer">
+                                <div class="btn-group">
 
-                        <div class="col mb-5 mt-4">
-                            <div class="card">
-                                <?php echo "<b class='num'>{$user['locker_id']}</b><br>"; ?>
-                                <div class="card-body text-center text">
-                                    <img src="../uploads/<?php echo $user['user_profile'] ?>" alt="User" class="img-fluid img-thumbnail rounded-circle border-0 mb-3">
-                                    <h5 class="card-title"> <?php echo "{$user['fname']} {$user['mi']}. {$user['lname']}"; ?> </h5>
-                                    <p class="text-secondary"> <?php echo $user['email'] ?> </p><br>
-                                    <p class="text-muted font-size-sm"><?php echo $user['idno'] ?></p><br>
-                                    <p class="text-muted font-size-sm"><?php echo  $user['yrsec'] ?></p>
-                                    <p class="text-muted font-size-sm"><?php echo  $course['program'] ?></p><br>
+                                    <button type="button" class="btn btn-success dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img src="../icons/edit.png" style="filter:invert(100);" alt="" height="20px"> Manage
+                                    </button>
 
-                                    <p class="text-muted font-size-sm"><?php echo "Last Access: " . ($lastAccess ? date('F j, Y g:i a', strtotime($lastAccess)) : 'Never') ?></p>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="btn-group">
-
-                                        <button type="button" class="btn btn-success dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
-                                            <img src="../icons/edit.png" alt="" height="20px"> Manage
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a name="editbutton" id="editbutton" class="editbutton dropdown-item" data-email="<?php echo $user['email'] ?>" role="button">Update User Info</a>
+                                        </li>
+                                        <li>
+                                            <a name="changelocker" id="changelocker" class="changelocker dropdown-item" href="admin-lockerlist.php" role="button">Set Locker No</a>
+                                        </li>
+                                        <li>
+                                            <a name="updatepass" id="updatepass" class="updatepass dropdown-item" data-email="<?php echo $user['email'] ?>" role="button">Reset Password</a>
+                                        </li>
+                                    </ul>
+                                    <a name="removeButton" id="removeButton" class="remove-button" data-email="<?php echo $user['email'] ?>" role="button">
+                                        <button type="button" class="btn btn-danger " aria-expanded="false">
+                                            Remove
                                         </button>
-
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a name="editbutton" id="editbutton" class="editbutton dropdown-item" data-email="<?php echo $user['email'] ?>" role="button">Update User Info</a>
-                                            </li>
-                                            <li>
-                                                <a name="changelocker" id="changelocker" class="changelocker dropdown-item" data-email="<?php echo $user['email'] ?>" role="button">Change Locker No</a>
-                                            </li>
-                                            <li>
-                                                <a name="updatepass" id="updatepass" class="updatepass dropdown-item" data-email="<?php echo $user['email'] ?>" role="button">Reset Password</a>
-                                            </li>
-                                            <li>
-                                                <hr class="dropdown-divider">
-                                            </li>
-                                            <li>
-                                                <a name="removeButton" id="removeButton" class="remove-button dropdown-item" data-email="<?php echo $user['email'] ?>" role="button">Remove</a>
-
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    </a>
                                 </div>
                             </div>
+                            
                         </div>
-                    <?php
-                }
-                    ?>
-                    </div>
-                </div>
 
-                <div class="form-group" style="margin-top: 12%; float:right; position: relative; ">
-                    <div class="col ">
-                        <a href="../php/add-user.php" class="text-center ">
-                            <button class="btn btn-light addb"><img src="../icons/male-add-icon.png" alt=""> Add user</button>
-                        </a>
                     </div>
-                </div>
+                <?php
+                }
+                ?>
+            </div>
         </div>
 
-        <!-- main /div -->
+        <div class="form-group" style="margin-top: 12%; float:right; position: relative; ">
+            <div class="col ">
+                <a href="../php/add-user.php" class="text-center ">
+                    <button class="btn btn-light addb"><img src="../icons/male-add-icon.png" alt=""> Add user</button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- main /div -->
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -267,7 +267,6 @@ if (!isset($_SESSION['email'])) {
             });
         });
 
-
         $(document).ready(function() {
             $('.updatepass').click(function() {
                 var email = $(this).data('email');
@@ -313,6 +312,25 @@ if (!isset($_SESSION['email'])) {
         });
     </script>
     <style>
+        .card {
+            z-index: 999;
+            /* Adjust the value as needed */
+        }
+
+        .dropdown-menu {
+            z-index: 1000;
+            /* Adjust the value as needed */
+        }
+
+        .container .card {
+            min-height: 300px;
+        }
+
+        .img {
+            height: 100px;
+            width: 100px;
+        }
+
         h3 {
             color: white;
             background: #253855b7;
