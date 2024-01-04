@@ -20,22 +20,23 @@ include('php-add-user.php');
   <title>Register User</title>
 
 
-    <link rel="shortcut icon" href="../icons/logo.png" type="image/x-icon">
-    <style>
-      body {
-        padding: 20px;
-      }
+  <link rel="shortcut icon" href="../icons/logo.png" type="image/x-icon">
+  <style>
+    body {
+      padding: 20px;
+    }
 
-      #message {
-        position: absolute;
-        margin-top: 70px;
-        display: none;
-        padding-left: 20px;
-        width: 70%;
-      }
-    </style>
-    </head>
-    <body>
+    #message {
+      position: absolute;
+      margin-top: 70px;
+      display: none;
+      padding-left: 20px;
+      width: 70%;
+    }
+  </style>
+</head>
+
+<body>
   <main>
 
     <div class="container-fluid center-container">
@@ -204,7 +205,7 @@ include('php-add-user.php');
                 <center>
                   <?php echo $errm ?> <br>
                   <a href="../admin/admin-userlist.php">
-                  <button type="button" class="btn btn-secondary ">Return</button></a>
+                    <button type="button" class="btn btn-secondary ">Return</button></a>
 
                   <button type="submit" class="btn btn-success ">Submit</button>
                 </center>
@@ -222,7 +223,6 @@ include('php-add-user.php');
   <!-- Bootstrap JavaScript Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
- <script src="../script.js"></script>
   <script src="../scripts/regform.js"></script>
 
 </body>

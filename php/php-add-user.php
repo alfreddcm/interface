@@ -1,8 +1,5 @@
 <?php
-
-
 require '../user-connection.php';
-
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $lname = $_POST["lname"];
@@ -32,24 +29,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
                 $targetDirectory = "../uploads/";
-                move_uploaded_file($tmp_name, $targetDirectory . $profile);
 
-                $insertUserQuery = "INSERT INTO user_data (user_profile, idno, email, password, fname, mi, lname, sex, course_id, department_id, locker_id, yrsec)
-                            VALUES ('$profile', '$idno', '$email', '$hashedPassword', '$fname', '$mi', '$lname', '$sex', '$course_id', '$dep_id', '$locker_id', '$ysec')";
-
-                if (mysqli_query($conn, $insertUserQuery)) {
-                    $lastUserId = mysqli_insert_id($conn);
-                    $updatelocker = mysqli_query($conn, "UPDATE locker_data SET user_id = $lastUserId WHERE id = $locker_id");
-
-                    if ($updatelocker) {
-                        echo "<script>alert('$email Account added! You can now log in.'); 
-                        </script>";
-                    } else {
-                        echo "<script>alert('ID number is already in use!'); </script>";
-                    }
-                } else {
-                    echo "<script>alert('Error executing the query: " . mysqli_error($conn) . "')</script>";
+                if (!is_dir($targetDirectory)) {
+                    mkdir($targetDirectory, 0755, true);
                 }
+                if (move_uploaded_file($tmp_name, $targetDirectory . $profile)) {
+                    echo "File uploaded successfully!";
+                    echo '<script>';
+                    echo 'console.log("File uploaded successfully!");';
+                    echo '</script>';
+                    
+                    $insertUserQuery = "INSERT INTO user_data (user_profile, idno, email, password, fname, mi, lname, sex, course_id, department_id, locker_id, yrsec)
+                            VALUES ('$profile', '$idno', '$email', '$hashedPassword', '$fname', '$mi', '$lname', '$sex', '$course_id', '$dep_id', '$locker_id', '$ysec')";
+                $sql=mysqli_query($conn, $insertUserQuery);
+
+                echo "<script>alert('Account added! ');</script>";
+
+                } else {
+                    echo "File upload failed!";
+                }
+
+                
             }
       
     }

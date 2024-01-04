@@ -146,7 +146,7 @@ if (!isset($_SESSION['email'])) {
                 $sqlcourse = mysqli_query($conn, "SELECT program FROM course WHERE id = $courseid ");
                 $course = mysqli_fetch_assoc($sqlcourse);
             ?>
-            
+
                 <div class="row justify-content-center align-items-center g-2">
                     <h3 class="mb-2">Unsigned Users</h3>
 
@@ -462,6 +462,19 @@ if (!isset($_SESSION['email'])) {
             display: inline;
             width: 30px;
             height: 30px;
+        }
+
+        @media screen and (max-width: 500px) {
+
+            .num {
+                top: 9px;
+                left: 45%;
+            }
+
+            .card {
+                transform: scale(0.9);
+            }
+
         }
     </style>
 

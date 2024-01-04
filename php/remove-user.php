@@ -19,10 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $row = $result->fetch_assoc();
                 $userId = $row['id'];
 
-                // Perform actions with the user id, e.g., update locker_data
-                $updateStmt = $conn->prepare("UPDATE locker_data SET user_id = null WHERE user_id = ?");
-                $updateStmt->bind_param("i", $userId);
-                $updateStmt->execute();
 
                 // Delete the row with the email
                 $deleteStmt = $conn->prepare("DELETE FROM user_data WHERE email = ?");
@@ -38,7 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $stmt->close();
-            $updateStmt->close();
             $deleteStmt->close();
             $conn->close();
 
