@@ -67,7 +67,7 @@ if (!isset($_SESSION['email'])) {
     <div id="main">
         <div class="container">
             <div class="row justify-content-center align-items-center g-2">
-            <h3 class="mb-2">User List</h3>
+                <h3 class="mb-2">User List</h3>
 
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 gutters-sm ">
                     <?php
@@ -89,7 +89,7 @@ if (!isset($_SESSION['email'])) {
                             <div class="card ">
                                 <?php echo "<b class='num'>{$user['locker_id']}</b><br>"; ?>
                                 <div class="card-body text-center text">
-                                    <img src="../uploads/<?php echo $user['user_profile'] ?>" alt="User" class="img-fluid img-thumbnail rounded-circle border-0 mb-3">
+                                    <img src="../uploads/<?php echo $user['user_profile'] ?>" alt="user" class="img-fluid img-thumbnail rounded-circle border-0 mb-3">
                                     <h5 class="card-title"> <?php echo "{$user['fname']} {$user['mi']}. {$user['lname']}"; ?> </h5>
                                     <p class="text-secondary"> <?php echo $user['email'] ?> </p><br>
                                     <p class="text-muted font-size-sm"><?php echo $user['idno'] ?></p><br>
@@ -123,7 +123,7 @@ if (!isset($_SESSION['email'])) {
 
                                             </li>
                                         </ul>
-                                    </div>  
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -132,25 +132,25 @@ if (!isset($_SESSION['email'])) {
                     ?>
                 </div>
             </div>
+
+            <?php
+            $fetchuser = mysqli_query($conn, "SELECT * FROM user_data where locker_id is null ORDER BY id");
+            while ($user = mysqli_fetch_assoc($fetchuser)) {
+                $userid = $user['id'];
+
+                $fetchlastaccess = mysqli_query($conn, "SELECT MAX(date_time) AS last_access FROM Log_history WHERE locker_id = '{$user['locker_id']}'");
+                $lastAccessResult = mysqli_fetch_assoc($fetchlastaccess);
+                $lastAccess = $lastAccessResult['last_access'];
+
+                $courseid = $user['course_id'];
+                $sqlcourse = mysqli_query($conn, "SELECT program FROM course WHERE id = $courseid ");
+                $course = mysqli_fetch_assoc($sqlcourse);
+            ?>
             
-                    <?php
-                    $fetchuser = mysqli_query($conn, "SELECT * FROM user_data where locker_id is null ORDER BY id");
-                    while ($user = mysqli_fetch_assoc($fetchuser)) {
-                        $userid = $user['id'];
+                <div class="row justify-content-center align-items-center g-2">
+                    <h3 class="mb-2">Unsigned Users</h3>
 
-                        // Modify the query to get the latest timestamp
-                        $fetchlastaccess = mysqli_query($conn, "SELECT MAX(date_time) AS last_access FROM Log_history WHERE locker_id = '{$user['locker_id']}'");
-                        $lastAccessResult = mysqli_fetch_assoc($fetchlastaccess);
-                        $lastAccess = $lastAccessResult['last_access'];
-
-                        $courseid = $user['course_id'];
-                        $sqlcourse = mysqli_query($conn, "SELECT program FROM course WHERE id = $courseid ");
-                        $course = mysqli_fetch_assoc($sqlcourse);
-                    ?>
-                    <div class="row justify-content-center align-items-center g-2">
-            <h3 class="mb-2">Unsigned Users</h3>
-
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 gutters-sm">
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 gutters-sm">
 
                         <div class="col mb-5 mt-4">
                             <div class="card">
@@ -190,23 +190,23 @@ if (!isset($_SESSION['email'])) {
 
                                             </li>
                                         </ul>
-                                    </div>  
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     <?php
-                    }
+                }
                     ?>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group" style="margin-top: 12%; float:right; position: relative; ">
-                <div class="col ">
-                    <a href="../php/add-user.php" class="text-center ">
-                        <button class="btn btn-light addb"><img src="../icons/male-add-icon.png" alt=""> Add user</button>
-                    </a>
+                <div class="form-group" style="margin-top: 12%; float:right; position: relative; ">
+                    <div class="col ">
+                        <a href="../php/add-user.php" class="text-center ">
+                            <button class="btn btn-light addb"><img src="../icons/male-add-icon.png" alt=""> Add user</button>
+                        </a>
+                    </div>
                 </div>
-            </div>
         </div>
 
         <!-- main /div -->
@@ -313,11 +313,12 @@ if (!isset($_SESSION['email'])) {
         });
     </script>
     <style>
-        h3{
-  color: white;
-  background: #253855b7;
-  border-radius: 3px;
-}
+        h3 {
+            color: white;
+            background: #253855b7;
+            border-radius: 3px;
+        }
+
         .img-thumbnail {
             width: 100px;
             margin-top: -65px;
@@ -465,25 +466,6 @@ if (!isset($_SESSION['email'])) {
     </style>
 
 </body>
-<!-- <div class="form-group">
-    <label for="locker_id">Locker ID</label>
-    <input type="hidden" name="old_locker_id" value="<?php echo $locker_id; ?>">
-    <?php
-    // $sqlLockers = "SELECT id FROM locker_data where id=$locker_id or user_id is null";
-    // $resultLockers = $conn->query($sqlLockers);
-
-    // if ($resultLockers->num_rows > 0) {
-    //     echo '<select name="locker_id" id="locker_id" class="form-select" aria-label="Default select example" required>';
-
-    //     while ($rowLocker = $resultLockers->fetch_assoc()) {
-    //         $selected = ($locker_id == $rowLocker["id"]) ? 'selected' : '';
-    //         echo '<option value="' . $rowLocker["id"] . '" ' . $selected . '>' . 'Locker ' . $rowLocker["id"] . '</option>';
-    //     }
-    // } else {
-    //     echo '<option value="" disabled> No available lockers</option>';
-    // }
-    ?>
-    </select> -->
 </div>
 </div>
 

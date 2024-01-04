@@ -28,6 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $deleteStmt = $conn->prepare("DELETE FROM user_data WHERE email = ?");
                 $deleteStmt->bind_param("s", $email);
                 $deleteStmt->execute();
+                $resetAutoIncrement = "ALTER TABLE user_data AUTO_INCREMENT = 1";
+                $conn->query($resetAutoIncrement);
 
                 // Send response to AJAX
                 echo "User with email $email has been deleted and locker_data updated.";

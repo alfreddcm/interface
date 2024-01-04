@@ -25,6 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $deleteStmt->bind_param("s", $lockerid);
                 $deleteStmt->execute();
 
+                $resetAutoIncrement = "ALTER TABLE locker_data AUTO_INCREMENT = 1";
+                $conn->query($resetAutoIncrement);
+                
                 echo "User with uid $uid has been deleted and locker_data updated.";
             } else {
                 echo "User with uid $uid not found.";

@@ -70,7 +70,7 @@ if (!isset($_SESSION['email'])) {
   <div id="main">
     <!--  -->
     <?php
-    $sql = "SELECT * FROM locker_data WHERE user_id IS NOT NULL";
+    $sql = "SELECT * FROM locker_data as ld RIGHT JOIN user_data as ud ON ld.id = ud.locker_id WHERE ud.locker_id IS NOT NULL";
     $result = $conn->query($sql);
 
     ?>
@@ -96,7 +96,7 @@ if (!isset($_SESSION['email'])) {
 
                     <p class="card-text">
                       <?php
-                      $userid = $row['user_id'];
+                      $userid = $row['id'];
                       $sql = mysqli_query($conn, "SELECT * from user_data where id= $userid ");
                       $res = mysqli_fetch_assoc($sql);
 
@@ -116,8 +116,7 @@ if (!isset($_SESSION['email'])) {
                         Option
                       </button>
                       <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="../php/locker-changceuser.php?id=<?php echo $row['id']?>">Change User</a></li>
-                        <li><a class="dropdown-item" href="#">Change Locker Id</a></li>
+                        <li><a class="dropdown-item" href="../php/locker-changceuser.php?id=<?php echo $row['id'] ?>">Change User</a></li>
                       </ul>
                     </div>
                     <a name="" id="" class="btn btn-danger remove-button" data-iud="<?php echo $row['uid'] ?>" data-id="<?php echo $row['id'] ?>" role="button">Remove</a>
@@ -130,15 +129,16 @@ if (!isset($_SESSION['email'])) {
         }
         ?>
       </div>
-    
-        <div class="row g-2">
-            <?php
-      $sql = "SELECT * FROM locker_data WHERE user_id IS NULL";
-      $result = $conn->query($sql);
 
-            echo '<h3 class="mb-2">New Lockers</h3> ';
-      while ($row = $result->fetch_assoc()){
-      ?>
+   
+        <?php
+        $sql = "SELECT * FROM locker_data as ld LEFT JOIN user_data as ud ON ld.id = ud.locker_id WHERE ud.locker_id IS NULL";
+        $result = $conn->query($sql);   
+        if ($result->num_rows > 0) {
+        echo '<div class="row g-2">';
+        echo '<h3 class="mb-2"> New Lockers </h3> ';
+        while ($row = $result->fetch_assoc()) {
+        ?>
           <div class="col-md-4 mb-4">
             <div class="card">
 
@@ -165,62 +165,62 @@ if (!isset($_SESSION['email'])) {
                 </div>
               </div>
 
-                  
+
             </div>
-            
-          </div>  
-          <?php
-                  }
-                    ?>
-        </div>
 
-
-        <!--  -->
-        <div class="form-group" style="margin-top: 12%; float:right; position: relative; ">
-          <div class="col ">
-            <a href="../php/add-locker.php" class="text-center">
-              <button class="btn btn-light addb"><img src="../icons/locker.png" style="filter:invert(100);" alt=""> Add Locker</button>
-            </a>
           </div>
+        <?php
+        }
+              }        ?>
+      </div>
+
+
+      <!--  -->
+      <div class="form-group" style="margin-top: 12%; float:right; position: relative; ">
+        <div class="col ">
+          <a href="../php/add-locker.php" class="text-center">
+            <button class="btn btn-light addb"><img src="../icons/locker.png" style="filter:invert(100);" alt=""> Add Locker</button>
+          </a>
         </div>
-        <!--  -->
+      </div>
+      <!--  -->
     </div>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
       var loadingIndicator = // ... code to create/loading spinner element;
 
-      $(document).on('click', '.remove-button', function() {
-        event.preventDefault();
-        var uid = $(this).data('uid');
-        var id = $(this).data('id');
-        Swal.fire({
-          title: 'Are you sure?',
-          text: 'You are about to remove the locker id: ' + id,
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, remove it!'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            $.ajax({
-              url: '../php/remove-locker.php',
-              type: 'POST',
-              data: {
-                uid: uid,
-              },
-              success: function(response) {
-                console.log(response);
-                Swal.fire('Removed!', 'The locker has been removed.', 'success');
-                location.reload();
-              },
-              error: function() {
-                Swal.fire('Error!', 'Failed to communicate with the server.', 'error');
-              }
-            });
-          }
+        $(document).on('click', '.remove-button', function() {
+          event.preventDefault();
+          var uid = $(this).data('uid');
+          var id = $(this).data('id');
+          Swal.fire({
+            title: 'Are you sure?',
+            text: 'You are about to remove the locker id: ' + id,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, remove it!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $.ajax({
+                url: '../php/remove-locker.php',
+                type: 'POST',
+                data: {
+                  uid: uid,
+                },
+                success: function(response) {
+                  console.log(response);
+                  Swal.fire('Removed!', 'The locker has been removed.', 'success');
+                  location.reload();
+                },
+                error: function() {
+                  Swal.fire('Error!', 'Failed to communicate with the server.', 'error');
+                }
+              });
+            }
+          });
         });
-      });
     </script>
 
 
@@ -290,7 +290,7 @@ if (!isset($_SESSION['email'])) {
         border-radius: 3px;
       }
 
-      @media screen and (max-width: 600px) {
+      @media screen and (max-width: 500px) {
 
         .num {
           top: 9px;

@@ -13,8 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </script>";
 
     } else {
-        $email = $_POST["email"];
-       
+            $email = $_POST["email"];
             $password = $_POST["psw"];
             $idno = $_POST["idno"];
             $mi = $_POST["mi"];

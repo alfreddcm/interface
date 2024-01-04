@@ -15,60 +15,58 @@ if (!isset($_SESSION['email'])) {
 if (isset($_GET['id'])) {
     $lockerid = urldecode($_GET['id']);
 }
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $selectedUserId = $_POST['user'];
     $lid = $_POST['lid'];
 
-    // Check if the locker is already assigned to a user
-    $checkQuery = "SELECT user_id FROM locker_data WHERE id = $lid";
-    $checkResult = mysqli_query($conn, $checkQuery);
+    $checkUserQuery = "SELECT * FROM user_data WHERE id = $selectedUserId";
+    $checkUserResult = mysqli_query($conn, $checkUserQuery);
 
-    if ($checkResult) {
-        $row = mysqli_fetch_assoc($checkResult);
-        $existingUserId = $row['user_id'];
+    if ($checkUserResult) {
+        $userRow = mysqli_fetch_assoc($checkUserResult);
 
-            $swapQuery1=mysqli_query($conn,"UPDATE locker_data 
+        if ($selectedUserId === 0) {
+            $updateQuery = "UPDATE user_data SET locker_id = NULL WHERE id = ?";
+            $stmt = mysqli_prepare($conn, $updateQuery);
+            mysqli_stmt_bind_param($stmt, 'i', $selectedUserId);
+            $updateResult = mysqli_stmt_execute($stmt);
 
-            ");
-
-
-
-            $result1 = mysqli_query($conn, $swapQuery1);
-            $result2 = mysqli_query($conn, $swapQuery2);
-
-            // Commit the transaction if both updates were successful
-            if ($result1 && $result2) {
-                mysqli_commit($conn);
-                echo "Update successful!";
-            } else {
-                // Rollback the transaction if there was an error
-                mysqli_rollback($conn);
-                echo "Error updating database: " . mysqli_error($conn);
+            if (!$updateResult) {
+                error_log("Error updating database: " . mysqli_error($conn));
+                echo "Error updating database. Please try again.";
+                exit();
             }
 
-            // Close the connection
+            echo "Updated";
             mysqli_close($conn);
-
-            exit(); // Terminate script after processing the form
-        }
-
-        $updateResult = mysqli_query($conn, $updateQuery);
-
-        if (!$updateResult) {
-            echo "Error updating database: " . mysqli_error($conn);
             exit();
+        } else {
+            if ($userRow['locker_id'] == $lid) {
+                echo "No changes needed.";
+                exit();
+            } else {
+                $updateQuery = "UPDATE user_data SET locker_id = CASE 
+                    WHEN id = $selectedUserId THEN $lid
+                    WHEN id = (SELECT id FROM user_data WHERE locker_id = $lid LIMIT 1) THEN " . ($userRow['locker_id'] ? $userRow['locker_id'] : 'NULL') . "
+                    ELSE locker_id
+                END;";
+
+                $updateResult = mysqli_query($conn, $updateQuery);
+
+                if (!$updateResult) {
+                    echo "Error updating database: " . mysqli_error($conn);
+                    exit();
+                }
+
+                echo "Updated";
+                mysqli_close($conn);
+                exit();
+            }
         }
-
-        echo "Updated";
     } else {
-        // Send an error message to the client
+        echo "Error querying database: " . mysqli_error($conn);
+        exit();
     }
-
-    // Close the connection
-    mysqli_close($conn);
-
-    exit(); // Terminate script after processing the form
 }
 
 ?>
@@ -136,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <h5 class="card-title">
                     <?php
                     echo "Locker ID: $lockerid";
-                    $seluser = mysqli_query($conn, "SELECT * FROM locker_data AS ld inner JOIN user_data AS ud ON ld.id = ud.locker_id WHERE ld.id = $lockerid");
+                    $seluser = mysqli_query($conn, "SELECT * FROM locker_data AS ld left JOIN user_data AS ud ON ld.id = ud.locker_id WHERE ld.id = $lockerid");
                     if ($seluser) {
                         $row = mysqli_fetch_assoc($seluser);
                     } else {
@@ -149,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         <td class="text-end">Current User:</td>
                         <?php
-                        if ($row['user_id'] == null) {
+                        if (!$seluser) {
                             echo  '<td class="text-start"> No user </td>';
                         } else {
                         ?>
@@ -159,6 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         ?>
                     </tr>
                 </table>
+
                 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="mb-3">
                     <select class="form-select" id="user" name="user" required>
                         <?php
@@ -167,20 +166,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $result = $conn->query($sql);
 
                         if ($result->num_rows > 0) {
-                            echo '<option value="0" selected>Set to empty user</option>';
+                            echo '<option value="0"> Set to empty user</option>';
 
                             while ($row = $result->fetch_assoc()) {
-                                $selected = ($lockerid == $row["locker_id"]) ? 'selected' : '';
-                                echo '<option value="' . $row["id"] . '" ' . $selected . '>' . $row["id"] . ". " . $row["fname"] . " " . $row["mi"] . ". " . $row["lname"] . '</option>';
+                                $selected = ($selectedUserId == $row["id"]) ? 'selected' : '';
+                                $optionValue = htmlspecialchars($row["id"]);
+                                $fullName = htmlspecialchars($row["fname"] . " " . $row["mi"] . ". " . $row["lname"]);
+
+                                echo '<option value="' . $optionValue . '" ' . $selected . '>' . $optionValue . ". " . $fullName . '</option>';
                             }
                         } else {
-                            echo '<option value="" disabled>No department found</option>';
+                            echo '<option value="" disabled >No User data found</option>';
                         }
                         ?>
                     </select>
                     <input hidden type="text" value="<?php echo $lockerid; ?>" name="lid" id="lid">
                 </form>
-                <a name="" id="" class="btn btn-primary" href="#" role="button">Return</a>
+                <a name="" id="" class="btn btn-primary" href="../admin/admin-lockerlist.php" role="button">Return</a>
                 <button id="submitBtn" class="btn btn-success" type="button">Submit</button>
 
                 </p>
@@ -208,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         Swal.fire({
                             title: "Success",
-                            text: "Database updated successfully",
+                            text: "Updated successfully",
                             icon: "success",
                             showCancelButton: false,
                             confirmButtonText: "OK",
@@ -233,7 +235,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $("#submitBtn").on("click", function() {
                 Swal.fire({
                     title: "Confirmation",
-                    text: "Are you sure you want to update the database?",
+                    text: "Are you sure you want to update?",
                     icon: "question",
                     showCancelButton: true,
                     confirmButtonText: "Yes",

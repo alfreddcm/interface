@@ -164,18 +164,19 @@ include('php-add-user.php');
                       <label>Course</label>
                       <?php
                       $sql = "SELECT id, program FROM course";
+
                       $result = $conn->query($sql);
 
                       if ($result->num_rows > 0) {
                         echo '<select class="form-select" id="course" name="course" required> ';
-                        echo '<option value="" disabled selected>Select a Course</option>';
+                        echo '<option value="" disabled selected> Select a Course</option>';
 
                         while ($row = $result->fetch_assoc()) {
                           echo '<option value="' . $row["id"] . '">' . $row["program"] . '</option>';
                         }
                         echo '</select>';
                       } else {
-                        echo '<p>No department found</p>';
+                        echo '<p> No department found</p>';
                       }
                       ?>
                     </div>
@@ -185,16 +186,18 @@ include('php-add-user.php');
                 <b>Select Locker Number</b>
                 <select name="locker_id" id="locker_id" name="locker_id" class="form-select" aria-label="Default select example" required>
                   <?php
-                  $sqlLockers = "SELECT id FROM locker_data WHERE user_id IS NULL";
+                  $sqlLockers = "SELECT ld.id
+                  FROM locker_data AS ld
+                  LEFT JOIN user_data AS ud ON ld.id = ud.locker_id
+                  WHERE ud.locker_id IS NULL;
+                  ";
                   $resultLockers = $conn->query($sqlLockers);
-                  echo '<option value="" disabled selected>Select a Locker Number</option>';
-
                   if ($resultLockers->num_rows > 0) {
                     while ($rowLocker = $resultLockers->fetch_assoc()) {
                       echo '<option value="' . $rowLocker["id"] . '">' . $rowLocker["id"] . '</option>';
                     }
                   } else {
-                    echo '<option value="" disabled> No available lockers</option>';
+                    echo '<option value="" selected disabled> No available lockers</option>';
                   }
                   ?>
                 </select>
@@ -219,6 +222,7 @@ include('php-add-user.php');
   <!-- Bootstrap JavaScript Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+ <script src="../script.js"></script>
   <script src="../scripts/regform.js"></script>
 
 </body>
