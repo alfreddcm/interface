@@ -34,14 +34,13 @@ require '../user-connection.php';
           <?php
           $filterDate = isset($_POST['filterDate']) ? $_POST['filterDate'] : null;
           $query = "SELECT *
-                    FROM Log_history AS log
-                    JOIN user_data AS user ON log.locker_id = user.locker_id";
+                    FROM Log_history ";
 
           if ($filterDate) {
-            $query .= " WHERE DATE(log.date_time) = '$filterDate'";
+            $query .= " WHERE DATE(date_time) = '$filterDate'";
           }
 
-          $query .= " ORDER BY log.date_time DESC";
+          $query .= " ORDER BY date_time DESC";
 
           $logs = mysqli_query($conn, $query);
           $currentDate = null;
@@ -57,9 +56,7 @@ require '../user-connection.php';
 
               echo '<tr>';
               echo '<td class="text-center">' . $row['locker_id'] . '</td>';
-
-              echo '<td>' . $row['idno'] . '</td>';
-              echo '<td>' . $row['fname'] . ' ' . $row['mi'] . ' ' . $row['lname'] . '</td>';
+              echo '<td>' . $row['user'] . ' </td>';
               echo '<td>' . date(' h:i A', strtotime($row['date_time'])) . '</td>';
               echo '<td>' . $row['access'] . '</td>';
               echo '<td>' . $row['action'] . '</td>';

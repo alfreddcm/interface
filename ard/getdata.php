@@ -23,53 +23,50 @@ if (isset($_GET['card_uid']) && isset($_GET['device_token'])) {
         if ($row = mysqli_fetch_assoc($resultl)) {
             $device_mode = $row['device_mode'];
             if ($device_mode == 1) {
-                // logging
-                $sql = "SELECT * FROM locker_data WHERE uid=?";
-                $result = mysqli_stmt_init($conn);
-                if (!mysqli_stmt_prepare($result, $sql)) {
-                    echo "SQL_Error_Select_card";
+                // Logging
+                $sql = "SELECT * FROM locker_data WHERE uid='$card_uid'";
+                $result = mysqli_query($conn, $sql);
+
+                if (!$result) {
+                    echo "SQL_Error_Select_card: " . mysqli_error($conn);
                     exit();
-                } else {
+                }
 
-                    mysqli_stmt_bind_param($result, "s", $card_uid);
-                    mysqli_stmt_execute($result);
-                    $resultl = mysqli_stmt_get_result($result);
+                if ($row = mysqli_fetch_assoc($result)) {
+                    $lockerid = $row['id'];
+                    $checkLockerQuery = "SELECT * FROM user_data WHERE locker_id = '$lockerid'";
+                    $checkResult = mysqli_query($conn, $checkLockerQuery);
 
-                    if ($row = mysqli_fetch_assoc($resultl)) {
-                        $lockerid = $row['id'];
+                    if (!$checkResult) {
+                        echo "SQL_Error_Check_Locker: " . mysqli_error($conn);
+                        exit();
+                    }
 
-                        $checkLockerQuery = "SELECT * FROM user_data WHERE locker_id = ?";
-                        $checkLockerStmt = mysqli_stmt_init($conn);
+                    if ($checkRow = mysqli_fetch_assoc($checkResult)) {
+                        $insertLogQuery = "
+                        INSERT INTO Log_history (locker_id, user_id, user_name, date_time, access) 
+                        VALUES (
+                            '$lockerid',
+                            (SELECT idno FROM user_data WHERE locker_id = '$lockerid' LIMIT 1),
+                            (SELECT CONCAT(idno, ' ', fname, ' ', mi, '. ', lname) FROM user_data WHERE locker_id = '$lockerid' LIMIT 1),
+                            NOW(),
+                            'RFID'
+                        )
+                    ";
+                        $insertLogResult = mysqli_query($conn, $insertLogQuery);
 
-                        if (!mysqli_stmt_prepare($checkLockerStmt, $checkLockerQuery)) {
-                            echo "SQL_Error_Check_Locker";
+                        if (!$insertLogResult) {
+                            echo "SQL_Error_Insert_Log: " . mysqli_error($conn);
                             exit();
                         }
 
-                        mysqli_stmt_bind_param($checkLockerStmt, "s", $lockerid);
-                        mysqli_stmt_execute($checkLockerStmt);
-                        $checkResult = mysqli_stmt_get_result($checkLockerStmt);
-
-                        if ($checkRow = mysqli_fetch_assoc($checkResult)) {
-                            $insertLogQuery = "INSERT INTO Log_history (locker_id, date_time, access) VALUES (?, NOW(), 'RFID')";
-                            $insertLogStmt = mysqli_stmt_init($conn);
-
-                            if (!mysqli_stmt_prepare($insertLogStmt, $insertLogQuery)) {
-                                echo "SQL_Error_Insert_Log";
-                                exit();
-                            }
-
-                            mysqli_stmt_bind_param($insertLogStmt, "s", $lockerid);
-                            mysqli_stmt_execute($insertLogStmt);
-
-                            echo "logged" . $lockerid;
-                        } else {
-                            echo "available";  
-                        }
+                        echo "logged " . $lockerid;
                     } else {
-                        echo "Not Registered";
-                        exit();
+                        echo "available";
                     }
+                } else {
+                    echo "Not Registered";
+                    exit();
                 }
             } else if ($device_mode == 0) {
 

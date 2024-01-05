@@ -115,19 +115,19 @@
            </a>
          </div>
          <div class="col">
-         <a href="admin-userlist.php" style="text-decoration: none;">
+           <a href="admin-userlist.php" style="text-decoration: none;">
 
-           <div class="card text-center smcard">
-             <p class="card-text">
-             <h6>Unassign Users</h6>
-             <span class="number">
-               <?php
-                $av = mysqli_query($conn, "SELECT * FROM user_data where locker_id is NULL");
-                $avv = mysqli_num_rows($av);
-                echo $avv;
-                ?></span>
-             </p>
-           </div>
+             <div class="card text-center smcard">
+               <p class="card-text">
+               <h6>Unassign Users</h6>
+               <span class="number">
+                 <?php
+                  $av = mysqli_query($conn, "SELECT * FROM user_data where locker_id is NULL");
+                  $avv = mysqli_num_rows($av);
+                  echo $avv;
+                  ?></span>
+               </p>
+             </div>
          </div></a>
        </div>
 
@@ -159,9 +159,26 @@
                 while ($row = mysqli_fetch_assoc($emailres)) {
                   echo '<tr>';
                   echo '<td>' . $counter . '</td>';
-                  echo '<td>' . $row['fname'] . " " . $row['mi'] . ". " . $row['lname'] . '</td>';
+                  echo '<td>
+                  <div class="dropdown dropend">
+                    <label class="dropdown-toggle" type="button" id="triggerId' . $row['id'] . '" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $row['fname'] . " " . $row['mi'] . ". " . $row['lname'] . '</label>
+                    <div class="dropdown-menu p-1" aria-labelledby="triggerId' . $row['id'] . '" style="width:200px; font-size:13px;">
+                      <label for="">ID No: </label>
+                      <label for="">' . $row['idno'] . '</label><br>
+                      <label for="">Email: ' . $row['email'] . '</label><br>
+                      <label for="">';
 
-                  echo '<td>' . date('F j, Y h:i A', strtotime($row['date_added'])) . '</td>';
+                  $courseid = $row['course_id'];
+                  $sqlcourse = mysqli_query($conn, "SELECT program FROM course WHERE id = $courseid ");
+                  $course = mysqli_fetch_assoc($sqlcourse);
+                  echo $course['program']   .
+
+                    '</label><br>
+
+                    </div>
+                  </div>
+                </td>';
+                  echo '<td>' . date('M j, Y h:i A', strtotime($row['date_added'])) . '</td>';
 
                   echo '<td><a
                     name="" id="acceptButton " class="btn btn-primary accept-button p-1" data-email="' . $row['email'] . '"role="button">Accept</a>
@@ -182,7 +199,7 @@
          <div class="col scroll">
            <div class="card text-start">
              <div class="card-header">
-               <h6 class="text-center">
+               <h6 class="text-center act">
                  <img src="../icons/project-icon.png" alt="" height="20px">
                  Activities
                </h6>
@@ -226,10 +243,7 @@
          updateManageUsers($('#datepicker').val()); // Update logs with the current selected date
        }, 6000);
      });
-
-
-
-
+     
      //do not touch//
 
      $(document).ready(function() {
@@ -325,14 +339,24 @@
      // do not touch
    </script>
    <style>
+     .dropdown.dropend .dropdown-toggle::after {
+       display: none !important;
+     }
+
+     .dropdown:hover .dropdown-menu,
+     .dropdown:hover .dropdown-toggle {
+       display: block;
+     }
+
      #datepicker {
-      margin: 1px;
+       margin: 1px;
        top: 0;
        right: 0;
        margin-right: 10px;
        position: absolute;
        width: fit-content;
      }
+
      .scroll .card {
        height: 250px;
      }
@@ -424,6 +448,9 @@
        .btn {
 
          transform: scale(.8);
+       }
+       .act{
+        display: flex;
        }
      }
    </style>

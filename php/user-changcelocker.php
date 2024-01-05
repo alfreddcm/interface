@@ -173,22 +173,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     $sql = "SELECT ld.id, ud.fname, ud.mi, ud.lname 
                             FROM locker_data as ld
-                            INNER JOIN user_data as ud ON ld.user_id = ud.id where ld.id is not null";
+                            right JOIN user_data as ud ON ld.user_id = ud.id where ld.id is not null";
 
                         $result = $conn->query($sql);
 
                         if ($result->num_rows > 0) {
-                            echo '<option value="0"> Set to empty user</option>';
+                            echo '<option value="0"> Set to empty locker</option>';
 
-                            while ($row = $result->fetch_assoc()) {
-                                $selected = ($selectedUserId == $row["id"]) ? 'selected' : '';
-                                $optionValue = htmlspecialchars($row["id"]);
-                                $user = htmlspecialchars($row["fname"] . " " . $row["mi"] . ". " . $row["lname"]);
+                            while ($q = $result->fetch_assoc()) {
+                                $selected = ($optionValue == $q["id"]) ? 'selected' : '';
 
-                                echo '<option value="' . $optionValue . '" ' . $selected . '>' ."Locker " . $row["id"] ." User: " .$user.'</option>';
+                                $optionValue = htmlspecialchars($q["id"]);
+                                $user = htmlspecialchars($q["fname"] . " " . $q["mi"] . ". " . $q["lname"]);
+
+                                echo '<option value="' . $optionValue . '">' ."Locker " . $q["id"] ." User: " .$user .'</option>';
                             }
                         } else {
-                            echo '<option value="" disabled >No locker data found</option>';
+                            echo '<option value="" disabled > No locker data found</option>';
                         }
                         ?>
                     </select>

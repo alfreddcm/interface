@@ -31,7 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $mail->isHTML(true);
         $mail->Subject = 'Request confirmation';
-        $mail->Body    = 'Your locker access has been accepted. You can now create an account using ' . $email . '. Thank you! ';
+        $mail->Body    = 'Your locker access has been accepted. You can now create an account using ' . $email . '. 
+        Please use this credetial to login. \n
+        Email: '.$email.'\n
+        Password: Password123 \n
+
+        Thank you! ';
 
         $mail->send();
         //updata
