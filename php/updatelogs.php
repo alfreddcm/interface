@@ -22,12 +22,10 @@ require '../user-connection.php';
         <thead class="thead-dark" style="position: sticky; top: 0;">
           <tr>
           <th class="text-center">Locker</th>
-
-            <th width="15%">ID</th>
+          <th>ID No</th>
             <th width="25%">User</th>
             <th>Date & Time</th>
             <th>Access</th>
-            <th>Action</th>
           </tr>
         </thead>
         <tbody style="font-size: 13px;">
@@ -56,6 +54,8 @@ require '../user-connection.php';
 
               echo '<tr>';
               echo '<td class="text-center">' . $row['locker_id'] . '</td>';
+              echo '<td>' . $row['user_idno'] . ' </td>';
+
               echo '<td>' . $row['user'] . ' </td>';
               echo '<td>' . date(' h:i A', strtotime($row['date_time'])) . '</td>';
               echo '<td>' . $row['access'] . '</td>';

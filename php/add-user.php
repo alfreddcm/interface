@@ -43,7 +43,9 @@ include('php-add-user.php');
       <div class="card">
         <div class="card-body">
           <div class="title-container">
+            
             <hr>
+            
             <h5 class="card-title">Add User Access Info</h5>
             <hr>
           </div>

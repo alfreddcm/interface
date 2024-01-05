@@ -73,7 +73,7 @@ $token = $_SESSION['token'];
     </div>
     <div id="main">
         <div class="container mt-5">
-            <div class="card text-start">
+        <div class="card text-start">
                 <div class="card-body">
                     <h4 class="card-title"> Adding new card on <?php 
                                        
