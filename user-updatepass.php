@@ -1,5 +1,8 @@
 <?php
-include("php-userinfo.php");
+include("php/php-userinfo.php");
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['psw'];
@@ -42,8 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo "Error updating data: " . mysqli_error($conn);
     }
-}    
-ob_end_flush();
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -75,34 +77,36 @@ ob_end_flush();
     </div>
 
     <div id="main">
-        <div class="row justify-content-center align-items-center g-2">
-            <div class="col">
-                <div class="card">
+        <div class="row justify-content-center align-items-center g-2 ">
+            <div class="col ">
+                <div class="card pl-2">
                     <div class="card-body">
                         <h4 class="card-title">Update Password</h4>
 
                         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" id="passwordForm" method="post">
-                        <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" class="form-control" id="psw" placeholder="Password" name="psw" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
-                            <i id="err1"></i>
-                            <span class="error" id="PasswordError" style="color: red;"></span>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" class="form-control" id="psw" placeholder="Password" name="psw" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
+                                <i id="err1"></i>
+                                <span class="error" id="PasswordError" style="color: red;"></span>
 
-                        </div>
-                        <div class="form-group">
-                            <label>New Password</label>
-                            <input type="password" class="form-control" id="newpsw" placeholder="New Password" name="newpsw" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
-                            <span class="error" id="newPasswordError" style="color: red;"></span>
-                        </div>
-                        <div class="form-group">
-                            <label>Confirm Password</label><br>
-                            <input type="password" class="form-control" id="pass2" name="confirmpassword" placeholder="Confirm Password" required>
-                            <span class="error" id="confirmPasswordError" style="color: red;"></span>
-                        </div>
-                        <input type="checkbox" onclick="showPasswords()">Show Password <br>
-                        <small id="passwordHelp" class="form-text text-muted">Never share your password with anyone else.</small><br>
-                        <span id="errorContainer"></span>
-                        <button type="submit" class="btn btn-primary" >Submit</button>
+                            </div>
+                            <div class="form-group">
+                                <label>New Password</label>
+                                <input type="password" class="form-control" id="newpsw" placeholder="New Password" name="newpsw" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
+                                <span class="error" id="newPasswordError" style="color: red;"></span>
+                            </div>
+                            <div class="form-group">
+                                <label>Confirm Password</label><br>
+                                <input type="password" class="form-control" id="pass2" name="confirmpassword" placeholder="Confirm Password" required>
+                                <span class="error" id="confirmPasswordError" style="color: red;"></span>
+                            </div>
+                            <input type="checkbox" onclick="showPasswords()">Show Password <br>
+                            <small id="passwordHelp" class="form-text text-muted">Never share your password with anyone else.</small><br>
+                            <span id="errorContainer"></span>
+                            <a name="" id="" class="btn btn-secondary" href="user-profile.php" role="button">Return</a>
+
+                            <button type="submit" class="btn btn-info">Submit</button>
                         </form>
                     </div>
                 </div>
@@ -122,42 +126,42 @@ ob_end_flush();
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
 <script>
-function toggleNav() {
-  var sidebar = document.getElementById("mySidebar");
-  var mainContent = document.getElementById("main");
+    function toggleNav() {
+        var sidebar = document.getElementById("mySidebar");
+        var mainContent = document.getElementById("main");
 
-  if (window.innerWidth > 600) {
-    if (sidebar.style.width === "230px") {
-      sidebar.style.width = "60px";
-      mainContent.style.marginLeft = "60px";
-    } else {
-      sidebar.style.width = "230px";
-      mainContent.style.marginLeft = "230px";
+        if (window.innerWidth > 600) {
+            if (sidebar.style.width === "230px") {
+                sidebar.style.width = "60px";
+                mainContent.style.marginLeft = "60px";
+            } else {
+                sidebar.style.width = "230px";
+                mainContent.style.marginLeft = "230px";
+            }
+        } else {
+            if (sidebar.style.width === "230px") {
+                sidebar.style.width = "60px";
+            } else {
+                sidebar.style.width = "230px";
+            }
+        }
     }
-  } else {
-    if (sidebar.style.width === "230px") {
-      sidebar.style.width = "60px";
-    } else {
-      sidebar.style.width = "230px";
-    }
-  }
-}
-function showPasswords() {
-  var passwordInput = document.getElementById("psw");
-  var newpassword = document.getElementById("newpsw");
-  var confirmPasswordInput = document.getElementById("pass2");
 
-  if (passwordInput.type === "password") {
-      passwordInput.type = "text";
-      newpassword.type = "text";
-      confirmPasswordInput.type = "text";
-  } else {
-      passwordInput.type = "password";
-      newpassword.type = "password";
-      confirmPasswordInput.type = "password";
-  }
-}
-   
+    function showPasswords() {
+        var passwordInput = document.getElementById("psw");
+        var newpassword = document.getElementById("newpsw");
+        var confirmPasswordInput = document.getElementById("pass2");
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            newpassword.type = "text";
+            confirmPasswordInput.type = "text";
+        } else {
+            passwordInput.type = "password";
+            newpassword.type = "password";
+            confirmPasswordInput.type = "password";
+        }
+    }
 </script>
 
 <style>
