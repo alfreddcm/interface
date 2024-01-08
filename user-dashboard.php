@@ -161,7 +161,7 @@ function time_elapsed_string($datetime)
             </div>
 
 
-            <div class="row justify-content-start align-items-start g-1">
+            <div class="row justify-content-start align-items-start g-1 bottom">
                 <div class="col scroll">
                 <div class="card note">
     <h6 class="card-header"><img src="icons/project-icon.png" height="20px"> Notes </h6>
@@ -171,7 +171,7 @@ function time_elapsed_string($datetime)
     <form method="POST" action="php/note.php">
             <?php
           
-            $chck= "SELECT text FROM Note WHERE idno = $idno";
+            $chck= "SELECT text FROM Note WHERE idno = '$idno'";
             $checkResult = mysqli_query($conn, $chck);
 
             if (mysqli_num_rows($checkResult) > 0) {
@@ -374,8 +374,9 @@ function time_elapsed_string($datetime)
 
 <style>
 #text {
+    padding: 5px;
         width: 100%; 
-        height: 150px;
+        height: 170px;
         resize: none;
         border-radius: 10px;
     }
@@ -416,9 +417,10 @@ function time_elapsed_string($datetime)
     .scroll {
         height: auto;
     }
+    
 
     .scroll .card {
-        height: 300px;
+        height: 320px;
     }
 
     .list-wrapper input[type=checkbox] {
