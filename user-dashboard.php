@@ -9,10 +9,10 @@ function time_elapsed_string($datetime)
     $diff_str = array(
         'y' => 'year',
         'm' => 'month',
-        'd' => 'day',
-        'h' => 'hour',
-        'i' => 'minute',
-        's' => 'second',
+        'd' => 'd',
+        'h' => 'hr',
+        'i' => 'min',
+        's' => 'sec',
     );
 
     foreach ($diff_str as $key => &$value) {
@@ -67,23 +67,58 @@ function time_elapsed_string($datetime)
     <div id="main">
         <div class="container">
 
-            <div class="row justify-content-start align-items-start g-1">
+            <div class="row justify-content-start align-items-start g-1 top">
                 <div class="col-sm-8">
-                    <div class="card">
+                    <div class="card info">
                         <div class="card-body">
 
                             <h3 class="mb-2">Good Day, <b><?php echo $fname . " " . $mi . ". " . $lname ?></b>!</h3>
                             <div class="row justify-content-start align-items-start g-1">
-                                <div class="col-sm-3">
+                                <div class="col-sm-3 img">
                                     <center>
-                                        <img src="uploads/<?php echo $user_profile ?>" style="max-width: 150px;border-radius:50%; object-fit: cover;
-" alt="">
+                                        <img src="uploads/<?php echo $user_profile ?>" alt="">
                                     </center>
                                 </div>
-                                <div class="col-sm-6">
-                                    <label for="">Year Section: </label><br>
-                                    <label for="">Course: </label><br>
-                                    <label for="">Year Section: </label>
+                                <div class="col-sm-8" style="margin-right: 0;">
+                                    <table>
+                                        <tr>
+                                            <td>Email</td>
+                                            <td> : <?php echo $email ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sex</td>
+                                            <td> : <?php echo $sex ?></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Course</td>
+                                            <td> :
+                                                <?php
+                                                $sqlcourse = mysqli_query($conn, "SELECT program from course where id=$course_id");
+                                                $row = mysqli_fetch_assoc($sqlcourse);
+                                                $courseProgram = $row['program'];
+                                                echo $yrsec . " ";
+                                                echo $courseProgram;
+                                                ?>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>Department</td>
+                                            <td> :
+                                                <?php
+                                                $sqldep = mysqli_query($conn, "SELECT dep_name from department where id=$department_id");
+                                                $row = mysqli_fetch_assoc($sqldep);
+                                                $sqldep = $row['dep_name'];
+                                                echo $sqldep;
+                                                ?>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                    <hr>
+                                    <a name="" id="" class="btn btn-success" href="user-profile.php" role="button">Update Profile</a>
+
 
                                 </div>
                             </div>
@@ -92,8 +127,8 @@ function time_elapsed_string($datetime)
                     </div>
 
                 </div>
-                <div class="col-sm-4">
-                    <div class="card">
+                <div class="col">
+                    <div class="card locknum">
                         <div class="card-body">
                             <h4 class="text-center">Locker <br>
                                 <b class="number text-center"><?php
@@ -129,9 +164,28 @@ function time_elapsed_string($datetime)
             <div class="row justify-content-start align-items-start g-1">
                 <div class="col scroll">
                     <div class="card">
-                        <h6 class="card-header"><img src="icons/project-icon.png" height="20px"> To do </h6>
+                        <h6 class="card-header"><img src="icons/project-icon.png" height="20px"> Notes </h6>
                         <hr>
 
+                        <div class="card-body">
+                            <form method="POST" action="note.php">
+
+                                <?php
+                                // $notedata = mysqli_query($conn, "SELECT text FROM Notes WHERE idno = $idno");
+
+                                ?>
+                                <input type="text" name="text" id="text" > 
+                                <input type="hidden" name="userid" id="userid">
+                                <!-- textarea -->
+
+                            </form>
+                        </div>
+
+
+                        <!-- Move the submit button to the card footer -->
+                        <div class="card-footer text-muted">
+                            <button type="submit" class="btn btn-primary"> Save Note </button>
+                        </div>
                     </div>
                 </div>
 
@@ -169,32 +223,28 @@ function time_elapsed_string($datetime)
 
                     </div>
                 </div>
-                <div class="col">
-
-
-
-                    <div class="card text-start">
+                <div class="col scroll">
+                    <div class="card text-start usage">
                         <h6 class="card-header"><img src="icons/project-icon.png" height="20px"> Locker Usage</h6>
-                        <div class="card-body">
-                            <?php
+                        <?php
 
-                            echo '
+                        echo '
                             <div class="row justify-content-center align-items-center g-2">
                             ';
 
-                            echo ' 
+                        echo ' 
                             <div class="col">
                             <label for="selectMonth">Select Month:</label>
                             <select id="selectMonth" class="form-select">';
-                            for ($i = 1; $i <= 12; $i++) {
-                                $month = date('F', mktime(0, 0, 0, $i, 1));
-                                echo '<option value="' . date("Y-m", mktime(0, 0, 0, $i, 1)) . '">' . $month . '</option>';
-                            }
-                            echo '</select>   
+                        for ($i = 1; $i <= 12; $i++) {
+                            $month = date('F', mktime(0, 0, 0, $i, 1));
+                            echo '<option value="' . date("Y-m", mktime(0, 0, 0, $i, 1)) . '">' . $month . '</option>';
+                        }
+                        echo '</select>   
                             </div>
                             ';
 
-                            echo '<div class="col">
+                        echo '<div class="col px-2">
 
 
                             <label for="selectYear">Select Year:</label>
@@ -203,37 +253,34 @@ function time_elapsed_string($datetime)
                             
                             ';
 
-
-                            $yearRange = range(date("Y"), date("Y") - 5); // Change the range as needed
-                            foreach ($yearRange as $year) {
-                                echo '<option value="' . $year . '">' . $year . '</option>';
-                            }
-                            echo '</select>
+                        $yearRange = range(date("Y"), date("Y") - 5);
+                        foreach ($yearRange as $year) {
+                            echo '<option value="' . $year . '">' . $year . '</option>';
+                        }
+                        echo '</select>
                                          </div>
                                     </div>';
 
-                            $selectedMonth = date("Y-m"); // Change this to the desired month (e.g., "2024-01")
-                            $selectedYear = date("Y"); // Change this to the desired year (e.g., "2024")
+                        $selectedMonth = date("Y-m");
+                        $selectedYear = date("Y");
 
-                            $logHistoryData = array();
-                            $logHistoryQuery = "SELECT DATE(date_time) as day, COUNT(*) as usage_count 
+                        $logHistoryData = array();
+                        $logHistoryQuery = "SELECT DATE(date_time) as day, COUNT(*) as usage_count 
                                                     FROM log_history 
-                                                    WHERE locker_id = $locker_id 
+                                                    WHERE locker_id = $locker_id && access='close'
                                                     AND DATE_FORMAT(date_time, '%Y-%m') = '$selectedMonth'
                                                     AND YEAR(date_time) = $selectedYear
                                                     GROUP BY day 
                                                     ORDER BY day DESC";
-                            $logHistoryResult = mysqli_query($conn, $logHistoryQuery);
+                        $logHistoryResult = mysqli_query($conn, $logHistoryQuery);
 
-                            while ($row = mysqli_fetch_assoc($logHistoryResult)) {
-                                $logHistoryData['labels'][] = $row['day'];
-                                $logHistoryData['data'][] = $row['usage_count'];
-                            }
-                            ?>
-                            <canvas id="lockerUsageChart"></canvas>
-                        </div>
+                        while ($row = mysqli_fetch_assoc($logHistoryResult)) {
+                            $logHistoryData['labels'][] = $row['day'];
+                            $logHistoryData['data'][] = $row['usage_count'];
+                        }
+                        ?>
+                        <canvas id="lockerUsageChart"></canvas>
                     </div>
-
                 </div>
             </div>
 
@@ -306,9 +353,34 @@ function time_elapsed_string($datetime)
 
 
 <style>
+    td {
+        vertical-align: top;
+    }
+
+    .img img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .locknum {
+        padding-top: 10px;
+        width: 100%;
+        left: -20px;
+    }
+
+    .info {
+        width: 95%;
+    }
+
+    hr {
+        margin-top: 1px;
+        margin-bottom: 6px;
+    }
+
     .card-header {
         background-color: #f5f5f5;
-        /* Change the background color as needed */
         padding: 10px;
         position: sticky;
         top: 0;
@@ -333,7 +405,7 @@ function time_elapsed_string($datetime)
     }
 
     .top .card {
-        height: 200px;
+        height: 230px;
     }
 
     .modal-body {
@@ -360,11 +432,12 @@ function time_elapsed_string($datetime)
 
     @media screen and (max-width: 600px) {
 
-        /* .col-lg-6 {
+        .col {
             flex: 0 0 auto;
             width: 90%;
             padding: auto;
-        } */
+        }
+
         #main {
             margin: 0;
             margin-left: 20px;
@@ -375,8 +448,25 @@ function time_elapsed_string($datetime)
         }
 
         .card {
-            width: 350px;
+            width: 100%;
         }
+
+        .locknum {
+            left: 1%;
+        }
+
+        .info .card {
+            width: 100%;
+        }
+
+        .scroll .usage {
+            height: auto;
+        }
+
+        .top .card {
+            height: auto;
+        }
+
     }
 
     h3 {

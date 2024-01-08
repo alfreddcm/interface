@@ -339,12 +339,12 @@
      // do not touch
    </script>
    <style>
-     .dropdown.dropend .dropdown-toggle::after {
+     .row2 .dropdown.dropend .dropdown-toggle::after {
        display: none !important;
      }
 
-     .dropdown:hover .dropdown-menu,
-     .dropdown:hover .dropdown-toggle {
+    .row2 .dropdown:hover .dropdown-menu,
+    .row2 .dropdown:hover .dropdown-toggle {
        display: block;
      }
 

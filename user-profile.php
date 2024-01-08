@@ -40,7 +40,7 @@ include("php/php-update-profile.php");
                                 <img src="uploads/<?php echo $user_profile ?>" alt="Avatar" class="  my-3" id="imagePreview">
                                 <hr>
                                 <button type="button" class="btn btn-success btn-md" data-bs-toggle="modal" data-bs-target="#update">
-                                    Options
+                                    Update Details
                                 </button>
                             </div>
 
@@ -67,13 +67,25 @@ include("php/php-update-profile.php");
                                                 ?>
                                             </p>
                                         </div>
+                                        
+
                                         <div class="col-6 mb-3">
-                                            <h6>Year Section</h6>
+                                            <div
+                                                class="row justify-content-center align-items-center g-2"
+                                            >
+                                                <div class="col"><h6>Sex</h6>
+                                            <p class="text-muted">
+                                                <?php
+                                                echo $sex
+                                                ?>
+                                            </p></div>
+                                                <div class="col"><h6>Year Section</h6>
                                             <p class="text-muted">
                                                 <?php
                                                 echo $yrsec
                                                 ?>
-                                            </p>
+                                            </p></div>
+                                            </div>
                                         </div>
                                         <div class="col-6 mb-3">
                                             <h6>Course</h6>
@@ -293,9 +305,11 @@ include("php/php-update-profile.php");
 
         #main {
             margin: 1px;
+            padding-right: 2px;
         }
         .card{
             width: 100%;
+            margin-right: 0;
         }
     }
 

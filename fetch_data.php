@@ -10,7 +10,7 @@ if (isset($_POST['selectedMonth']) && isset($_POST['selectedYear'])) {
     // Your existing database query code
     $logHistoryQuery = "SELECT DATE(date_time) as day, COUNT(*) as usage_count 
                        FROM log_history 
-                       WHERE locker_id = ? 
+                       WHERE locker_id = ? && access='close'
                        AND DATE_FORMAT(date_time, '%Y-%m') = ?
                        AND YEAR(date_time) = ?
                        GROUP BY day 

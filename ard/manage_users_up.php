@@ -50,7 +50,7 @@
                     </td>
                     <td><?php echo $count++; ?></td>
                     <td><?php echo $row['uid'] . " " . $token; ?>
-                      <a name="" id="" class="btn btn-danger remove-button" data-iud="<?php echo $row['uid'] ?>" role="button">Remove</a>
+                      <a name="uid" id="uid" class="btn btn-danger remove-button" data-uid="<?php echo $row['uid'] ?>" role="button">Remove</a>
 
                     </td>
 
