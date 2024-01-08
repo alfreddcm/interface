@@ -9,7 +9,7 @@ function time_elapsed_string($datetime)
     $diff_str = array(
         'y' => 'year',
         'm' => 'month',
-        'd' => 'd',
+        'd' => 'day',
         'h' => 'hr',
         'i' => 'min',
         's' => 'sec',
@@ -149,7 +149,7 @@ function time_elapsed_string($datetime)
                             <p class="card-text"><small class="text-muted">
                                     <?php
                                     date_default_timezone_set('Asia/Manila');
-                                    $last_access = mysqli_fetch_assoc(mysqli_query($conn, "SELECT max(date_time) AS last_access FROM log_history WHERE locker_id = $locker_id"));
+                                    $last_access = mysqli_fetch_assoc(mysqli_query($conn, "SELECT max(date_time) AS last_access FROM Log_history WHERE locker_id = $locker_id"));
                                     echo "Last updated " . time_elapsed_string($last_access['last_access']);
                                     ?>
                                 </small></p>
@@ -163,30 +163,34 @@ function time_elapsed_string($datetime)
 
             <div class="row justify-content-start align-items-start g-1">
                 <div class="col scroll">
-                    <div class="card">
-                        <h6 class="card-header"><img src="icons/project-icon.png" height="20px"> Notes </h6>
-                        <hr>
+                <div class="card note">
+    <h6 class="card-header"><img src="icons/project-icon.png" height="20px"> Notes </h6>
+    <hr>
 
-                        <div class="card-body">
-                            <form method="POST" action="note.php">
+    <div class="card-body">
+    <form method="POST" action="php/note.php">
+            <?php
+          
+            $chck= "SELECT text FROM Note WHERE idno = $idno";
+            $checkResult = mysqli_query($conn, $chck);
 
-                                <?php
-                                // $notedata = mysqli_query($conn, "SELECT text FROM Notes WHERE idno = $idno");
+            if (mysqli_num_rows($checkResult) > 0) {
+                $row = mysqli_fetch_assoc($checkResult);
+                $text = $row['text'];
+            } else {
+                $text = '';
+            }
+            ?>
+            <textarea type="text" name="text" id="text"><?php echo $text ?></textarea>
+            <input type="hidden" name="idno" id="idno" value="<?php echo $idno ?>">
+    
+    </div>
+    <div class="card-footer text-muted">
+        <button type="submit" class="btn btn-primary"> Save Note </button>
+    </div>
+        </form>
+</div>
 
-                                ?>
-                                <input type="text" name="text" id="text" > 
-                                <input type="hidden" name="userid" id="userid">
-                                <!-- textarea -->
-
-                            </form>
-                        </div>
-
-
-                        <!-- Move the submit button to the card footer -->
-                        <div class="card-footer text-muted">
-                            <button type="submit" class="btn btn-primary"> Save Note </button>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="col scroll">
@@ -298,6 +302,22 @@ function time_elapsed_string($datetime)
 <script src="todo/script.js"></script>
 <script src="node_modules/jquery/dist/jquery.min.js"></script>
 <script>
+      function handleEnterKey(event) {
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault(); // Prevent form submission on Enter key
+            // Optionally, you can add custom behavior for the Enter key, e.g., creating a new line
+            let textarea = document.getElementById('text');
+            let cursorPos = textarea.selectionStart;
+            let textBefore = textarea.value.substring(0, cursorPos);
+            let textAfter = textarea.value.substring(cursorPos);
+
+            textarea.value = textBefore + "\n" + textAfter;
+        }
+    }
+
+    function validateForm() {
+        return false; 
+    }
     // Use the data fetched from the server
     var lockerUsageData = {
         labels: <?php echo json_encode($logHistoryData['labels']); ?>,
@@ -353,6 +373,12 @@ function time_elapsed_string($datetime)
 
 
 <style>
+#text {
+        width: 100%; 
+        height: 150px;
+        resize: none;
+        border-radius: 10px;
+    }
     td {
         vertical-align: top;
     }
@@ -432,19 +458,21 @@ function time_elapsed_string($datetime)
 
     @media screen and (max-width: 600px) {
 
-        .col {
+        /* .col {
             flex: 0 0 auto;
             width: 90%;
             padding: auto;
-        }
+        } */
 
         #main {
             margin: 0;
             margin-left: 20px;
+            margin-right: 10px;
         }
 
         #main .card {
             font-size: 12px;
+            width: 100%;
         }
 
         .card {
@@ -455,9 +483,9 @@ function time_elapsed_string($datetime)
             left: 1%;
         }
 
-        .info .card {
+        /* .info .card {
             width: 100%;
-        }
+        } */
 
         .scroll .usage {
             height: auto;
