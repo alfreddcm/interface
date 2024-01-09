@@ -68,8 +68,8 @@ include("../php/php-updateadminprofile.php");
                             <div class="col-md-4 mb-0 gradient-custom text-center text-black">
                                 <img src="../adminuploads/<?php echo $profile ?>" alt="Avatar" class="img-fluid my-3" id="imagePreview">
                                 <hr>
-                                <h6><button type="button" class="btn btn-secendary btn-m" data-bs-toggle="modal" data-bs-target="#update">
-                                        Options
+                                <h6><button type="button" class="btn btn-success btn-m" data-bs-toggle="modal" data-bs-target="#update">
+                                        Update info
                                     </button></h6>
                             </div>
 
@@ -83,6 +83,8 @@ include("../php/php-updateadminprofile.php");
 
                                         <h6>Email</h6>
                                         <p class="text-muted"><?php echo $email ?></p>
+                                        <h6>Position</h6>
+                                        <p class="text-muted"><?php echo ucfirst(strtolower($pos)); ?></p>
 
                                         <h6>Department</h6>
                                         <p class="text-muted">

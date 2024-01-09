@@ -2,6 +2,7 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
 require('../user-connection.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -23,26 +24,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($result) {
         if (mysqli_num_rows($result) > 0 ) {
-            echo "<script>
-            alert('Email already on the list!');
-            window.location.href='../index.php';
-            </script>";
+            echo "Email already on the list!";
 
          } elseif(mysqli_num_rows($result1) > 0){
-            echo "<script>
-            alert('An account is already created using this email or ID number!');
-            window.location.href='../index.php';
-
-            </script>";
+            echo "An account is already created using this email or ID number!";
 
             
 
         } elseif(mysqli_num_rows($result2) > 0){
-            echo "<script>
-            alert('An account is already created using this email!');
-            window.location.href='../index.php';
-
-            </script>";
+            echo "An account is already created using this email!";
 
         } else {
 
@@ -51,11 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             VALUES ('$email','$idno','$fname','$mi','$lname','$sex',$course_id,$department_id,'$yrsec')");
 
             if ($insertQuery) {
-                echo "<script>
-                        alert('Request send! Please wait for email for confirmation');
-                        window.location.href='../index.php';
-
-                        </script>";
+                echo "success";
 
             } else {
                 echo "<script>

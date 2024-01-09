@@ -313,7 +313,7 @@ $(document).ready(function() {
                 url: $(this).attr('action'),
                 data: $(this).serialize(),
                 success: function(response) {
-                    if (response === 'Success') {
+                    if (response === 'success') {
                         Swal.fire({
                             title: 'Success',
                             text: 'Note saved!',

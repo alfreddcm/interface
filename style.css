@@ -117,20 +117,27 @@ body {
     filter: drop-shadow(0 0 0.2rem black);
   }
 
+  /* .dropdown:hover .dropdown-menu {
+    display: block;
+  } */
+
+  .dropdown-menu{
+    padding: 10px;
+  }
 .dropdown .btn, p{
   color: #ffffff;
   display: inline;
 }
 
 .dropdown .p{
-  outline: 1px solid rgb(255, 255, 255);
+padding-top: 2px;
   width: 40px;
   height: 40px;
   margin: 0;
   padding: 0;
 }
 
-.dropdown .p:hover{
+.dropdown:hover .p{
 outline: 9px solid rgba(255, 255, 255, 0.279);
 transition: outline 1s ease;
 }

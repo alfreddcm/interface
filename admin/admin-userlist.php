@@ -184,6 +184,7 @@ if (!isset($_SESSION['email'])) {
                                 <a name="updatepass" id="updatepass" class="updatepass dropdown-item" data-email="<?php echo $user['email'] ?>" role="button">Reset Password</a>
                             </li>
                         </ul>
+                        
                         <a name="removeButton" id="removeButton" class="remove-button" data-email="<?php echo $user['email'] ?>" role="button">
                             <button type="button" class="btn btn-danger" aria-expanded="false">
                                 Remove
@@ -311,12 +312,18 @@ if (!isset($_SESSION['email'])) {
         });
     </script>
     <style>
+        .card-footer button{
+            margin: 2px;
+            margin-right: 2px;
+        }
         .container .card {
             min-height: 300px;
 
         }
 
         .img {
+            object-fit: cover;
+
             height: 100px;
             width: 100px;
         }

@@ -18,7 +18,6 @@ if (!isset($_SESSION['email'])) {
 <head>
   <title>Locker List</title>
   <link rel="shortcut icon" href="../icons/logo.png" type="image/x-icon">
-
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="../style.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
@@ -43,8 +42,7 @@ if (!isset($_SESSION['email'])) {
               <p class="font-weight-bold p1"><?php echo $fname . " " . $mi . ". " . $lname ?></p> &nbsp;
               <img src="../adminuploads/<?php echo $profile ?>" alt="Admin" class="rounded-circle p">
             </button>
-
-            <div class="dropdown-menu p-3" aria-labelledby="triggerId">
+            <div class="dropdown-menu pt-3" aria-labelledby="triggerId">
               <p class="text-uppercase font-weight-bold"><?php echo $fname . " " . $mi . ". " . $lname ?></p>
               <p class="text-secondary"> <?php echo $email ?>
               <ul class="list-unstyled">
@@ -88,7 +86,7 @@ if (!isset($_SESSION['email'])) {
                 <div class="row justify-content-center align-items-center g-1">
                   <div class="col-md-4 text-center">
                     <img class="img" src="../icons/locker-icon.png" height="100px">
-                    <?php 
+                    <?php
 
                     echo "<b class='num'>{$row['locker_id']}</b><br>"; ?>
                   </div>
@@ -99,7 +97,7 @@ if (!isset($_SESSION['email'])) {
                       $userid = $row['id'];
                       $sql = mysqli_query($conn, "SELECT * from user_data where id= $userid ");
                       $res = mysqli_fetch_assoc($sql);
-                      
+
                       echo $res['fname'] . ' ' . $res['mi'] . '. ' . $res['lname'];
                       $course_id = $res['course_id'];
 
@@ -132,7 +130,7 @@ if (!isset($_SESSION['email'])) {
 
       <?php
       $sql = "SELECT ld.id, ld.uid, ld.status FROM locker_data as ld LEFT JOIN user_data as ud ON ld.id = ud.locker_id WHERE ud.id IS NULL";
-      
+
       $result = $conn->query($sql);
       if ($result->num_rows > 0) {
         echo '<div class="row g-2">';
@@ -157,7 +155,7 @@ if (!isset($_SESSION['email'])) {
                       Option
                     </button>
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="../php/locker-changceuser.php?id=<?php echo $row['id'] ?>" >Set User</a></li>
+                      <li><a class="dropdown-item" href="../php/locker-changceuser.php?id=<?php echo $row['id'] ?>">Set User</a></li>
                     </ul>
                   </div>
                   <a name="" id="" class="btn btn-danger remove-button" data-uid="<?php echo $row['uid'] ?>" data-id="<?php echo $row['id'] ?>" role="button">Remove</a>
@@ -175,8 +173,6 @@ if (!isset($_SESSION['email'])) {
 
 
     </div>
-
-
     <!--  -->
     <div class="form-group" style="margin-top: 12%; float:right; position: relative; ">
       <div class="col ">
@@ -186,7 +182,10 @@ if (!isset($_SESSION['email'])) {
       </div>
     </div>
     <!--  -->
+
+
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
@@ -295,10 +294,14 @@ if (!isset($_SESSION['email'])) {
       border-radius: 3px;
     }
 
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: 600px) {
 
-      .num {
+      .num{
         top: 9px;
+        left: 45%;
+      }
+      .num2 {
+        top: 0px;
         left: 45%;
       }
 
@@ -311,4 +314,3 @@ if (!isset($_SESSION['email'])) {
 </body>
 
 </html>
-

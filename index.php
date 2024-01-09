@@ -44,7 +44,7 @@ include("php/php-login.php");
                 <div class="col-lg-5 pb-0 loginform">
                     <div class="row justify-content-center align-items-center g-2">
                         <div class="col">
-                            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+                            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" id="log">
                                 <div class="form-container">
                                     <form class="form">
                                         <div class="title">
@@ -59,7 +59,7 @@ include("php/php-login.php");
                                         </div>
                                         <div class="input-group">
                                             <label for="password">Password</label>
-                                            <input type="password" name="password" id="password" placeholder="">
+                                            <input type="password" name="password" id="password" placeholder="" minlength="8">
                                         </div>
                                         <input type="checkbox" class="mt-4" onclick="showPassword()">
                                         
@@ -89,11 +89,6 @@ include("php/php-login.php");
         <div class="container px-5">
             <div class="text-white-50 small">
                 <div class="mb-0">&copy; Your Website 2023. All Rights Reserved.</div>
-                <a href="#!">Privacy</a>
-                <span class="mx-1">&middot;</span>
-                <a href="#!">Terms</a>
-                <span class="mx-1">&middot;</span>
-                <a href="#!">FAQ</a>
             </div>
         </div>
     </footer>
@@ -105,7 +100,7 @@ include("php/php-login.php");
                 <div class="modal-body text-center">
                     <h5>Regitration Form</h5>
                     <div class="mb-3">
-                        <form action="php/php-register.php" method="post">
+                        <form action="php/php-register.php" method="post" id="reg">
                             <div class="main-block">
                                 <hr>
                                 <div class="row justify-content-center text-start g-2">
@@ -153,13 +148,13 @@ include("php/php-login.php");
                                                 <div class="col">
                                                     <div class="form-group col2">
                                                         <label>ID Number</label>
-                                                        <input type="text" class="form-control" id="idno" name="idno" placeholder="Enter ID Number" maxlength="7" oninput="addHyphenidno()" required>
+                                                        <input type="text" class="form-control" id="idno" name="idno" placeholder="Enter ID Number" pattern="\d{2}-\d{4}" maxlength="7" title="Id number must have 6 digits" oninput="addHyphenidno()" required>
                                                     </div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="form-group">
                                                         <label>Year and Section</label>
-                                                        <input type="text" class="form-control" id="ysec" name="ysec" placeholder="eg. 2-1" maxlength="3" oninput="addHyphen()" required>
+                                                        <input type="text" class="form-control" id="ysec" name="ysec" placeholder="eg. 2-1" pattern="\d{1}-\d{1}" maxlength="3" title="Year and section 2 digits" oninput="addHyphen()" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -229,7 +224,49 @@ include("php/php-login.php");
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+    <script src="sweet/jquery-1.10.2.min.js"></script>
+    <script src="sweet/sweetalert2.all.min.js"></script>
     <script>
+$(document).ready(function() {
+        $("#reg").submit(function(e) {
+            e.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response === 'success') {
+                        Swal.fire({
+                            title: 'Success',
+                            text: 'Request Added! Please wait for email confirmation! ',
+                            icon: 'success',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: response,
+                            icon: 'error',
+                        });
+                    }
+                },
+
+                error: function() {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred while processing your request.',
+                        icon: 'error',
+                    });
+                }
+            });
+        });
+    });
+
+
         function showPassword() {
             var passwordInput = document.getElementById("password");
 

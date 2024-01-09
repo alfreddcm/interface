@@ -11,6 +11,7 @@
 
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <link rel="stylesheet" type="text/css" href="../style.css">
+   <link rel="stylesheet" href="../css/dash.css" class="re">
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -62,7 +63,7 @@
          <div class="col">
            <a href="admin-lockerlist.php" style="text-decoration: none;">
 
-             <div class="card text-center smcard">
+             <div class="card text-center smcard border-primary">
                <p class="card-text">
                <h6>Total Lockers</h6>
                <span class="number">
@@ -78,7 +79,7 @@
          </div>
          <div class="col">
            <a href="admin-userlist.php" style="text-decoration: none;">
-             <div class="card text-center smcard">
+             <div class="card text-center smcard border-primary">
                <p class="card-text">
                <h6>Total Users </h6>
 
@@ -97,7 +98,7 @@
          <div class="col">
            <a href="admin-lockerlist.php" style="text-decoration: none;">
 
-             <div class="card text-center smcard">
+             <div class="card text-center smcard border-primary">
                <p class="card-text">
                <h6>Available lockers</h6>
                <span class="number">
@@ -117,7 +118,7 @@
          <div class="col">
            <a href="admin-userlist.php" style="text-decoration: none;">
 
-             <div class="card text-center smcard">
+             <div class="card text-center smcard border-primary">
                <p class="card-text">
                <h6>Unassign Users</h6>
                <span class="number">
@@ -133,7 +134,7 @@
 
        <div class="row row2 justify-content-center align-items-center g-2">
          <div class="col scroll ">
-           <div class="card  mb-2 text-start">
+           <div class="card  mb-2 text-start border-success">
              <h6 class="card-header text-center">
                <img src="../icons/male-add-icon.png" alt="" height="20px">
                Request list
@@ -197,7 +198,7 @@
          </div>
 
          <div class="col scroll">
-           <div class="card text-start">
+           <div class="card text-start acts border-success">
              <div class="card-header">
                <h6 class="text-center act">
                  <img src="../icons/project-icon.png" alt="" height="20px">
@@ -212,11 +213,32 @@
          </div>
 
        </div>
+       <div class="row justify-content-center align-items-center g-2">
+         <div class="col">
+           <div class="card border-primary">
+             <div class="card-body">
+               <h4 class="card-title">Title</h4>
+               <p class="card-text">Text</p>
+             </div>
+           </div>
+
+         </div>
+
+         <div class="col">
+           <div class="card border-primary">
+             <div class="card-body">
+               <h4 class="card-title">Title</h4>
+               <p class="card-text">Text</p>
+             </div>
+           </div>
+         </div>
+       </div>
+
      </div>
 
-
-     <!-- main /div -->
    </div>
+
+   <!-- main /div -->
    <script src="../script.js"></script>
    <script>
      $(document).ready(function() {
@@ -243,7 +265,7 @@
          updateManageUsers($('#datepicker').val()); // Update logs with the current selected date
        }, 6000);
      });
-     
+
      //do not touch//
 
      $(document).ready(function() {
@@ -338,122 +360,7 @@
 
      // do not touch
    </script>
-   <style>
-     .row2 .dropdown.dropend .dropdown-toggle::after {
-       display: none !important;
-     }
 
-    .row2 .dropdown:hover .dropdown-menu,
-    .row2 .dropdown:hover .dropdown-toggle {
-       display: block;
-     }
-
-     #datepicker {
-       margin: 1px;
-       top: 0;
-       right: 0;
-       margin-right: 10px;
-       position: absolute;
-       width: fit-content;
-     }
-
-     .scroll .card {
-       height: 250px;
-     }
-
-     .scroll p {
-       overflow-y: auto;
-
-     }
-
-     .number {
-       display: inline;
-       font-size: 40px;
-       font-weight: bold;
-
-     }
-
-     .container-lg {
-       background-color: rgba(0, 0, 0, 0.223);
-       width: auto;
-       height: fit-content;
-       padding: 10px;
-       padding-bottom: 30px;
-     }
-
-     .modal-body {
-       color: black;
-     }
-
-     #con {
-       display: block;
-       padding: 0px;
-     }
-
-     .user {
-       width: fit-content;
-     }
-
-     .overflow {
-       height: 300px;
-     }
-
-     #imagePreview {
-       margin: 15px;
-       align-self: center;
-       justify-self: center;
-       width: 150px;
-       height: 150px;
-       object-fit: cover;
-       border-radius: 50%;
-       outline: 4px solid darkslateblue;
-       outline-offset: 2px;
-     }
-
-
-     .info {
-       height: 100%;
-     }
-
-     .info p {
-       font-size: .9rem;
-
-     }
-
-
-
-     @media screen and (max-width: 600px) {
-       .col {
-         width: 100%;
-         justify-content: center;
-         align-items: center;
-         margin-bottom: 10px;
-       }
-
-       .smcard {
-         display: block;
-         width: 190px;
-         height: 100px;
-         margin-bottom: 2px;
-       }
-
-       .row2 .card {
-         width: 400px;
-       }
-
-       table {
-         font-size: small;
-       }
-
-       .btn {
-
-         transform: scale(.8);
-       }
-       .act{
-        display: flex;
-       }
-     }
-   </style>
  </body>
 
  </html>

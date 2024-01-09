@@ -1,0 +1,122 @@
+.card:hover{
+    top: -3px;
+    background-color: rgb(211, 220, 255);
+}
+
+ .row2 .dropdown.dropend .dropdown-toggle::after {
+   display: none !important;
+ }
+
+.row2 .dropdown:hover .dropdown-menu,
+.row2 .dropdown:hover .dropdown-toggle {
+   display: block;
+ }
+
+ #datepicker {
+   margin: 1px;
+   top: 0;
+   right: 0;
+   margin-right: 10px;
+   position: absolute;
+   width: fit-content;
+ }
+
+ .scroll .card {
+   height: 250px;
+ }
+
+ .scroll p {
+   overflow-y: auto;
+
+ }
+
+ .number {
+   display: inline;
+   font-size: 40px;
+   font-weight: bold;
+
+ }
+
+ .container-lg {
+   background-color: rgba(0, 0, 0, 0.223);
+   width: auto;
+   height: fit-content;
+   padding: 10px;
+   padding-bottom: 30px;
+ }
+
+ .modal-body {
+   color: black;
+ }
+
+ #con {
+   display: block;
+   padding: 0px;
+ }
+
+ .user {
+   width: fit-content;
+ }
+
+ .overflow {
+   height: 300px;
+ }
+
+ #imagePreview {
+   margin: 15px;
+   align-self: center;
+   justify-self: center;
+   width: 150px;
+   height: 150px;
+   object-fit: cover;
+   border-radius: 50%;
+   outline: 4px solid darkslateblue;
+   outline-offset: 2px;
+ }
+
+
+ .info {
+   height: 100%;
+ }
+
+ .info p {
+   font-size: .9rem;
+
+ }
+ .acts{
+    top: -6px;
+ }
+
+
+
+ @media screen and (max-width: 600px) {
+   .col {
+     width: 100%;
+     justify-content: center;
+     align-items: center;
+     margin-bottom: 10px;
+   }
+
+   .smcard {
+     display: block;
+     width: 190px;
+     height: 100px;
+     margin-bottom: 2px;
+   }
+
+   .row2 .card {
+     width: 400px;
+   }
+
+   table {
+     font-size: small;
+   }
+
+   .btn {
+
+     transform: scale(.8);
+   }
+   .act{
+    display: flex;
+   }
+ }

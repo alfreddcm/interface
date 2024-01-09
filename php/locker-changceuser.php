@@ -128,70 +128,78 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <div id="main">
         <br>
+        <div class="row justify-content-center align-items-center">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <?php
+                            echo "Locker ID: $lockerid";
+                            $seluser = mysqli_query($conn, "SELECT * FROM locker_data AS ld left JOIN user_data AS ud ON ld.id = ud.locker_id WHERE ld.id = $lockerid");
+                            if ($seluser) {
+                                $row = mysqli_fetch_assoc($seluser);
+                            } else {
+                                echo "Query failed: " . mysqli_error($conn);
+                            }
+                            ?></h5>
+                        <p class="card-text text-black ">
+                        <table>
+                            <tr>
 
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title">
-                    <?php
-                    echo "Locker ID: $lockerid";
-                    $seluser = mysqli_query($conn, "SELECT * FROM locker_data AS ld left JOIN user_data AS ud ON ld.id = ud.locker_id WHERE ld.id = $lockerid");
-                    if ($seluser) {
-                        $row = mysqli_fetch_assoc($seluser);
-                    } else {
-                        echo "Query failed: " . mysqli_error($conn);
-                    }
-                    ?></h5>
-                <p class="card-text text-black ">
-                <table>
-                    <tr>
-
-                        <td class="text-end">Current User:</td>
-                        <?php
-                        if (!$seluser) {
-                            echo  '<td class="text-start"> No user </td>';
-                        } else {
-                        ?>
-                            <td class="text-start"><?php echo $row['fname'] . " " . $row['mi'] . ". " . $row['lname']." " .$row['idno']; ?></td>
-                        <?php
-                        }
-                        ?>
-                    </tr>
-                </table>
-
-                <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="mb-3">
-                    <select class="form-select" id="user" name="user" required>
-                        <?php
-
-                        $sql = "SELECT * FROM user_data";
-                        $result = $conn->query($sql);
-
-                        if ($result->num_rows > 0) {
-                            echo '<option value="0"> Set to empty user</option>';
-
-                            while ($row = $result->fetch_assoc()) {
-                                $selected = ($selectedUserId == $row["id"]) ? 'selected' : '';
-                                $optionValue = htmlspecialchars($row["id"]);
-                                $fullName = htmlspecialchars($row["fname"] . " " . $row["mi"] . ". " . $row["lname"]);
-
-                                if ($row['locker_id'] === null) {
-                                    echo '<option value="' . $optionValue . '" ' . $selected . '>No Locker - ' . $fullName . ' ' . $row['idno'] . '</option>';
+                                <td class="text-end">Current User:</td>
+                                <?php
+                                if (!$seluser) {
+                                    echo  '<td class="text-start"> No user </td>';
                                 } else {
-                                    echo '<option value="' . $optionValue . '" ' . $selected . '>' . "Locker: " . $row['locker_id'] . " " . $fullName . " " . $row['idno'] . '</option>';
+                                ?>
+                                    <td class="text-start"><?php echo $row['fname'] . " " . $row['mi'] . ". " . $row['lname'] . " " . $row['idno']; ?></td>
+                                <?php
                                 }
-                                                            }
-                        } else {
-                            echo '<option value="" disabled >No User data found</option>';
-                        }
-                        ?>
-                    </select>
-                    <input hidden type="text" value="<?php echo $lockerid; ?>" name="lid" id="lid">
-                </form>
-                <a name="" id="" class="btn btn-primary" href="../admin/admin-lockerlist.php" role="button">Return</a>
-                <button id="submitBtn" class="btn btn-success" type="button">Submit</button>
+                                ?>
+                            </tr>
+                        </table>
 
-                </p>
+                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="mb-3">
+                            <select class="form-select" id="user" name="user" required>
+                                <?php
+
+                                $sql = "SELECT * FROM user_data";
+                                $result = $conn->query($sql);
+
+                                if ($result->num_rows > 0) {
+                                    echo '<option value="0"> Set to empty user</option>';
+
+                                    while ($row = $result->fetch_assoc()) {
+                                        $selected = ($selectedUserId == $row["id"]) ? 'selected' : '';
+                                        $optionValue = htmlspecialchars($row["id"]);
+                                        $fullName = htmlspecialchars($row["fname"] . " " . $row["mi"] . ". " . $row["lname"]);
+
+                                        if ($row['locker_id'] === null) {
+                                            echo '<option value="' . $optionValue . '" ' . $selected . '>No Locker - ' . $fullName . ' ' . $row['idno'] . '</option>';
+                                        } else {
+                                            echo '<option value="' . $optionValue . '" ' . $selected . '>' . "Locker: " . $row['locker_id'] . " " . $fullName . " " . $row['idno'] . '</option>';
+                                        }
+                                    }
+                                } else {
+                                    echo '<option value="" disabled >No User data found</option>';
+                                }
+                                ?>
+                            </select>
+                            <input hidden type="text" value="<?php echo $lockerid; ?>" name="lid" id="lid">
+                        </form>
+                        <a name="" id="" class="btn btn-primary" href="../admin/admin-lockerlist.php" role="button">Return</a>
+                        <button id="submitBtn" class="btn btn-success" type="button">Submit</button>
+
+                        </p>
+                    </div>
+                </div>
             </div>
+
         </div>
+
+
+
+
     </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -252,7 +260,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             });
         });
     </script>
-
+<style>
+    .card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+@media screen and (max-width: 600px) {
+.card{
+    width: 80%;
+}
+}
+</style>
 </body>
 
 </html>
