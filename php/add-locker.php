@@ -12,6 +12,49 @@ if (!isset($_SESSION['email'])) {
 
 $token = $_SESSION['token'];
 
+if (isset($_POST['message'])) {
+      if ($_POST['message'] == "err1") {
+          echo '	<script type="text/javascript">
+                       setTimeout(function () {
+                          $(".up_info1").fadeIn(200);
+                          $(".up_info1").text("UID is already on the locker_data");
+                          $("#admin-account").modal("show");
+                        }, 500);
+                        setTimeout(function () {
+                          $(".up_info1").fadeOut(1000);
+                        }, 3000);
+                  </script>';
+      }
+  } 
+
+  if (isset($_POST['message'])) {
+      if ($_POST['message'] == "err2") {
+          echo '	<script type="text/javascript">
+                       setTimeout(function () {
+                          $(".up_info1").fadeIn(200);
+                          $(".up_info1").text("UID is already on the list, not registered");
+                          $("#admin-account").modal("show");
+                        }, 500);
+                        setTimeout(function () {
+                          $(".up_info1").fadeOut(1000);
+                        }, 3000);
+                  </script>';
+      }
+  } 
+
+  if (isset($_POST['message'])) {
+      if ($_POST['message'] == "er3") {
+          echo ' <script type="text/javascript">
+                       setTimeout(function () {
+                          $(".up_info2").fadeIn(200);
+                          $(".up_info2").text("New card added!");
+                        }, 500);
+                        setTimeout(function () {
+                          $(".up_info2").fadeOut(1000);
+                        }, 3000);
+                  </script>';
+      }
+  }
 ?>
 
 <!DOCTYPE html>
@@ -69,7 +112,7 @@ $token = $_SESSION['token'];
     <div id="mySidebar" class="sidebar">
         <a href="../admin/admin-dashboard.php"><img src="../icons/dashboard-icon.png"> Dashboard</a>
         <a href="../admin/admin-lockerlist.php" style="background-color: white; "><img src="../icons/locker.png" style="filter:invert(100);"> <b style="color:black;"> Locker list</b></a>
-        <a href="../admin/admin-userlist.php"><img src="../icons/users.png"> Manage users</a>
+        <a href="../admin/admin-userlist.php"><img src="../icons/users.png"> Manage users </a>
     </div>
     <div id="main">
         <div class="container mt-5">
@@ -83,6 +126,9 @@ $token = $_SESSION['token'];
                     echo $row["dep_name"]
                     ?></h4>
                     <p class="card-text">
+               
+                    <div class="up_info1 alert-danger"></div>
+                    <div class="up_info2 alert-success"></div>
                     <div id="manage_users"></div>
                     </p>
                 </div>
@@ -133,5 +179,18 @@ $token = $_SESSION['token'];
             });
         </script>
 </body>
+<style>
+    .up_info1, .up_info2 {
+  display: none;
+  width: 270px;
+  height: 40px;
+  font-size: 17px;
+  font-family: "Roboto", sans-serif;
+  padding: 5px;
+  margin-right: 20px;
+  text-align: center;
+  position: absolute;
+}
+</style>
 
 </html>

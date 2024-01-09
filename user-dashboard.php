@@ -73,7 +73,7 @@ function time_elapsed_string($datetime)
                     <div class="card info">
                         <div class="card-body">
 
-                            <h3 class="mb-2">Good Day, <b><?php echo $fname . " " . $mi . ". " . $lname ?></b>!</h3>
+                            <h3 class="mb-2">Good Day , &nbsp;<b><?php echo $fname . " " . $mi . ". " . $lname ?></b>!</h3>
                             <div class="row justify-content-start align-items-start g-1">
                                 <div class="col-sm-3 img">
                                     <center>
@@ -164,33 +164,33 @@ function time_elapsed_string($datetime)
 
             <div class="row justify-content-start align-items-start g-1 bottom">
                 <div class="col scroll">
-                <div class="card note">
-    <h6 class="card-header"><img src="icons/project-icon.png" height="20px"> Notes </h6>
-    <hr>
+                    <div class="card note">
+                        <h6 class="card-header"><img src="icons/project-icon.png" height="20px"> Notes </h6>
+                        <hr>
 
-    <div class="card-body">
-    <form method="POST" action="php/note.php" id="note">
-            <?php
-          
-            $chck= "SELECT text FROM Note WHERE idno = '$idno'";
-            $checkResult = mysqli_query($conn, $chck);
+                        <div class="card-body">
+                            <form method="POST" action="php/note.php" id="note">
+                                <?php
 
-            if (mysqli_num_rows($checkResult) > 0) {
-                $row = mysqli_fetch_assoc($checkResult);
-                $text = $row['text'];
-            } else {
-                $text = '';
-            }
-            ?>
-            <textarea type="text" name="text" id="text"><?php echo $text ?></textarea>
-            <input type="hidden" name="idno" id="idno" value="<?php echo $idno ?>">
-    
-    </div>
-    <div class="card-footer text-muted">
-        <button type="submit" class="btn btn-primary"> Save Note </button>
-    </div>
-        </form>
-</div>
+                                $chck = "SELECT text FROM Note WHERE idno = '$idno'";
+                                $checkResult = mysqli_query($conn, $chck);
+
+                                if (mysqli_num_rows($checkResult) > 0) {
+                                    $row = mysqli_fetch_assoc($checkResult);
+                                    $text = $row['text'];
+                                } else {
+                                    $text = '';
+                                }
+                                ?>
+                                <textarea type="text" name="text" id="text"><?php echo $text ?></textarea>
+                                <input type="hidden" name="idno" id="idno" value="<?php echo $idno ?>">
+
+                        </div>
+                        <div class="card-footer text-muted">
+                            <button type="submit" class="btn btn-primary"> Save Note </button>
+                        </div>
+                        </form>
+                    </div>
 
                 </div>
 
@@ -304,7 +304,7 @@ function time_elapsed_string($datetime)
 <script src="todo/script.js"></script>
 <script src="node_modules/jquery/dist/jquery.min.js"></script>
 <script>
-$(document).ready(function() {
+    $(document).ready(function() {
         $("#note").submit(function(e) {
             e.preventDefault();
 
@@ -344,7 +344,7 @@ $(document).ready(function() {
     });
 
 
-      function handleEnterKey(event) {
+    function handleEnterKey(event) {
         if (event.key === "Enter" && !event.shiftKey) {
             event.preventDefault(); // Prevent form submission on Enter key
             // Optionally, you can add custom behavior for the Enter key, e.g., creating a new line
@@ -358,7 +358,7 @@ $(document).ready(function() {
     }
 
     function validateForm() {
-        return false; 
+        return false;
     }
     // Use the data fetched from the server
     var lockerUsageData = {
@@ -415,13 +415,14 @@ $(document).ready(function() {
 
 
 <style>
-#text {
-    padding: 5px;
-        width: 100%; 
+    #text {
+        padding: 5px;
+        width: 100%;
         height: 170px;
         resize: none;
         border-radius: 10px;
     }
+
     td {
         vertical-align: top;
     }
@@ -459,7 +460,7 @@ $(document).ready(function() {
     .scroll {
         height: auto;
     }
-    
+
 
     .scroll .card {
         height: 320px;

@@ -213,26 +213,6 @@
          </div>
 
        </div>
-       <div class="row justify-content-center align-items-center g-2">
-         <div class="col">
-           <div class="card border-primary">
-             <div class="card-body">
-               <h4 class="card-title">Title</h4>
-               <p class="card-text">Text</p>
-             </div>
-           </div>
-
-         </div>
-
-         <div class="col">
-           <div class="card border-primary">
-             <div class="card-body">
-               <h4 class="card-title">Title</h4>
-               <p class="card-text">Text</p>
-             </div>
-           </div>
-         </div>
-       </div>
 
      </div>
 
@@ -357,6 +337,9 @@
          }
        });
      });
+
+
+    
 
      // do not touch
    </script>

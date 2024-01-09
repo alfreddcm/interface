@@ -112,8 +112,8 @@ if (isset($_GET['card_uid']) && isset($_GET['device_token'])) {
             
                     if (mysqli_num_rows($result_locker) > 0) {
                         $message = "UID is already on the locker_data";
+                        $err="er1";
                     } else {
-                        // Check if UID is in newcard
                         $sql_check_newcard = "SELECT * FROM newcard WHERE uid = ?";
                         $stmt_check_newcard = mysqli_stmt_init($conn);
             
@@ -124,8 +124,9 @@ if (isset($_GET['card_uid']) && isset($_GET['device_token'])) {
             
                             if (mysqli_num_rows($result_check_newcard) > 0) {
                                 $message = "UID is already on the list, not registered";
+                                $err="er2";
+
                             } else {
-                                // Insert into newcard if UID is new
                                 $insert_newcard = "INSERT INTO newcard (uid) VALUES (?)";
                                 $stmt_insert_newcard = mysqli_stmt_init($conn);
             
@@ -134,6 +135,7 @@ if (isset($_GET['card_uid']) && isset($_GET['device_token'])) {
             
                                     if (mysqli_stmt_execute($stmt_insert_newcard)) {
                                         $message = "Successful";
+                                        $err="er3";
                                     } else {
                                         $message = "Error inserting into newcard: " . mysqli_error($conn);
                                     }
@@ -141,6 +143,7 @@ if (isset($_GET['card_uid']) && isset($_GET['device_token'])) {
                                     mysqli_stmt_close($stmt_insert_newcard);
                                 } else {
                                     $message = "Statement preparation failed for newcard insertion.";
+                                    
                                 }
                             }
             
@@ -155,7 +158,7 @@ if (isset($_GET['card_uid']) && isset($_GET['device_token'])) {
                     $message = "Statement preparation failed for locker_data.";
                 }
             
-                header("Location: ../php/add-locker.php?message=" . urlencode($message));
+                // header("Location: ../php/add-locker.php?message=" . urlencode($err));
                 echo $message;
                 exit();
             }
@@ -165,3 +168,4 @@ if (isset($_GET['card_uid']) && isset($_GET['device_token'])) {
 }
 
 mysqli_close($conn);
+?>

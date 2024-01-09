@@ -28,6 +28,7 @@
           <tbody>
             <?php
             require '../user-connection.php';
+            
             if (isset($_POST['token'])) {
               $token = $_POST['token'];
             }
