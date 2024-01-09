@@ -49,7 +49,7 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === 0) {
     <link rel="stylesheet" type="text/css" href="addcss.css">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="sweet/sweetalert2.all.min.js"></script>
 
 </head>
 
@@ -63,7 +63,7 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === 0) {
         <a class="openbtn" onclick="toggleNav()"><img src="icons/menu-icon.png" alt="" height="30px" width="30px"> <b>Menu</b></a>
         <a href="user-dashboard.php"> <img src="icons/dashboard-icon.png" height="30px" width="30px"> Dashboard </a>
         <a href="user-profile.php" style="background-color: white; "><img src="icons/profile-icon.png" height="30px" width="30px" style="filter:invert(100);"><b style="color:black;"> Profile</b></a>
-        <a href="php/php-logout.php"><img src="icons/logout-icon.png" height="30px" width="30px"> Log out</a>
+        <a href="#" onclick="confirmLogout();"><img src="icons/logout-icon.png" height="30px" width="30px"> Log out</a>
     </div>
 
     <div id="main">
@@ -102,6 +102,8 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === 0) {
 </body>
 
 <script src="node_modules/jquery/dist/jquery.min.js"></script>
+<script src="js/logout.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
 <script src="script.js">

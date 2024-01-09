@@ -43,6 +43,7 @@ function time_elapsed_string($datetime)
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="sweet/sweetalert2.all.min.js"></script>
 
 
 </head>
@@ -60,7 +61,7 @@ function time_elapsed_string($datetime)
 
         <a href="User-dashboard.php" style="background-color: white; "><img src="icons/dashboard-icon.png" height="30px" width="30px" style="filter:invert(100);"><b style="color:black;"> Dashboard</b></a>
         <a href="user-profile.php"><img src="icons/profile-icon.png" height="30px" width="30px"> Profile</a>
-        <a href="php/php-logout.php"><img src="icons/logout-icon.png" height="30px" width="30px"> Log out</a>
+        <a href="#" onclick="confirmLogout();"><img src="icons/logout-icon.png" height="30px" width="30px"> Log out</a>
     </div>
 
 
@@ -168,7 +169,7 @@ function time_elapsed_string($datetime)
     <hr>
 
     <div class="card-body">
-    <form method="POST" action="php/note.php">
+    <form method="POST" action="php/note.php" id="note">
             <?php
           
             $chck= "SELECT text FROM Note WHERE idno = '$idno'";
@@ -299,9 +300,50 @@ function time_elapsed_string($datetime)
 
 </body>
 <script src="script.js"></script>
+<script src="js/logout.js"></script>
 <script src="todo/script.js"></script>
 <script src="node_modules/jquery/dist/jquery.min.js"></script>
 <script>
+$(document).ready(function() {
+        $("#note").submit(function(e) {
+            e.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response === 'Success') {
+                        Swal.fire({
+                            title: 'Success',
+                            text: 'Note saved!',
+                            icon: 'success',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: response,
+                            icon: 'error',
+                        });
+                    }
+                },
+
+                error: function() {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred while processing your request.',
+                        icon: 'error',
+                    });
+                }
+            });
+        });
+    });
+
+
       function handleEnterKey(event) {
         if (event.key === "Enter" && !event.shiftKey) {
             event.preventDefault(); // Prevent form submission on Enter key

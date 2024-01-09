@@ -6,6 +6,7 @@ html, body {
 
 body {
   background: url(bg.png);
+  height: 100%;
   font-family: "Lato", sans-serif;
   background-size: cover;
   background-attachment: fixed;

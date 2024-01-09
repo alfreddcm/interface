@@ -1,8 +1,8 @@
 <?php
 include("php/php-userinfo.php");
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['psw'];
@@ -23,11 +23,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($affectedRows > 0) {
             $oldPassword = $sqldata['password'];
             if (!password_verify($password, $oldPassword)) {
-                echo "<script>alert('Current password doesn\\'t match')</script>";
+                echo 'Current password doesn\'t match';
+                exit();
             } elseif (!$uppercase || !$lowercase || !$number || strlen($password) < 8) {
-                echo "<script>alert('Password should be at least 8 characters in length and include at least one uppercase letter, one lowercase letter, one number, and one special character.')</script>";
+                echo 'Password should be at least 8 characters in length and include at least one uppercase letter, one lowercase letter, one number, and one special character.';
+                exit();
             } elseif ($newPassword != $confirmPassword) {
-                echo "<script>alert('Invalid confirm password')</script>";
+                echo 'Invalid confirm password';
+                exit();
             } else {
                 $hashedNewPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
@@ -35,9 +38,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $updateQuery = "UPDATE user_data SET password = '$hashedNewPassword' WHERE id = '$userId'";
                 mysqli_query($conn, $updateQuery);
 
-                echo "<script>alert('Password updated successfully!')
-                window.location.href='user-profile.php';
-                                </script>";
+                echo 'success';
+                exit();
+
             }
         } else {
             echo "Update did not affect any rows.";
@@ -73,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <a class="openbtn" onclick="toggleNav()"><img src="icons/menu-icon.png" alt="" height="30px" width="30px"> <b>Menu</b></a>
         <a href="user-dashboard.php"> <img src="icons/dashboard-icon.png" height="30px" width="30px"> Dashboard </a>
         <a href="user-profile.php" style="background-color: white; "><img src="icons/profile-icon.png" height="30px" width="30px" style="filter:invert(100);"><b style="color:black;"> Profile</b></a>
-        <a href="php/php-logout.php"><img src="icons/logout-icon.png" height="30px" width="30px"> Log out</a>
+        <a href="#" onclick="confirmLogout();"><img src="icons/logout-icon.png" height="30px" width="30px"> Log out</a>
     </div>
 
     <div id="main">
@@ -123,9 +126,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </body>
 
 <script src="node_modules/jquery/dist/jquery.min.js"></script>
+<script src="js/logout.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
 <script>
+    $(document).ready(function() {
+        $("#passwordForm").submit(function(e) {
+            e.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response === 'success') {
+                        Swal.fire({
+                            title: 'Success',
+                            text: 'Password updated successfully!',
+                            icon: 'success',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Reload the current page
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: response,
+                            icon: 'error',
+                        });
+                    }
+                },
+
+                error: function() {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred while processing your request.',
+                        icon: 'error',
+                    });
+                }
+            });
+        });
+    });
+
+
     function toggleNav() {
         var sidebar = document.getElementById("mySidebar");
         var mainContent = document.getElementById("main");

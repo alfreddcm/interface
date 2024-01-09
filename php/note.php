@@ -15,20 +15,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $updateQuery = "UPDATE Note SET text = '$text' WHERE idno = '$idno'";
         
         if (mysqli_query($conn, $updateQuery)) {
-            echo "<script>alert(' Note Saved ');
-            window.location.href = '../user-dashboard.php';
-
-            </script>
-           
-            ";
+            echo "Success";
         } else {
-            echo "<script>alert(' error Updating the note
-            ');
-            window.location.href = '../user-dashboard.php';
-
-            </script>
-           
-            ";
+            echo "error";
             echo "Error updating note: " . mysqli_error($conn);
         }
     } else {
@@ -36,19 +25,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $insertQuery = "INSERT INTO Note (idno, text) VALUES ('$idno', '$text')";
         
         if (mysqli_query($conn, $insertQuery)) {
-            echo "<script>alert(' Note save');
-            window.location.href = '../user-dashboard.php';
-            </script>"; 
-            echo "<script>alert(' error Updating the note
-            ');</script>
-           
-            ";       
+            echo "Success";       
         } else {
             echo "Error inserting note: " . mysqli_error($conn);
         }
     }
 }
 
-// Close the database connection if needed
 mysqli_close($conn);
 ?>
