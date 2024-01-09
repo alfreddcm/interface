@@ -67,7 +67,7 @@ if (!isset($_SESSION['email'])) {
   <div id="main">
     <!--  -->
     <?php
-    $sql = "SELECT * FROM locker_data as ld RIGHT JOIN user_data as ud ON ld.id = ud.locker_id WHERE ud.locker_id IS NOT NULL order by ud.id desc";
+    $sql = "SELECT * FROM locker_data as ld RIGHT JOIN user_data as ud ON ld.id = ud.locker_id WHERE ud.locker_id IS NOT NULL order by ud.locker_id ASC";
     $result = $conn->query($sql);
 
     ?>

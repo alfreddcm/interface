@@ -12,49 +12,6 @@ if (!isset($_SESSION['email'])) {
 
 $token = $_SESSION['token'];
 
-if (isset($_POST['message'])) {
-      if ($_POST['message'] == "err1") {
-          echo '	<script type="text/javascript">
-                       setTimeout(function () {
-                          $(".up_info1").fadeIn(200);
-                          $(".up_info1").text("UID is already on the locker_data");
-                          $("#admin-account").modal("show");
-                        }, 500);
-                        setTimeout(function () {
-                          $(".up_info1").fadeOut(1000);
-                        }, 3000);
-                  </script>';
-      }
-  } 
-
-  if (isset($_POST['message'])) {
-      if ($_POST['message'] == "err2") {
-          echo '	<script type="text/javascript">
-                       setTimeout(function () {
-                          $(".up_info1").fadeIn(200);
-                          $(".up_info1").text("UID is already on the list, not registered");
-                          $("#admin-account").modal("show");
-                        }, 500);
-                        setTimeout(function () {
-                          $(".up_info1").fadeOut(1000);
-                        }, 3000);
-                  </script>';
-      }
-  } 
-
-  if (isset($_POST['message'])) {
-      if ($_POST['message'] == "er3") {
-          echo ' <script type="text/javascript">
-                       setTimeout(function () {
-                          $(".up_info2").fadeIn(200);
-                          $(".up_info2").text("New card added!");
-                        }, 500);
-                        setTimeout(function () {
-                          $(".up_info2").fadeOut(1000);
-                        }, 3000);
-                  </script>';
-      }
-  }
 ?>
 
 <!DOCTYPE html>
@@ -127,8 +84,6 @@ if (isset($_POST['message'])) {
                     ?></h4>
                     <p class="card-text">
                
-                    <div class="up_info1 alert-danger"></div>
-                    <div class="up_info2 alert-success"></div>
                     <div id="manage_users"></div>
                     </p>
                 </div>

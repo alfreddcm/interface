@@ -37,7 +37,7 @@ if (isset($_GET['card_uid']) && isset($_GET['device_token'])) {
                     $lockerid = $row['id'];
                     $checkLockerQuery = "SELECT * FROM locker_data WHERE id = '$lockerid'";
                     $checkResult = mysqli_query($conn, $checkLockerQuery);
-
+                    
                     if (!$checkResult) {
                         echo "SQL_Error_Check_Locker: " . mysqli_error($conn);
                         exit();
@@ -102,32 +102,7 @@ if (isset($_GET['card_uid']) && isset($_GET['device_token'])) {
                 }
             } else if ($device_mode == 0) {
 
-                $sql = "SELECT * FROM locker_data WHERE uid = ?";
-                $stmt_locker = mysqli_stmt_init($conn);
-            
-                if (mysqli_stmt_prepare($stmt_locker, $sql)) {
-                    mysqli_stmt_bind_param($stmt_locker, "i", $card_uid);
-                    mysqli_stmt_execute($stmt_locker);
-                    $result_locker = mysqli_stmt_get_result($stmt_locker);
-            
-                    if (mysqli_num_rows($result_locker) > 0) {
-                        $message = "UID is already on the locker_data";
-                        $err="er1";
-                    } else {
-                        $sql_check_newcard = "SELECT * FROM newcard WHERE uid = ?";
-                        $stmt_check_newcard = mysqli_stmt_init($conn);
-            
-                        if (mysqli_stmt_prepare($stmt_check_newcard, $sql_check_newcard)) {
-                            mysqli_stmt_bind_param($stmt_check_newcard, "i", $card_uid);
-                            mysqli_stmt_execute($stmt_check_newcard);
-                            $result_check_newcard = mysqli_stmt_get_result($stmt_check_newcard);
-            
-                            if (mysqli_num_rows($result_check_newcard) > 0) {
-                                $message = "UID is already on the list, not registered";
-                                $err="er2";
-
-                            } else {
-                                $insert_newcard = "INSERT INTO newcard (uid) VALUES (?)";
+                $insert_newcard = "INSERT INTO newcard (uid) VALUES (?)";
                                 $stmt_insert_newcard = mysqli_stmt_init($conn);
             
                                 if (mysqli_stmt_prepare($stmt_insert_newcard, $insert_newcard)) {
@@ -135,36 +110,21 @@ if (isset($_GET['card_uid']) && isset($_GET['device_token'])) {
             
                                     if (mysqli_stmt_execute($stmt_insert_newcard)) {
                                         $message = "Successful";
-                                        $err="er3";
                                     } else {
                                         $message = "Error inserting into newcard: " . mysqli_error($conn);
                                     }
             
                                     mysqli_stmt_close($stmt_insert_newcard);
-                                } else {
-                                    $message = "Statement preparation failed for newcard insertion.";
-                                    
-                                }
-                            }
-            
-                            mysqli_stmt_close($stmt_check_newcard);
-                        } else {
-                            $message = "Statement preparation failed for checking newcard.";
-                        }
-                    }
-            
-                    mysqli_stmt_close($stmt_locker);
-                } else {
-                    $message = "Statement preparation failed for locker_data.";
-                }
             
                 // header("Location: ../php/add-locker.php?message=" . urlencode($err));
                 echo $message;
                 exit();
-            }
-            
-        }
-    }
+                                }
+                            }
+                        }
+                    }
+        
+    
 }
 
 mysqli_close($conn);

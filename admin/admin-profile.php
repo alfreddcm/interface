@@ -124,7 +124,7 @@ include("../php/php-updateadminprofile.php");
                                 <button type="button" class="btn mb-2 btn-primary">Edit photo</button></a>
                             <button type="button" class="btn mb-2 q btn-primary" data-bs-toggle="modal" data-bs-target="#modalId">Edit Information</button>
                             <a href="admin-updatepass.php"><button class="btn mb-2  btn-primary">Update Password</button></a>
-                            <a href="add-admin.php"><button class="btn mb-2  btn-primary">Add Adminitrator</button></a>
+                            <a href="add-admin.php"><button class="btn mb-2  btn-primary">Add Administrator</button></a>
                         </i>
                     </div>
                 </div>
