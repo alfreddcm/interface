@@ -16,7 +16,8 @@
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
- </head>
+  </head>
+
 
  <body>
    <header class="text-start">
@@ -40,7 +41,7 @@
                <ul class="list-unstyled">
                  <li><a class="dropdown-item" href="admin-profile.php">
                      <img src="../icons/profile-icon.png" style="filter:invert(100)"> Profile</a></li>
-                 <li><a class="dropdown-item" href="../php/php-logout.php">
+                 <li><a class="dropdown-item" href="#" onclick="confirmLogout();">
                      <img src="../icons/logout-icon.png" style="filter:invert(100)">Log out</a></li>
                </ul>
              </div>

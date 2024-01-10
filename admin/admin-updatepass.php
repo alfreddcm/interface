@@ -1,6 +1,10 @@
 <?php
 include("../php/php-admininfo.php");
 
+
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['psw'];
     $newPassword = $_POST['newpsw'];
@@ -10,7 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $lowercase = preg_match('@[a-z]@', $newPassword);
     $number = preg_match('@[0-9]@', $newPassword);
 
-    // Sanitize the email and hash it for security
     $email = mysqli_real_escape_string($conn, $_SESSION['email']);
 
     $slqf = mysqli_query($conn, "SELECT * FROM admin WHERE email = '$email'");
@@ -21,11 +24,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($affectedRows > 0) {
             $oldPassword = $sqldata['password'];
             if (!password_verify($password, $oldPassword)) {
-                echo "<script>alert('Current password doesn\\'t match')</script>";
+                echo 'Current password doesn\'t match';
+                exit();
             } elseif (!$uppercase || !$lowercase || !$number || strlen($password) < 8) {
-                echo "<script>alert('Password should be at least 8 characters in length and include at least one uppercase letter, one lowercase letter, one number, and one special character.')</script>";
+                echo 'Password should be at least 8 characters in length and include at least one uppercase letter, one lowercase letter, one number, and one special character.';
+                exit();
             } elseif ($newPassword != $confirmPassword) {
-                echo "<script>alert('Invalid confirm password')</script>";
+                echo 'Invalid confirm password';
+                exit();
             } else {
                 $hashedNewPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
@@ -33,9 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $updateQuery = "UPDATE admin SET password = '$hashedNewPassword' WHERE id = '$userId'";
                 mysqli_query($conn, $updateQuery);
 
-                echo "<script>alert('Password updated successfully!')
-                window.location.href='admin-profile.php';
-                                </script>";
+                echo 'success';
+                exit();
+
             }
         } else {
             echo "Update did not affect any rows.";
@@ -44,7 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Error updating data: " . mysqli_error($conn);
     }
 }
-ob_end_flush();
 ?>
 <!DOCTYPE html>
 <html>
@@ -58,7 +63,8 @@ ob_end_flush();
     <link rel="stylesheet" type="text/css" href="../addcss.css">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="../script.js"></script>
+    <script src="../sweet/sweetalert2.all.min.js"></script>
 
 </head>
 
@@ -85,7 +91,7 @@ ob_end_flush();
                             <ul class="list-unstyled">
                                 <li><a class="dropdown-item" href="admin-profile.php">
                                         <img src="../icons/profile-icon.png" style="filter:invert(100)"> Profile</a></li>
-                                <li><a class="dropdown-item" href="../php/php-logout.php">
+                                <li><a class="dropdown-item" href="#" onclick="confirmLogout();">
                                         <img src="../icons/logout-icon.png" style="filter:invert(100)">Log out</a></li>
                             </ul>
                         </div>
@@ -131,7 +137,7 @@ ob_end_flush();
                             <span id="errorContainer"></span>
                             <div class="text-center">
                             <a href="admin-profile.php"><button type="button" class="btn btn-primary"> Return </button></a>
-                            <button type="submit" class="btn btn-primary">Submit</button></div>
+                            <button type="submit" class="btn btn-success">Submit</button></div>
                         </form>
                     </div>
                 </div>
@@ -150,7 +156,51 @@ ob_end_flush();
 <script src="node_modules/jquery/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+<script src="../script.js"></script>
+    <script src="../sweet/sweetalert2.all.min.js"></script>
+    <script src="../sweet/jquery-1.10.2.min.js"></script>
+
 <script>
+        $(document).ready(function() {
+        $("#passwordForm").submit(function(e) {
+            e.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response === 'success') {
+                        Swal.fire({
+                            title: 'Success',
+                            text: 'Password updated successfully!',
+                            icon: 'success',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: response,
+                            icon: 'error',
+                        });
+                    }
+                },
+
+                error: function() {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred while processing your request.',
+                        icon: 'error',
+                    });
+                }
+            });
+        });
+    });
+
+
     function toggleNav() {
         var sidebar = document.getElementById("mySidebar");
         var mainContent = document.getElementById("main");
@@ -192,6 +242,12 @@ ob_end_flush();
 </script>
 
 <style>
+        .card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
     #imagePreview {
         width: 200px;
         height: 200px;

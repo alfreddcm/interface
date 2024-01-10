@@ -16,48 +16,49 @@ include("../php/php-updateadminprofile.php");
 
     <!-- Bootstrap CSS v5.2.1 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="script.js"></script>
+    <script src="../sweet/sweetalert2.all.min.js"></script>
+    <script src="../script.js"></script>
 
 </head>
 
 <body>
-<header class="text-start">
-     <div class="row justify-content-center align-items-center g-2">
-       <div class="col">
-         <a class="openbtn" onclick="toggleNav()"><img src="../icons/menu-icon.png" alt=""></a>
-         <img src="../icons/logo.png" class="logo" height="30px">
-         <h4 style="display: inline;">ELOCKER</h4>
-       </div>
-       <div class="col text-end">
-         <div>
-           <div class="dropdown open">
-             <button class="btn dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-               <p class="font-weight-bold p1"><?php echo $fname . " " . $mi . ". " . $lname ?></p> &nbsp;
+    <header class="text-start">
+        <div class="row justify-content-center align-items-center g-2">
+            <div class="col">
+                <a class="openbtn" onclick="toggleNav()"><img src="../icons/menu-icon.png" alt=""></a>
+                <img src="../icons/logo.png" class="logo" height="30px">
+                <h4 style="display: inline;">ELOCKER</h4>
+            </div>
+            <div class="col text-end">
+                <div>
+                    <div class="dropdown open">
+                        <button class="btn dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <p class="font-weight-bold p1"><?php echo $fname . " " . $mi . ". " . $lname ?></p> &nbsp;
 
-               <img src="../adminuploads/<?php echo $profile ?>" alt="Admin" class="rounded-circle p">
-             </button>
+                            <img src="../adminuploads/<?php echo $profile ?>" alt="Admin" class="rounded-circle p">
+                        </button>
 
-             <div class="dropdown-menu p-3" aria-labelledby="triggerId">
-               <p class="text-uppercase font-weight-bold"><?php echo $fname . " " . $mi . ". " . $lname ?></p>
-               <p class="text-secondary"> <?php echo $email ?>
-               <ul class="list-unstyled">
-                 <li><a class="dropdown-item" href="admin-profile.php">
-                     <img src="../icons/profile-icon.png" style="filter:invert(100)"> Profile</a></li>
-                 <li><a class="dropdown-item" href="../php/php-logout.php">
-                     <img src="../icons/logout-icon.png" style="filter:invert(100)">Log out</a></li>
-               </ul>
-             </div>
-           </div>
-         </div>
-       </div>
-     </div>
-   </header>
+                        <div class="dropdown-menu p-3" aria-labelledby="triggerId">
+                            <p class="text-uppercase font-weight-bold"><?php echo $fname . " " . $mi . ". " . $lname ?></p>
+                            <p class="text-secondary"> <?php echo $email ?>
+                            <ul class="list-unstyled">
+                                <li><a class="dropdown-item" href="admin-profile.php">
+                                        <img src="../icons/profile-icon.png" style="filter:invert(100)"> Profile</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="confirmLogout();">
+                                        <img src="../icons/logout-icon.png" style="filter:invert(100)">Log out</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
-   <div id="mySidebar" class="sidebar">
-     <a href="admin-dashboard.php" style="background-color: white; "><img src="../icons/dashboard-icon.png" style="filter:invert(100);"><b style="color:black;"> Dashboard</b></a>
-     <a href="admin-lockerlist.php"><img src="../icons/locker.png"> Locker list</a>
-     <a href="admin-userlist.php"><img src="../icons/users.png"> Manage users</a>
-   </div>
+    <div id="mySidebar" class="sidebar">
+        <a href="admin-dashboard.php" style="background-color: white; "><img src="../icons/dashboard-icon.png" style="filter:invert(100);"><b style="color:black;"> Dashboard</b></a>
+        <a href="admin-lockerlist.php"><img src="../icons/locker.png"> Locker list</a>
+        <a href="admin-userlist.php"><img src="../icons/users.png"> Manage users</a>
+    </div>
 
     <div id="main">
         <div class="container py-4">
@@ -264,8 +265,6 @@ include("../php/php-updateadminprofile.php");
     </script>
 </body>
 <style>
-
-
     #imagePreview {
         width: 150px;
         height: 150px;
@@ -279,6 +278,18 @@ include("../php/php-updateadminprofile.php");
     .card {
         padding: 20px;
         height: fit-content;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    @media screen and (max-width: 600px) {
+        .card {
+            overflow-x: scroll;
+            height: 80%;
+            width: 80%;
+        }
     }
 </style>
 

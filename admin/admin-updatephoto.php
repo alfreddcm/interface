@@ -76,7 +76,7 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === 0) {
                             <ul class="list-unstyled">
                                 <li><a class="dropdown-item" href="admin-profile.php">
                                         <img src="../icons/profile-icon.png" style="filter:invert(100)"> Profile</a></li>
-                                <li><a class="dropdown-item" href="../php/php-logout.php">
+                                <li><a class="dropdown-item" href="#" onclick="confirmLogout();">
                                         <img src="../icons/logout-icon.png" style="filter:invert(100)">Log out</a></li>
                             </ul>
                         </div>
@@ -109,7 +109,7 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === 0) {
                                 </div>
                                 <div class="col">
                                     <div class="d-grid gap-2">
-                                        <button type="submit" name="" id="" class="btn btn-primary">
+                                        <button type="submit" name="" id="" class="btn btn-success">
                                             Confirm
                         </form></button>
                     </div>
@@ -135,6 +135,15 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === 0) {
 
 
 <style>
+
+   .card {
+        padding: 5px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
     #imagePreview {
         width: 200px;
         height: 200px;
@@ -154,6 +163,11 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === 0) {
             flex: 0 0 auto;
             width: 80%;
         }
+        .card{
+    overflow-x: scroll;
+    height: 65%;
+    width: 80%;
+}
     }
 
     .col-xl-6 {

@@ -210,6 +210,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </script>
 
 <style>
+        .card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
     #imagePreview {
         width: 200px;
         height: 200px;

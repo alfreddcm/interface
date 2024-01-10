@@ -48,7 +48,7 @@ if (!isset($_SESSION['email'])) {
               <ul class="list-unstyled">
                 <li><a class="dropdown-item" href="admin-profile.php">
                     <img src="../icons/profile-icon.png" style="filter:invert(100)"> Profile</a></li>
-                <li><a class="dropdown-item" href="../php/php-logout.php">
+                <li><a class="dropdown-item" href="#" onclick="confirmLogout();">
                     <img src="../icons/logout-icon.png" style="filter:invert(100)">Log out</a></li>
               </ul>
             </div>
