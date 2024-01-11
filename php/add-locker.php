@@ -83,7 +83,6 @@ $token = $_SESSION['token'];
                     echo $row["dep_name"]
                     ?></h4>
                     <p class="card-text">
-               
                     <div id="manage_users"></div>
                     </p>
                 </div>
@@ -105,7 +104,7 @@ $token = $_SESSION['token'];
                     });
                 }
                 updateManageUsers();
-                setInterval(updateManageUsers, 2000);
+                setInterval(updateManageUsers, 6000);
             });
 
             // dont touch ----->>>>----->>>>-----
@@ -135,17 +134,14 @@ $token = $_SESSION['token'];
         </script>
 </body>
 <style>
-    .up_info1, .up_info2 {
-  display: none;
-  width: 270px;
-  height: 40px;
-  font-size: 17px;
-  font-family: "Roboto", sans-serif;
-  padding: 5px;
-  margin-right: 20px;
-  text-align: center;
-  position: absolute;
-}
+       .card {
+        padding: 5px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
 </style>
 
 </html>

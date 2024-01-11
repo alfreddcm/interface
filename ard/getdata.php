@@ -102,7 +102,9 @@ if (isset($_GET['card_uid']) && isset($_GET['device_token'])) {
                 }
             } else if ($device_mode == 0) {
 
-                $insert_newcard = "INSERT INTO newcard (uid) VALUES (?)";
+            header("Location: manage_user_up.php?uid=" . urlencode($err));
+
+            $insert_newcard = "INSERT INTO newcard (uid) VALUES (?)";
                                 $stmt_insert_newcard = mysqli_stmt_init($conn);
             
                                 if (mysqli_stmt_prepare($stmt_insert_newcard, $insert_newcard)) {

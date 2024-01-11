@@ -22,26 +22,21 @@
     if (isset($_POST['token'])) {
         $token = $_POST['token'];
     }
+    if (isset($_POST['uid'])) {
+      $posteduid = $_POST['uid'];
+  }
 
-    $sql = mysqli_query($conn, "SELECT uid FROM newcard ORDER BY id DESC LIMIT 1");
-    if ($sql) {
-        $row = mysqli_fetch_assoc($sql);
+ ?>
+ <center>
 
-        ?>
 
         <input type="hidden" id="token" name="token" value="<?php echo $token ?>">
-        <input type="text" id="selected_card" name="selected_card" value="<?php echo $row['uid']; ?>">
-        <?php
-    } else {
-        echo "Error: " . mysqli_error($conn);
-    }
-?>
-
-
+        <input type="text" id="selected_card" class="mb-3" name="selected_card" value="<?php echo $posteduid; ?>">
+ <br>
 
         <a href="../admin/admin-lockerlist.php"><button type="button" class="btn btn-secondary"> Return </button></a>
         <button type="submit" class="btn btn-success" onsubmit="submitForm()">Submit</button>
-
+</center>
       </form>
     </div>
 
@@ -73,11 +68,16 @@
       }
     </script>
   </main>
-
   <!-- Bootstrap JavaScript Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+<style>
+input{
+  border-radius: 23px;
+  font-size: 20px;
+  padding: 3px;
+}
+</style>
 </body>
 
 </html>
