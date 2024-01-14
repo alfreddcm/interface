@@ -3,7 +3,7 @@
 $servername = "localhost";
 $dbusername = "root";
 $dbpassword = "";
-$database = "elock";
+$database = "elocker";
 $conn = new mysqli($servername, $dbusername, $dbpassword, $database);
 
 if ($conn->connect_error) {

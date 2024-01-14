@@ -1,3 +1,19 @@
+
+<?php
+    require '../user-connection.php';
+
+    if (isset($_POST['token'])){
+        $token = $_POST['token'];
+    }
+
+  //   if (isset($_POST['uid'])) {
+  //     $posteduid = $_POST['uid'];
+  // }
+  
+	$Write="<?php $" . "UIDresult=''; " . "echo $" . "UIDresult;" . " ?>";
+	file_put_contents('../UIDContainer.php',$Write);
+
+ ?>
 <!doctype html>
 <html lang="en">
 
@@ -15,24 +31,9 @@
 
     <div class="table-responsive-sm" style="max-height: 870px;">
       <form id="cardForm" action="addcard.php" method="post">
-
-      <?php
-    require '../user-connection.php';
-
-    if (isset($_POST['token'])) {
-        $token = $_POST['token'];
-    }
-    if (isset($_POST['uid'])) {
-      $posteduid = $_POST['uid'];
-  }
-
- ?>
  <center>
-
-
         <input type="hidden" id="token" name="token" value="<?php echo $token ?>">
-        <input type="text" id="selected_card" class="mb-3" name="selected_card" value="<?php echo $posteduid; ?>">
- <br>
+<input type="text" name="id" id="getUID" placeholder="Please Tap your Card" rows="1" cols="1" required>
 
         <a href="../admin/admin-lockerlist.php"><button type="button" class="btn btn-secondary"> Return </button></a>
         <button type="submit" class="btn btn-success" onsubmit="submitForm()">Submit</button>
@@ -41,6 +42,12 @@
     </div>
 
     <script>
+			$(document).ready(function(){
+				 $("#getUID").load("../UIDContainer.php");
+				setInterval(function() {
+					$("#getUID").load("../UIDContainer.php");
+				}, 500);
+			});
 
       function submitForm() {
         var formData = new FormData(document.getElementById('cardForm'));

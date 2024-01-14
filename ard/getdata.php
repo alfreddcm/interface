@@ -61,7 +61,7 @@ if (isset($_GET['card_uid']) && isset($_GET['device_token'])) {
                                     );
                                 "
                             );
-                            echo "Log " . $lockerid . " Open";
+                            echo "Log" . $lockerid . "Open";
                         } elseif ($lastAction['access'] == 'open') {
                             // Insert a new record with 'close' action
                             $insertLogQuery = mysqli_query(
@@ -76,7 +76,7 @@ if (isset($_GET['card_uid']) && isset($_GET['device_token'])) {
                                 );
                             "
                             );
-                            echo "Log " . $lockerid . " Close";
+                            echo "Log" . $lockerid . "Close";
                         } elseif ($lastAction['access'] == 'close') {
                             // Insert a new record with 'open' action
                             $insertLogQuery = mysqli_query(
@@ -91,7 +91,7 @@ if (isset($_GET['card_uid']) && isset($_GET['device_token'])) {
                     );
                 "
                             );
-                            echo "Log " . $lockerid . " Open";
+                            echo "Log" . $lockerid . "Open";
                         }
                     } else {
                         echo "Not Assigned";
@@ -102,28 +102,28 @@ if (isset($_GET['card_uid']) && isset($_GET['device_token'])) {
                 }
             } else if ($device_mode == 0) {
 
-            header("Location: manage_user_up.php?uid=" . urlencode($err));
-
-            $insert_newcard = "INSERT INTO newcard (uid) VALUES (?)";
-                                $stmt_insert_newcard = mysqli_stmt_init($conn);
-            
-                                if (mysqli_stmt_prepare($stmt_insert_newcard, $insert_newcard)) {
-                                    mysqli_stmt_bind_param($stmt_insert_newcard, "i", $card_uid);
-            
-                                    if (mysqli_stmt_execute($stmt_insert_newcard)) {
-                                        $message = "Successful";
-                                    } else {
-                                        $message = "Error inserting into newcard: " . mysqli_error($conn);
-                                    }
-            
-                                    mysqli_stmt_close($stmt_insert_newcard);
-            
-                // header("Location: ../php/add-locker.php?message=" . urlencode($err));
-                echo $message;
-                exit();
-                                }
+                $UIDresult = $_GET["card_uid"];
+                $Write = "<?php $" . "UIDresult='" . $UIDresult . "'; " . "echo $" . "UIDresult;" . " ?>";
+                
+                // Specify the file path
+                $filePath = '../UIDContainer.php';
+                
+                // Use file_put_contents with error handling
+                if (file_put_contents($filePath, $Write) !== false) {
+                    echo 'Posted'.$UIDresult;
+                } else {
+                    echo 'error';
+                
+                    // Output additional error information
+                    if (file_exists($filePath)) {
+                        echo ' Check file permissions.';
+                    } else {
+                        echo ' File not found. Check if the file path is correct.';
+                    }
+                }
+                             
+            }
                             }
-                        }
                     }
         
     
