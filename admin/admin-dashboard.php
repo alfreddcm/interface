@@ -16,6 +16,9 @@
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+   <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
  </head>
 
 
@@ -36,9 +39,9 @@
              </button>
 
              <div class="dropdown-menu p-3" aria-labelledby="triggerId">
-               <p class="text-uppercase font-weight-bold"><?php echo $fname . " " . $mi . ". " . $lname ?></p>
-               <p class="text-secondary"> <?php echo $email ?>
-               <ul class="list-unstyled">
+               <span class="text-uppercase font-weight-bold"><?php echo $fname . " " . $mi . ". " . $lname ?></span><br>
+               <span class="text-secondary"> <?php echo $email ?></span>
+               <ul class="list-unstyled mt-2 mb-2">
                  <li><a class="dropdown-item" href="admin-profile.php">
                      <img src="../icons/profile-icon.png" style="filter:invert(100)"> Profile</a></li>
                  <li><a class="dropdown-item" href="#" onclick="confirmLogout();">
@@ -58,78 +61,124 @@
    </div>
 
 
+   <!--  -->
    <div id="main">
      <div class="container-fluid pt-2">
        <div class="row justify-content-center align-items-center g-2 mb-3">
+         <h3 class="mb-2" style="color: white;
+  background: #253855b7;
+  border-radius: 3px;">Dashboard</h3>
+
          <div class="col">
            <a href="admin-lockerlist.php" style="text-decoration: none;">
+             <div class="card">
+               <div class="card-content">
+                 <div class="card-body">
+                   <div class="media d-flex">
+                     <div class="media-body text-left">
+                       <h3 class="success"><?php
+                                            $sqllocker = mysqli_query($conn, "SELECT * FROM locker_data");
+                                            $lockernum = mysqli_num_rows($sqllocker);
+                                            echo $lockernum;
+                                            ?></h3>
+                       <span>Total Lockers </span>
+                     </div>
+                     <div class="align-self-center">
+                       <i class="fa-solid fa-lock">
+                        <img src="../icons/lckes.png" alt="" height="60px">
+                       </i>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+             </div>
 
-             <div class="card text-center smcard border-primary">
-               <p class="card-text">
-               <h6>Total Lockers</h6>
-               <span class="number">
-                 <?php
-                  $sqllocker = mysqli_query($conn, "SELECT * FROM locker_data");
-                  $lockernum = mysqli_num_rows($sqllocker);
-                  echo $lockernum;
-                  ?>
-                 <img src="../icons/lock-icon.png" alt="" height="60px" style="margin-top:-25px;"></span>
-               </p>
+           </a>
+         </div>
+
+         <div class="col">
+           <a href="admin-userlist.php" style="text-decoration: none;">
+
+             <div class="card">
+               <div class="card-content">
+                 <div class="card-body">
+                   <div class="media d-flex">
+                     <div class="media-body text-left">
+                       <h3 class="success"><?php
+                                            $sqluser = mysqli_query($conn, "SELECT * FROM user_data");
+                                            $usernum = mysqli_num_rows($sqluser);
+                                            echo $usernum;
+                                            ?></h3>
+                       <span>Total Users </span>
+                     </div>
+                     <div class="align-self-center">
+                       <i class="icon-user success font-large-2 float-right">
+                       <img src="../icons/team-icon.png" alt="" height="50px">
+
+                       </i>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+             </div>
+
+           </a>
+         </div>
+         <div class="col">
+           <a href="admin-lockerlist.php" style="text-decoration: none;">
+             <div class="card">
+               <div class="card-content">
+                 <div class="card-body">
+                   <div class="media d-flex">
+                     <div class="media-body text-left">
+                       <h3 class="success"> <?php
+                                            $av = mysqli_query(
+                                              $conn,
+                                              "SELECT * FROM locker_data as ld LEFT JOIN user_data as ud ON ld.id = ud.locker_id WHERE ud.locker_id IS NULL"
+                                            );
+                                            $avv = mysqli_num_rows($av);
+                                            echo $avv;
+                                            ?></h3>
+                       <span>Available lockers</span>
+                     </div>
+                     <div class="align-self-center">
+                       <i class="icon-user success font-large-2 float-right">
+                       <img src="../icons/locker-ico.png" alt="" height="60px">
+
+                       </i>
+                     </div>
+                   </div>
+                 </div>
+               </div>
              </div>
            </a>
          </div>
          <div class="col">
            <a href="admin-userlist.php" style="text-decoration: none;">
-             <div class="card text-center smcard border-primary">
-               <p class="card-text">
-               <h6>Total Users </h6>
 
-               <span class="number">
-                 <?php
-                  $sqluser = mysqli_query($conn, "SELECT * FROM user_data");
-                  $usernum = mysqli_num_rows($sqluser);
-                  echo $usernum;
-                  ?>
+             <div class="card">
+               <div class="card-content">
+                 <div class="card-body">
+                   <div class="media d-flex">
+                     <div class="media-body text-left">
+                       <h3 class="success"> <?php
+                                            $av = mysqli_query($conn, "SELECT * FROM user_data where locker_id is NULL");
+                                            $avv = mysqli_num_rows($av);
+                                            echo $avv;
+                                            ?></h3>
+                       <span>Unassign Users</span>
+                     </div>
+                     <div class="align-self-center">
+                       <i class="icon-user success font-large-2 float-right">
+                       <img src="../icons/people.png" alt="" height="60px">
 
-                 <img src="../icons/users.png" alt="" style="filter:invert(100); margin-top:-10px;" height="60px"></span>
-               </p>
+                       </i>
+                     </div>
+                   </div>
+                 </div>
+               </div>
              </div>
-           </a>
-         </div>
-         <div class="col">
-           <a href="admin-lockerlist.php" style="text-decoration: none;">
 
-             <div class="card text-center smcard border-primary">
-               <p class="card-text">
-               <h6>Available lockers</h6>
-               <span class="number">
-                 <?php
-                  $av = mysqli_query(
-                    $conn,
-                    "SELECT * FROM locker_data as ld LEFT JOIN user_data as ud ON ld.id = ud.locker_id WHERE ud.locker_id IS NULL"
-                  );
-                  $avv = mysqli_num_rows($av);
-                  echo $avv;
-                  ?></span>
-               </p>
-
-             </div>
-           </a>
-         </div>
-         <div class="col">
-           <a href="admin-userlist.php" style="text-decoration: none;">
-
-             <div class="card text-center smcard border-primary">
-               <p class="card-text">
-               <h6>Unassign Users</h6>
-               <span class="number">
-                 <?php
-                  $av = mysqli_query($conn, "SELECT * FROM user_data where locker_id is NULL");
-                  $avv = mysqli_num_rows($av);
-                  echo $avv;
-                  ?></span>
-               </p>
-             </div>
          </div></a>
        </div>
 
@@ -360,6 +409,7 @@
 
      // do not touch
    </script>
+
 
  </body>
 

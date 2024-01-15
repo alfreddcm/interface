@@ -37,7 +37,7 @@ if (!isset($_SESSION['email'])) {
                 <div>
                     <div class="dropdown open">
                         <button class="btn dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            <p class="font-weight-bold p1"><?php echo $fname . " " . $mi . ". " . $lname ?></p> &nbsp;
+                           <b> <p class="font-weight-bold p1"><?php echo $fname . " " . $mi . ". " . $lname ?></p></b> &nbsp;
                             <img src="../adminuploads/<?php echo $profile ?>" alt="Admin" class="rounded-circle p">
                         </button>
 
@@ -509,7 +509,7 @@ if (!isset($_SESSION['email'])) {
 
             .num {
                 top: 9px;
-                left: 45%;
+                right: 3px;
             }
 
             .card {

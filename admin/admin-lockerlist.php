@@ -39,12 +39,12 @@ if (!isset($_SESSION['email'])) {
         <div>
           <div class="dropdown open">
             <button class="btn dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-              <p class="font-weight-bold p1"><?php echo $fname . " " . $mi . ". " . $lname ?></p> &nbsp;
+             <b> <p class="font-weight-bold p1"><?php echo $fname . " " . $mi . ". " . $lname ?></p></b> &nbsp;
               <img src="../adminuploads/<?php echo $profile ?>" alt="Admin" class="rounded-circle p">
             </button>
             <div class="dropdown-menu pt-3" aria-labelledby="triggerId">
               <p class="text-uppercase font-weight-bold"><?php echo $fname . " " . $mi . ". " . $lname ?></p>
-              <p class="text-secondary"> <?php echo $email ?>
+              <p class="text-secondary"> <?php echo $email ?></p>
               <ul class="list-unstyled">
                 <li><a class="dropdown-item" href="admin-profile.php">
                     <img src="../icons/profile-icon.png" style="filter:invert(100)"> Profile</a></li>
@@ -191,7 +191,6 @@ if (!isset($_SESSION['email'])) {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
   <script src="../sweet/jquery-1.10.2.min.js"></script>
   <script>
-    var loadingIndicator = // ... code to create/loading spinner element;
 
       $(document).on('click', '.remove-button', function() {
         event.preventDefault();
@@ -237,7 +236,6 @@ if (!isset($_SESSION['email'])) {
         confirmButtonText: 'Yes, log me out!'
       }).then((result) => {
         if (result.isConfirmed) {
-          // Redirect to the logout script or perform your logout logic here
           window.location.href = '../php/php-logout.php';
         }
       });

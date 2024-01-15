@@ -293,11 +293,6 @@ function time_elapsed_string($datetime)
     </div>
 
 
-
-
-
-
-
 </body>
 <script src="script.js"></script>
 <script src="js/logout.js"></script>

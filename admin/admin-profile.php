@@ -22,37 +22,36 @@ include("../php/php-updateadminprofile.php");
 </head>
 
 <body>
-    <header class="text-start">
-        <div class="row justify-content-center align-items-center g-2">
-            <div class="col">
-                <a class="openbtn" onclick="toggleNav()"><img src="../icons/menu-icon.png" alt=""></a>
-                <img src="../icons/logo.png" class="logo" height="30px">
-                <h4 style="display: inline;">ELOCKER</h4>
-            </div>
-            <div class="col text-end">
-                <div>
-                    <div class="dropdown open">
-                        <button class="btn dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            <p class="font-weight-bold p1"><?php echo $fname . " " . $mi . ". " . $lname ?></p> &nbsp;
+<header class="text-start">
+     <div class="row justify-content-center align-items-center g-2">
+       <div class="col">
+         <a class="openbtn" onclick="toggleNav()"><img src="../icons/menu-icon.png" alt=""></a>
+         <img src="../icons/logo.png" class="logo" height="30px">
+         <h4 style="display: inline;">ELOCKER</h4>
+       </div>
+       <div class="col text-end">
+         <div>
+           <div class="dropdown open">
+             <button class="btn dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              <b> <p class="font-weight-bold p1"><?php echo $fname . " " . $mi . ". " . $lname ?></p></b> &nbsp;
+               <img src="../adminuploads/<?php echo $profile ?>" alt="Admin" class="rounded-circle p">
+             </button>
 
-                            <img src="../adminuploads/<?php echo $profile ?>" alt="Admin" class="rounded-circle p">
-                        </button>
-
-                        <div class="dropdown-menu p-3" aria-labelledby="triggerId">
-                            <p class="text-uppercase font-weight-bold"><?php echo $fname . " " . $mi . ". " . $lname ?></p>
-                            <p class="text-secondary"> <?php echo $email ?>
-                            <ul class="list-unstyled">
-                                <li><a class="dropdown-item" href="admin-profile.php">
-                                        <img src="../icons/profile-icon.png" style="filter:invert(100)"> Profile</a></li>
-                                <li><a class="dropdown-item" href="#" onclick="confirmLogout();">
-                                        <img src="../icons/logout-icon.png" style="filter:invert(100)">Log out</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+             <div class="dropdown-menu p-3" aria-labelledby="triggerId">
+               <span class="text-uppercase font-weight-bold"><?php echo $fname . " " . $mi . ". " . $lname ?></span><br>
+               <span class="text-secondary"> <?php echo $email ?></span>
+               <ul class="list-unstyled mt-2 mb-2">
+                 <li><a class="dropdown-item" href="admin-profile.php">
+                     <img src="../icons/profile-icon.png" style="filter:invert(100)"> Profile</a></li>
+                 <li><a class="dropdown-item" href="#" onclick="confirmLogout();">
+                     <img src="../icons/logout-icon.png" style="filter:invert(100)">Log out</a></li>
+               </ul>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
+   </header>
 
     <div id="mySidebar" class="sidebar">
         <a href="admin-dashboard.php" style="background-color: white; "><img src="../icons/dashboard-icon.png" style="filter:invert(100);"><b style="color:black;"> Dashboard</b></a>
@@ -234,7 +233,7 @@ include("../php/php-updateadminprofile.php");
                                 </div>
                             </div>
                             <center>
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary mt-2">Submit</button>
                             </center>
                     </div>
                 </div>

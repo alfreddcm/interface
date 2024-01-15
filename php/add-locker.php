@@ -77,20 +77,25 @@ file_put_contents('../UIDContainer.php', $Write);
         <div class="container mt-5">
             <div class="card text-start">
                 <div class="card-body">
+                    <center>
                     <h4 class="card-title"> Adding new card on <?php
 
                                                                 $sql = "SELECT * FROM department where id= $token";
                                                                 $result = $conn->query($sql);
                                                                 $row = $result->fetch_assoc();
                                                                 echo $row["dep_name"]
-                                                                ?></h4>
+                                                                ?></h4></center>
                     <p class="card-text">
                         <!-- <div id="manage_users"></div> -->
                     <div class="table-responsive-sm" style="max-height: 870px;">
-                    <form id="cardForm" action="addcard.php" method="post" onsubmit="return submitForm();">
+                        <form id="cardForm" action="addcard.php" method="post" onsubmit="return submitForm();">
                             <center>
                                 <input type="hidden" id="token" name="token" value="<?php echo $token ?>">
-                                <input type="text" name="selected_card" id="getUID" placeholder="Please Tap your Card" required>
+
+                                <div class="input-wrapper">
+                                    <input class="input-box" type="text" name="selected_card" id="getUID" placeholder="Please Tap your Card" required>
+                                    <span class="underline"></span>
+                                </div>
 
                                 <a href="../admin/admin-lockerlist.php"><button type="button" class="btn btn-secondary"> Return </button></a>
                                 <button type="submit" class="btn btn-success" onsubmit="submitForm()">Submit</button>
@@ -102,50 +107,50 @@ file_put_contents('../UIDContainer.php', $Write);
             </div>
         </div>
         <script>
-$(document).ready(function() {
-    $("#getUID").load("../UIDContainer.php", function(responseText) {
-        console.log("Initial Content:", responseText.trim());
-    });
+            $(document).ready(function() {
+                $("#getUID").load("../UIDContainer.php", function(responseText) {
+                    console.log("Initial Content:", responseText.trim());
+                });
 
-    // Set up an interval to continuously update the content
-    setInterval(function() {
-        $("#getUID").load("../UIDContainer.php", function(responseText) {
-            $("#getUID").val(responseText.trim());
-            console.log("Updated Content:", responseText.trim());
-        });
-    }, 500);
-});
+                // Set up an interval to continuously update the content
+                setInterval(function() {
+                    $("#getUID").load("../UIDContainer.php", function(responseText) {
+                        $("#getUID").val(responseText.trim());
+                        console.log("Updated Content:", responseText.trim());
+                    });
+                }, 500);
+            });
 
-function submitForm() {
-    var formData = new FormData(document.getElementById('cardForm'));
-    $.ajax({
-        type: 'POST',
-        url: 'addcard.php',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(response) {
-    console.log(response);
+            function submitForm() {
+                var formData = new FormData(document.getElementById('cardForm'));
+                $.ajax({
+                    type: 'POST',
+                    url: 'addcard.php',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        console.log(response);
 
-    if (response === 'success') {
-        Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: 'Card added successfully!',
-        });
-    } else {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error!',
-            text: response,
-        });
-    }
-},
+                        if (response === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Card added successfully!',
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: response,
+                            });
+                        }
+                    },
 
-    });
+                });
 
-    return false; // Prevent the default form submission
-}
+                return false; // Prevent the default form submission
+            }
 
 
 
@@ -176,6 +181,44 @@ function submitForm() {
         </script>
 </body>
 <style>
+    .input-wrapper {
+        position: relative;
+        width: 200px;
+        margin: 50px auto;
+    }
+
+    .input-box {
+        font-size: 16px;
+        padding: 10px 0;
+        border: none;
+        border-bottom: 2px solid #ccc;
+        color: #08AEEA;
+        width: 100%;
+        background-color: transparent;
+        transition: border-color 0.3s ease-in-out;
+    }
+
+    .underline {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: #08AEEA;
+        transform: scaleX(0);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .input-box:focus {
+        border-color: #08AEEA;
+        outline: none;
+    }
+
+    .input-box:focus+.underline {
+        transform: scaleX(1);
+    }
+
+
     .card {
         padding: 5px;
         position: absolute;
