@@ -23,8 +23,8 @@ include("php/php-login.php");
                 <a class="navbar-brand fw-bold" href="#page-top"><img src="icons/logo.png" alt="" height="40px"></a>
                 <div>
 
-                    </div>
                 </div>
+            </div>
             </div>
         </nav>
     </header>
@@ -38,7 +38,7 @@ include("php/php-login.php");
                         <h1 class="display-1"><b>Elocker</b></h1>
                         <p class="lead fw-normal ">
                             "Unlocking Education, Securing Futures: <br>
-                             RFID - Your Key to Smart School Storage!" </p>
+                            RFID - Your Key to Smart School Storage!" </p>
                     </div>
                 </div>
                 <div class="col-lg-5 pb-0 loginform">
@@ -62,9 +62,9 @@ include("php/php-login.php");
                                             <input type="password" name="password" id="password" placeholder="" minlength="8">
                                         </div>
                                         <input type="checkbox" class="mt-4" onclick="showPassword()">
-                                        
+
                                         <label class="show">Show Password</label>
-<hr>
+                                        <hr>
 
                                         <button class="sign">Sign in</button>
                                     </form>
@@ -206,10 +206,13 @@ include("php/php-login.php");
                                                 </div>
                                             </div>
 
-
+                                            <div class="form-group">
+                                                <center>
+                                                    <div class="g-recaptcha mt-2" data-sitekey="6LfQMFEpAAAAAFbPG5GwBk6M81q6Zt76atds9EVM"></div>
+                                                </center>
+                                            </div>
                                         </div>
                                     </div>
-
                                     <!--              -->
                                     <hr>
                                     <button type="submit" class="btn btn-primary ">Submit</button>
@@ -222,49 +225,61 @@ include("php/php-login.php");
     </div>
 
     <!-- Bootstrap core JS-->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     <script src="sweet/jquery-1.10.2.min.js"></script>
     <script src="sweet/sweetalert2.all.min.js"></script>
     <script>
-$(document).ready(function() {
-        $("#reg").submit(function(e) {
-            e.preventDefault();
+        $(document).ready(function() {
+            $("#reg").submit(function(e) {
+                e.preventDefault();
 
-            $.ajax({
-                type: "POST",
-                url: $(this).attr('action'),
-                data: $(this).serialize(),
-                success: function(response) {
-                    if (response === 'success') {
-                        Swal.fire({
-                            title: 'Success',
-                            text: 'Request Added! Please wait for email confirmation! ',
-                            icon: 'success',
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                location.reload();
-                            }
-                        });
-                    } else {
+                // Check if reCAPTCHA is verified
+                if (grecaptcha.getResponse() === "") {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Please complete the reCAPTCHA verification.',
+                        icon: 'error',
+                    });
+                    return;
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: $(this).attr('action'),
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        if (response === 'success') {
+                            Swal.fire({
+                                title: 'Success',
+                                text: 'Request Added! Please wait for email confirmation!',
+                                icon: 'success',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Error',
+                                text: response,
+                                icon: 'error',
+                            });
+                        }
+                    },
+
+                    error: function() {
                         Swal.fire({
                             title: 'Error',
-                            text: response,
+                            text: 'An error occurred while processing your request.',
                             icon: 'error',
                         });
                     }
-                },
-
-                error: function() {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'An error occurred while processing your request.',
-                        icon: 'error',
-                    });
-                }
+                });
             });
         });
-    });
 
 
         function showPassword() {
@@ -294,6 +309,7 @@ $(document).ready(function() {
             }
             input2.value = value;
         }
+        
     </script>
 </body>
 

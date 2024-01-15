@@ -83,7 +83,7 @@ if (!isset($_SESSION['email'])) {
             <div class="card">
               <div class="card-body">
 
-                <div class="row justify-content-center align-items-center g-1">
+                <div class="row g-1">
                   <div class="col-md-4 text-center">
                     <img class="img" src="../icons/locker-icon.png" height="100px">
                     <?php
@@ -107,14 +107,14 @@ if (!isset($_SESSION['email'])) {
                       ?>
                     </p><br>
                     <p class="card-text">UID: <?php echo $row['uid']; ?></p><br>
-                    <p class="card-text">Status: <?php echo $row['status']; ?></p>
+                    <!-- <p class="card-text">Status: <?php //echo $row['status']; ?></p> -->
                     <hr>
                     <div class="btn-group">
                       <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                         Option
                       </button>
                       <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="../php/locker-changceuser.php?id=<?php echo $row['locker_id'] ?>">Set User</a></li>
+                        <li><a class="dropdown-item" href="../php/locker-changceuser.php?id=<?php echo $row['locker_id'] ?>">Change User</a></li>
                       </ul>
                     </div>
                     <a name="" id="" class="btn btn-danger remove-button" data-uid="<?php echo $row['uid'] ?>" data-id="<?php echo $row['id'] ?>" role="button">Remove</a>
@@ -148,7 +148,7 @@ if (!isset($_SESSION['email'])) {
                 </div>
                 <div class="col-md-8">
                   <p class="card-text">UID: <?php echo $row['uid']; ?></p><br>
-                  <p class="card-text">Status: <?php echo $row['status']; ?></p>
+                  <!-- <p class="card-text">Status: <?php //echo $row['status']; ?></p> -->
                   <hr>
                   <div class="btn-group">
                     <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -225,6 +225,23 @@ if (!isset($_SESSION['email'])) {
           }
         });
       });
+
+    function confirmLogout() {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'You will be logged out!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, log me out!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Redirect to the logout script or perform your logout logic here
+          window.location.href = '../php/php-logout.php';
+        }
+      });
+    }
   </script>
 
 
@@ -257,7 +274,7 @@ if (!isset($_SESSION['email'])) {
       outline-color: 1px solid black;
       position: absolute;
       text-align: right;
-      top: 40px;
+      top: 10px;
       left: 50px;
       color: white;
       font-size: 70px;
@@ -296,13 +313,15 @@ if (!isset($_SESSION['email'])) {
 
     @media screen and (max-width: 600px) {
 
-      .num{
-        top: 9px;
+      .num {
+        top: 7px;
         left: 45%;
       }
+
       .num2 {
-        top: 0px;
+        top: -14px;
         left: 45%;
+
       }
 
       .card {

@@ -51,8 +51,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt->execute()) {
 
-            $sql = "DELETE FROM requestlist WHERE email = '$email'";
-            echo 'Email has been sent successfully.;';
+            $stmt = $conn->prepare("DELETE FROM requestlist WHERE email = ?");
+            $stmt->bind_param("s", $email);
+
+            // Execute the statement
+            $stmt->execute();
+
+            // Check for success
+            if ($stmt->affected_rows > 0) {
+                echo 'Request Accepted!';
+            } else {
+                echo "Error deleting record: " . $stmt->error;
+            }
+   
         } else {
             echo 'Error updating record: ' . $stmt->error . ';';
         }

@@ -11,6 +11,8 @@ if (!isset($_SESSION['email'])) {
 }
 
 $token = $_SESSION['token'];
+$Write = "<?php $" . "UIDresult=''; " . "echo $" . "UIDresult;" . " ?>";
+file_put_contents('../UIDContainer.php', $Write);
 
 ?>
 
@@ -73,39 +75,79 @@ $token = $_SESSION['token'];
     </div>
     <div id="main">
         <div class="container mt-5">
-        <div class="card text-start">
+            <div class="card text-start">
                 <div class="card-body">
-                    <h4 class="card-title"> Adding new card on <?php 
-                                       
-                    $sql = "SELECT * FROM department where id= $token";
-                    $result = $conn->query($sql);
-                    $row = $result->fetch_assoc();
-                    echo $row["dep_name"]
-                    ?></h4>
+                    <h4 class="card-title"> Adding new card on <?php
+
+                                                                $sql = "SELECT * FROM department where id= $token";
+                                                                $result = $conn->query($sql);
+                                                                $row = $result->fetch_assoc();
+                                                                echo $row["dep_name"]
+                                                                ?></h4>
                     <p class="card-text">
-                    <div id="manage_users"></div>
+                        <!-- <div id="manage_users"></div> -->
+                    <div class="table-responsive-sm" style="max-height: 870px;">
+                    <form id="cardForm" action="addcard.php" method="post" onsubmit="return submitForm();">
+                            <center>
+                                <input type="hidden" id="token" name="token" value="<?php echo $token ?>">
+                                <input type="text" name="selected_card" id="getUID" placeholder="Please Tap your Card" required>
+
+                                <a href="../admin/admin-lockerlist.php"><button type="button" class="btn btn-secondary"> Return </button></a>
+                                <button type="submit" class="btn btn-success" onsubmit="submitForm()">Submit</button>
+                            </center>
+                        </form>
+                    </div>
                     </p>
                 </div>
             </div>
         </div>
         <script>
-       
+$(document).ready(function() {
+    $("#getUID").load("../UIDContainer.php", function(responseText) {
+        console.log("Initial Content:", responseText.trim());
+    });
 
-            $(document).ready(function() {
-                function updateManageUsers() {
-                    $.ajax({
-                        url: "../ard/manage_users_up.php",
-                        data: {
-                            token: '<?php echo $token; ?>'
-                        },
-                        method: 'POST',
-                    }).done(function(data) {
-                        $('#manage_users').html(data);
-                    });
-                }
-                updateManageUsers();
-                setInterval(updateManageUsers, 6000);
-            });
+    // Set up an interval to continuously update the content
+    setInterval(function() {
+        $("#getUID").load("../UIDContainer.php", function(responseText) {
+            $("#getUID").val(responseText.trim());
+            console.log("Updated Content:", responseText.trim());
+        });
+    }, 500);
+});
+
+function submitForm() {
+    var formData = new FormData(document.getElementById('cardForm'));
+    $.ajax({
+        type: 'POST',
+        url: 'addcard.php',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+    console.log(response);
+
+    if (response === 'success') {
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Card added successfully!',
+        });
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: response,
+        });
+    }
+},
+
+    });
+
+    return false; // Prevent the default form submission
+}
+
+
 
             // dont touch ----->>>>----->>>>-----
             window.addEventListener("load", function() {
@@ -134,14 +176,13 @@ $token = $_SESSION['token'];
         </script>
 </body>
 <style>
-       .card {
+    .card {
         padding: 5px;
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
     }
-
 </style>
 
 </html>

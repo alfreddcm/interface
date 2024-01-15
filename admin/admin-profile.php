@@ -135,7 +135,7 @@ include("../php/php-updateadminprofile.php");
     </div>
 
     <div class="modal fade" id="modalId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md" role="document">
+        <div class="modal-dialog modal-dialog-centered " role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalTitleId">Update User Information</h5>
@@ -143,103 +143,99 @@ include("../php/php-updateadminprofile.php");
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid center-container">
-                        <div class="card">
-                            <div class="card-body">
-                                <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
-                                    <div class="row">
+                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col">
+
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="text" class="form-control" id="email" name="email" placeholder="Enter email" value="<?php echo $email ?>">
+                                    </div>
+
+
+                                    <div class="row justify-content-center align-items-center g-2">
                                         <div class="col">
-
                                             <div class="form-group">
-                                                <label for="email">Email</label>
-                                                <input type="text" class="form-control" id="email" name="email" placeholder="Enter email" value="<?php echo $email ?>">
+                                                <label for="fname">First Name</label>
+                                                <input type="text" class="form-control" id="fname" name="fname" placeholder="Enter first name" pattern="[a-zA-Z]*" title="Must contain a-z characters" value="<?php echo $fname ?>">
                                             </div>
 
-
-                                            <div class="row justify-content-center align-items-center g-2">
-                                                <div class="col">
-                                                    <div class="form-group">
-                                                        <label for="fname">First Name</label>
-                                                        <input type="text" class="form-control" id="fname" name="fname" placeholder="Enter first name" pattern="[a-zA-Z]*" title="Must contain a-z characters" value="<?php echo $fname ?>">
-                                                    </div>
-
-                                                </div>
-                                                <div class="col-sm-2">
-                                                    <div class="form-group">
-                                                        <label for="mi">MI</label>
-                                                        <input type="text" class="form-control" id="mi" name="mi" placeholder="Enter middle initial" pattern="[a-zA-Z]*" title=" Must contain a-z characters" value="<?php echo $mi ?>" maxlength="1">
-                                                    </div>
-
-                                                </div>
-                                                <div class="col">
-                                                    <div class="form-group">
-                                                        <label for="lname">Last Name</label>
-                                                        <input type="text" class="form-control" id="lname" name="lname" value="<?php echo $lname ?>" placeholder="Enter last name" pattern="[a-zA-Z]*" title="Must contain a-z characters" required>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
+                                        </div>
+                                        <div class="col-sm-2">
                                             <div class="form-group">
-                                                <label for="sex">Sex</label>
-                                                <select class="form-select" id="sex" name="sex" required>
-                                                    <?php
-                                                    if ($sex == "m") {
-                                                        echo "<option value='" . $sex . "'>Male </option>";
-                                                        echo "<option value='f'>Female</option>";
-                                                    } else {
-                                                        echo "<option value='" . $sex . "'>Female</option>";
-                                                        echo "<option value='m'>Male</option>";
-                                                    }
-                                                    ?>
-                                                </select>
+                                                <label for="mi">MI</label>
+                                                <input type="text" class="form-control" id="mi" name="mi" placeholder="Enter middle initial" pattern="[a-zA-Z]*" title=" Must contain a-z characters" value="<?php echo $mi ?>" maxlength="1">
                                             </div>
 
-                                            <div class="row justify-content-center align-items-center g-2">
-                                                <label for="sex">Position</label>
-                                                <select class="form-select" id="pos" name="pos" required>
-                                                    <?php
-                                                    if ($pos == "student") {
-                                                        echo "<option value='" . $pos . "'>Student </option>";
-                                                        echo "<option value='instructor'>Instructor</option>";
-                                                    } else {
-                                                        echo "<option value='" . $pos . "'>Intructor</option>";
-                                                        echo "<option value='student'>Student</option>";
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label>Department</label>
-                                                    <?php
-                                                    $sql = "SELECT id, dep_name FROM department";
-                                                    $result = $conn->query($sql);
-                                                    $sql2 = "SELECT id, dep_name FROM department where id=$department_id";
-                                                    $result2 = $conn->query($sql2);
-                                                    $dep = $result2->fetch_assoc();
-
-                                                    if ($result->num_rows > 0) {
-                                                        echo '<select class="form-select" id="depid" name="depid" required>';
-                                                        echo '<option value="' . $dep['id'] . '" selected>' . $dep['dep_name'] . '
-                                                            
-                                                            </option>';
-                                                        while ($row = $result->fetch_assoc()) {
-                                                            echo '<option value="' . $row["id"] . '">' . $row["dep_name"] . '</option>';
-                                                        }
-                                                        echo '</select>';
-                                                    } else {
-                                                        echo '<p>No department found</p>';
-                                                    }
-                                                    ?>
-                                                </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="lname">Last Name</label>
+                                                <input type="text" class="form-control" id="lname" name="lname" value="<?php echo $lname ?>" placeholder="Enter last name" pattern="[a-zA-Z]*" title="Must contain a-z characters" required>
                                             </div>
                                         </div>
                                     </div>
+
+
+                                    <div class="form-group">
+                                        <label for="sex">Sex</label>
+                                        <select class="form-select" id="sex" name="sex" required>
+                                            <?php
+                                            if ($sex == "m") {
+                                                echo "<option value='" . $sex . "'>Male </option>";
+                                                echo "<option value='f'>Female</option>";
+                                            } else {
+                                                echo "<option value='" . $sex . "'>Female</option>";
+                                                echo "<option value='m'>Male</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="row justify-content-center align-items-center g-2">
+                                        <label for="sex">Position</label>
+                                        <select class="form-select" id="pos" name="pos" required>
+                                            <?php
+                                            if ($pos == "student") {
+                                                echo "<option value='" . $pos . "'>Student </option>";
+                                                echo "<option value='instructor'>Instructor</option>";
+                                            } else {
+                                                echo "<option value='" . $pos . "'>Intructor</option>";
+                                                echo "<option value='student'>Student</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label>Department</label>
+                                            <?php
+                                            $sql = "SELECT id, dep_name FROM department";
+                                            $result = $conn->query($sql);
+                                            $sql2 = "SELECT id, dep_name FROM department where id=$department_id";
+                                            $result2 = $conn->query($sql2);
+                                            $dep = $result2->fetch_assoc();
+
+                                            if ($result->num_rows > 0) {
+                                                echo '<select class="form-select" id="depid" name="depid" required>';
+                                                echo '<option value="' . $dep['id'] . '" selected>' . $dep['dep_name'] . '
+                                                            
+                                                            </option>';
+                                                while ($row = $result->fetch_assoc()) {
+                                                    echo '<option value="' . $row["id"] . '">' . $row["dep_name"] . '</option>';
+                                                }
+                                                echo '</select>';
+                                            } else {
+                                                echo '<p>No department found</p>';
+                                            }
+                                            ?>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <center>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </center>
+                            <center>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </center>
                     </div>
                 </div>
                 </form>
@@ -256,12 +252,32 @@ include("../php/php-updateadminprofile.php");
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous">
     </script>
     <script>
+
+
         var modalId = document.getElementById('modalId');
 
         modalId.addEventListener('show.bs.modal', function(event) {
             let button = event.relatedTarget;
             let recipient = button.getAttribute('data-bs-whatever');
         });
+
+        function confirmLogout() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You will be logged out!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, log me out!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '../php/php-logout.php';
+                }
+            });
+        }
+
+        
     </script>
 </body>
 <style>

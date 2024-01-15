@@ -4,28 +4,21 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Assuming you have a valid database connection ($conn)
 
-    // Retrieve the token and other form data
     $token = isset($_POST['token']) ? $_POST['token'] : '';
     $selectedCard = isset($_POST['selected_card']) ? $_POST['selected_card'] : null;
 
-    // Check if $selectedCard is not null
     if ($selectedCard !== null) {
-        // Assuming the UID is the same as the selected card ID
         $uid = $selectedCard;
-        $checkQuery = "SELECT COUNT(*) FROM locker_data WHERE uid = '$uid'";
-        $checkResult = mysqli_query($conn, $checkQuery);
+        $checkResult = mysqli_query($conn, "SELECT * FROM locker_data WHERE uid = '$uid'");
 
         if (!$checkResult) {
             echo "Error checking existing uuid: " . mysqli_error($mysqli);
         } else {
-            $count = mysqli_fetch_row($checkResult)[0];
+            $count = mysqli_fetch_row($checkResult);
 
             if ($count == 0) {
-                // Insert data into the locker_data table
                 $sql = "INSERT INTO locker_data (uid, token) VALUES (?, ?)";
                 $sqlremove = "DELETE FROM newcard WHERE uid = ?";
                 $stmt = mysqli_stmt_init($conn);
@@ -36,26 +29,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     mysqli_stmt_execute($stmt);
                     mysqli_stmt_close($stmt);
 
-                    // Remove from newcard table
                     mysqli_stmt_prepare($stmtr, $sqlremove);
                     mysqli_stmt_bind_param($stmtr, "s", $uid);
                     mysqli_stmt_execute($stmtr);
                     mysqli_stmt_close($stmtr);
 
-                    echo '<script>alert("Added!"); window.location.href="../php/add-locker.php"; </script>';
+                    echo 'success';
                 } else {
-                    echo '<p class="alert alert-danger">SQL Error</p>';
+                    echo 'SQL Error';
                 }
             } else {
-                // 'uuid' already exists, handle accordingly
-                echo '<script>alert("Duplicate uid found!"); window.location.href="../php/add-locker.php"; </script>';
+                echo 'UID already on the list!';
             }
         }
 
-        // Close the database connection if needed
         mysqli_close($conn);
 
     } else {
-        echo ' <script>alert("Please select a card."); window.location.href="../php/add-locker.php";</script>';
+        echo 'Please Scan the card!';
     }
 }

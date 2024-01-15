@@ -161,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="../sweet/jquery-1.10.2.min.js"></script>
 
 <script>
-        $(document).ready(function() {
+     $(document).ready(function() {
         $("#passwordForm").submit(function(e) {
             e.preventDefault();
 
@@ -239,6 +239,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             confirmPasswordInput.type = "password";
         }
     }
+    
+    function confirmLogout() {
+  Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will be logged out!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, log me out!'
+  }).then((result) => {
+      if (result.isConfirmed) {
+          // Redirect to the logout script or perform your logout logic here
+          window.location.href = '../php/php-logout.php';
+      }
+  });
+}
 </script>
 
 <style>

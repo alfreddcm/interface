@@ -35,17 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
             $mail->send();
             //updata
-            $password = "Password123";
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            
-            $stmt = $conn->prepare("INSERT INTO user_data (email, idno, fname, mi, lname, sex, course_id, department_id, yrsec, locker_id, user_profile, password)  
-                                    SELECT email, idno, fname, mi, lname, sex, course_id, department_id, yrsec, NULL, 'blank-profile.png', ?
-                                    FROM requestlist 
-                                    WHERE email = ?");
-            $stmt->bind_param("ss", $hashedPassword, $email);
-    
-            if ($stmt->execute()) {
-    
+        
                 $sql = "DELETE FROM requestlist WHERE email = '$emailToRemove'";
                 $result = $conn->query($sql);
         
@@ -55,9 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     echo json_encode(['success' => false, 'error' => 'Failed to remove the email. ' . $conn->error]);
                 }
                 $conn->close();
-            } else {
-                echo json_encode(['success' => false, 'error' => 'Email parameter not set']);
-            }
     
             $stmt->close();
         } catch (Exception $e) {

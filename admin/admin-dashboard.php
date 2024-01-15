@@ -16,7 +16,7 @@
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-  </head>
+ </head>
 
 
  <body>
@@ -272,15 +272,18 @@
                data: {
                  email: email
                },
-               beforeSend: function() {
-                 // This function is called before sending the request
-               },
+               beforeSend: function() {},
                success: function(response) {
                  console.log("Success response received");
                  Swal.fire({
                    title: 'Success!',
                    text: response,
                    icon: 'success'
+                 }).then((result) => {
+                   if (result.isConfirmed) {
+                     // Reload the page
+                     location.reload();
+                   }
                  });
                },
                error: function(xhr, status, error) {
@@ -292,7 +295,6 @@
                  });
                },
                complete: function() {
-                 // Hide loading indicator after the request is completed (success or error)
                  console.log("Hiding loading indicator");
                  Swal.hideLoading();
                }
@@ -339,8 +341,22 @@
        });
      });
 
-
-    
+     function confirmLogout() {
+       Swal.fire({
+         title: 'Are you sure?',
+         text: 'You will be logged out!',
+         icon: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: 'Yes, log me out!'
+       }).then((result) => {
+         if (result.isConfirmed) {
+           // Redirect to the logout script or perform your logout logic here
+           window.location.href = '../php/php-logout.php';
+         }
+       });
+     }
 
      // do not touch
    </script>

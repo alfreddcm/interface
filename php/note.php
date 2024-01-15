@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $updateQuery = "UPDATE Note SET text = '$text' WHERE idno = '$idno'";
         
         if (mysqli_query($conn, $updateQuery)) {
-            echo "Success";
+            echo "success";
         } else {
             echo "error";
             echo "Error updating note: " . mysqli_error($conn);
@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $insertQuery = "INSERT INTO Note (idno, text) VALUES ('$idno', '$text')";
         
         if (mysqli_query($conn, $insertQuery)) {
-            echo "Success";       
+            echo "success";       
         } else {
             echo "Error inserting note: " . mysqli_error($conn);
         }
