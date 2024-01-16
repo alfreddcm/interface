@@ -213,7 +213,6 @@ include("php/php-login.php");
                                             </div>
                                         </div>
                                     </div>
-                                    <!--              -->
                                     <hr>
                                     <button type="submit" class="btn btn-primary ">Submit</button>
                                     <button class="btn btn-info" type="button" data-bs-dismiss="modal" aria-label="Close"> Return</button>
@@ -280,7 +279,6 @@ include("php/php-login.php");
                 });
             });
         });
-
 
         function showPassword() {
             var passwordInput = document.getElementById("password");

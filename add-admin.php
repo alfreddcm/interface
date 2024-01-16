@@ -46,7 +46,8 @@ include('../php/php-add-admin.php')
 
         <div class="form-group">
           <div id="message">
-            <div class="card">
+
+            <div class="cardP">
               <div class="card-body">
                 <h4 class="card-title">Password must contain:</h4>
               </div>
