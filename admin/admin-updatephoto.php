@@ -1,5 +1,8 @@
 <?php
 include("../php/php-admininfo.php");
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+
 
 $email = $_SESSION['email'];
 if (isset($_FILES['profile']) && $_FILES['profile']['error'] === 0) {
@@ -14,17 +17,9 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === 0) {
     if ($stmt) {
         mysqli_stmt_bind_param($stmt, "ss", $profile, $email);
         if (mysqli_stmt_execute($stmt)) {
-            echo "<script>alert('Updated Successfuly!');
-            window.location = 'admin-updatephoto.php';        
-            </script>
-                   ";
-            exit;
+            $response= "success";
         } else {
-            echo "<script>alert('Updated Failed!');
-            window.location = 'admin-updatephoto.php';        
-            </script>
-                   ";
-            exit;
+            $response= "error";
         }
 
         mysqli_stmt_close($stmt);
@@ -35,6 +30,7 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === 0) {
                ";
         exit;
     }
+
 }
 ?>
 <!DOCTYPE html>
@@ -49,7 +45,8 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === 0) {
     <link rel="stylesheet" type="text/css" href="../addcss.css">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="../sweet/sweetalert2.all.min.js"></script>
+    <script src="../sweet/jquery-1.10.2.min.js"></script>
 
 </head>
 
@@ -99,7 +96,7 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === 0) {
                     <div class="card-body">
                         <h4 class="card-title">Update Profile</h4>
                         <p class="card-text">
-                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
+                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" id="form" enctype="multipart/form-data">
                             <img src="../adminuploads/<?php echo $profile ?>" alt="Avatar" class="img-fluid my-5" id="imagePreview" name="imagePreview">
                             </p><br>
                             <input type="file" class="text-center" name="profile" id="profile" onchange="previewImage()" accept="image/*" required> 
@@ -126,13 +123,55 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === 0) {
 
 </body>
 
-<script src="node_modules/jquery/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
 <script src="../script.js">
 
 </script>
 
+<script>
+var response = <?php echo json_encode(isset($response) ? $response : ''); ?>;
+        $(document).ready(function() {
+            $("#form").submit(function(e) {
+                e.preventDefault();
+
+                $.ajax({
+                    type: "POST",
+                    url: $(this).attr('action'),
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        console.log(response);
+                        if (response === 'success') {
+                            Swal.fire({
+                                title: 'Success',
+                                text: 'Profile updated successfully!',
+                                icon: 'success',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Error updating the profile!',
+                                icon: 'error',
+                            });
+                        }
+                    },
+
+                    error: function() {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'An error occurred while processing your request.',
+                            icon: 'error',
+                        });
+                    }
+                });
+            });
+        });
+
+</script>
 
 <style>
 

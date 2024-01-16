@@ -25,7 +25,7 @@ if (isset($_GET['card_uid']) && isset($_GET['device_token'])) {
 
             if ($device_mode == 1) {
                 // Logging
-                $sql = "SELECT * FROM locker_data WHERE uid='$card_uid'";
+                $sql = "SELECT * FROM locker_data WHERE uid = $card_uid";
                 $result = mysqli_query($conn, $sql);
 
                 if (!$result) {
@@ -35,7 +35,8 @@ if (isset($_GET['card_uid']) && isset($_GET['device_token'])) {
 
                 if ($row = mysqli_fetch_assoc($result)) {
                     $lockerid = $row['id'];
-                    $checkLockerQuery = "SELECT * FROM locker_data WHERE id = '$lockerid'";
+                    $checkLockerQuery = "SELECT * FROM locker_data as ld INNER JOIN user_data as ud ON ld.id = ud.locker_id WHERE ld.id = '$lockerid' AND ud.locker_id IS NOT NULL";
+
                     $checkResult = mysqli_query($conn, $checkLockerQuery);
                     
                     if (!$checkResult) {
