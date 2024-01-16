@@ -15,9 +15,12 @@
 .row2 .dropdown:hover .dropdown-toggle {
    display: block;
  }
+
+br{
+  margin-bottom: 0.5px;
+ }
  
  #datepicker {
-   margin: 1px;
    top: 0;
    right: 0;
    margin-right: 10px;
@@ -34,6 +37,7 @@
    overflow-y: auto;
 
  }
+
 
  .number {
    display: inline;
@@ -107,7 +111,6 @@
      margin-bottom: 2px;
    }
 
- 
 
    table {
      font-size: small;

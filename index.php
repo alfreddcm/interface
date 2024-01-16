@@ -121,7 +121,7 @@ include("php/php-login.php");
                                                 <div class="col">
                                                     <div class="form-group">
                                                         <label>Middle Initial</label>
-                                                        <input type="text" class="form-control" id="mi" name="mi" placeholder="Fiddle initial" style="text-transform: capitalize;" pattern="[a-zA-Z]*" title=" Must contain a-z characters" maxlength="1">
+                                                        <input type="text" class="form-control" id="mi" name="mi" placeholder="Middle initial" style="text-transform: capitalize;" pattern="[a-zA-Z]*" title=" Must contain a-z characters" maxlength="1">
                                                     </div>
                                                 </div>
                                                 <div class="col">

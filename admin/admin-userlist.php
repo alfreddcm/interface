@@ -142,6 +142,10 @@ if (!isset($_SESSION['email'])) {
 
     <?php
     $fetchuser = mysqli_query($conn, "SELECT * FROM user_data where locker_id is null ORDER BY id");
+    if($fetchuser){
+
+    
+    echo '<h3 class="mb-2">Unsigned Users</h3>';
     while ($user = mysqli_fetch_assoc($fetchuser)) {
         $userid = $user['id'];
 
@@ -153,7 +157,6 @@ if (!isset($_SESSION['email'])) {
         $sqlcourse = mysqli_query($conn, "SELECT program FROM course WHERE id = $courseid ");
         $course = mysqli_fetch_assoc($sqlcourse);
     ?>
-               <h3 class="mb-2">Unsigned Users</h3>
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 gutters-sm ">
         <div class="col mb-5 mt-4">
             <div class="card">
@@ -195,6 +198,7 @@ if (!isset($_SESSION['email'])) {
             </div>
         </div><?php
     }
+}
     ?>
             </div>
             </div>

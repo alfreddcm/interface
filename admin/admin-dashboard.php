@@ -182,14 +182,14 @@
 
        <div class="row row2 justify-content-center align-items-center g-2">
          <div class="col scroll">
-          <div class="card text-start" style="overflow-y: scroll;z-index:1; ">
-          <h6 class="card-header text-center" style="position: sticky; top: 0; display:relative;">
+          <div class="card text-start">
+         
+             <h6 class="card-header text-center" style="position: sticky; top: 0; display:relative; height:50px;">
                <img src="../icons/male-add-icon.png" alt="" height="20px">
                Request list
              </h6>
-             <div >
+             <div>
 
-            
               <?php
               $emailres = mysqli_query($conn, "SELECT * FROM requestlist where department_id = $department_id");
 
@@ -200,11 +200,11 @@
                 echo '<th>#</th>';
                 echo '<th>Name</th>';
                 echo '<th>Date Added</th>';
-                echo '<th>Action</th>';
+                echo '<th> </th>';
 
                 echo '</tr>';
                 echo '</thead>';
-                echo '<tbody>';
+                echo '<tbody class="class2">';
 
                 $counter = 1;
 
@@ -212,9 +212,9 @@
                   echo '<tr>';
                   echo '<td>' . $counter . '</td>';
                   echo '<td>
-                              <div class="dropdown dropend">
+                              <div class="dropdown dropup">
                                 <label class="dropdown-toggle" type="button" id="triggerId' . $row['id'] . '" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $row['fname'] . " " . $row['mi'] . ". " . $row['lname'] . '</label>
-                                <div class="dropdown-menu p-1" aria-labelledby="triggerId' . $row['id'] . '" style="width:fit-content; z-index:100; font-size:13px;">
+                                <div class="dropdown-menu p-1" aria-labelledby="triggerId' . $row['id'] . '" style=" width:fit-content ; font-size:13px;">
                                   <label for="">ID No: </label>
                                   <label for="">' . $row['idno'] . '</label><br>
                                   <label for="">Email: ' . $row['email'] . '</label><br>
@@ -253,9 +253,9 @@
   
 <!--  -->
          <div class="col scroll">
-           <div class="card text-start  border-success">
-             <div class="card-header">
-               <h6 class="text-center">
+           <div class="card text-start  border-primary">
+             <div class="card-header act">
+               <h6 class="text-center" style="height: 15px;">
                  <img src="../icons/project-icon.png" alt="" height="20px">
                  Activities
                </h6>
@@ -396,13 +396,36 @@
              success: function(response) {
                console.log(response);
                Swal.close();
-               Swal.fire('Removed!', 'The email has been removed.', 'success');
-               location.reload();
+               Swal.fire({
+                  title: 'Removed!',
+                  text: 'The email has been removed.',
+                  icon: 'success',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'OK'
+              }).then((result) => {
+                  if (result.isConfirmed) {
+                      location.reload();
+                  }
+              });
 
              },
              error: function() {
-               Swal.fire('Removed!', 'The email has been removed.', 'success');
-               location.reload();             }
+              Swal.fire({
+              title: 'Removed!',
+              text: 'The email has been removed.',
+              icon: 'success',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'OK'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  location.reload();
+              }
+          });         
+              }
            });
          }
        });
