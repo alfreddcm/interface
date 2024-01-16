@@ -187,7 +187,8 @@ function time_elapsed_string($datetime)
 
                         </div>
                         <div class="card-footer text-muted">
-                            <button type="submit" class="btn btn-primary"> Save Note </button>
+                            <center>
+                            <button type="submit" class="btn btn-primary"> Save Note </button></center>
                         </div>
                         </form>
                     </div>
@@ -299,6 +300,7 @@ function time_elapsed_string($datetime)
 <script src="todo/script.js"></script>
 <script src="node_modules/jquery/dist/jquery.min.js"></script>
 <script>
+
     $(document).ready(function() {
         $("#note").submit(function(e) {
             e.preventDefault();

@@ -6,8 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fname = $_POST["fname"];
 
     if (empty($fname) || empty($lname)) {
-        echo "<script>alert('Please enter first and last name.');
-        </script>";
+        echo "Please enter first and last name.'";
 
     } else {
             $email = $_POST["email"];
@@ -25,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $checkuser = mysqli_query($conn, "SELECT * FROM user_data WHERE idno = '$idno' OR email = '$email'");
 
             if (mysqli_num_rows($checkuser) > 0) {
-                echo "<script>alert('User ID $idno and $email is already in use.') </script>";
+                echo "User ID $idno and $email is already in use.";
             } else {
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
                 $targetDirectory = "../uploads/";
@@ -34,7 +33,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     mkdir($targetDirectory, 0755, true);
                 }
                 if (move_uploaded_file($tmp_name, $targetDirectory . $profile)) {
-                    echo "File uploaded successfully!";
                     echo '<script>';
                     echo 'console.log("File uploaded successfully!");';
                     echo '</script>';
@@ -43,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             VALUES ('$profile', '$idno', '$email', '$hashedPassword', '$fname', '$mi', '$lname', '$sex', '$course_id', '$dep_id', '$locker_id', '$ysec')";
                 $sql=mysqli_query($conn, $insertUserQuery);
 
-                echo "<script>alert('Account added! ');</script>";
+                echo "succes";
 
                 } else {
                     echo "File upload failed!";
@@ -53,5 +51,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
       
     }
+    exit;
 }
 ?>

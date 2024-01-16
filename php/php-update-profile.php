@@ -10,10 +10,7 @@ if ($row = mysqli_fetch_assoc($sql)) {
     // Extract user data
     $id = $row['id'];
 } else {
-    echo "<script>alert('Error retrieving user data!');
-    window.location = 'user-profile.php';        
-    </script>
-           ";
+    echo "Error retrieving user data!";
     exit; 
 }
 
@@ -38,10 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Check if there are rows in the result
         if (mysqli_num_rows($resultemail) > 0) {
-        echo "<script>alert('Error: The email is already in use.');
-        window.location = 'user-profile.php';        
-                </script>
-                ";
+        echo "The email is already in use. ";
         exit; 
         }
     }
@@ -55,9 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             mysqli_stmt_execute($stmt2);
             $resultIdno = mysqli_stmt_get_result($stmt2);
         if (mysqli_num_rows($resultIdno) > 0) {
-        echo "<script>alert('Error: Id no is already in use.');
-        window.location = 'user-profile.php';        
-                </script>";
+        echo "Error: Id no is already in use.";
         exit; 
     }
 
@@ -76,9 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (mysqli_query($conn, $updateQuery)) {
         
         $_SESSION['email'] = $newemail;
-        echo "<script>alert('Success');
-        window.location = 'user-profile.php';        
-                </script>";
+        echo "success";
 
         exit; 
     } else {
@@ -88,5 +78,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit; 
     }
 }
+exit;
 }
 ?>

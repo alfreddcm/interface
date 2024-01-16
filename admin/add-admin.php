@@ -12,12 +12,16 @@ include('../php/php-add-admin.php')
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
   <link rel="stylesheet" href="../addcss.css" class="rel">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../sweet/sweetalert2.all.min.js"></script>
+  <script src="../sweet/jquery-1.10.2.min.js"></script>
   <title>Register</title>
+  <link rel="shortcut icon" href="../icons/logo.png" type="image/x-icon">
+
 </head>
 
 <div class="main-block">
   <h1>Registration</h1>
-  <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" enctype="multipart/form-data">
+  <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" id="form" enctype="multipart/form-data">
     <hr>
     <center>
       <div class="account-type">
@@ -36,7 +40,7 @@ include('../php/php-add-admin.php')
           </center>
           <br>
           <label>Profile (Upload JPG)</label><br>
-          <input type="file" class="form-control-file" id="profile" name="profile" onchange="previewImage()" accept="image/*" required>
+          <input type="file" class="form-control-file" id="image" name="image" onchange="previewImage()" accept="image/*" required>
         </div>
       </div>
       <div class="col">
@@ -121,12 +125,57 @@ include('../php/php-add-admin.php')
     <hr>
     <button type="submit" class="btn btn-primary ">Submit</button>
 
-    <a href="admin-profile.php"><button type="button" class="btn btn-secondary ">Return</button></a>
+    <a href="admin-profile.php"><button type="button" class="btn btn-secondary mt-2">Return</button></a>
   </form>
 </div>
 </div>
 </div>
 </body>
 <script src="../scripts/regform.js"></script>
+<script>
+   $(document).ready(function() {
+    $("#form").submit(function(e) {
+        e.preventDefault();
+
+        var formData = new FormData(this);
+
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('action'),
+            data: formData,
+            processData: false, // Prevent jQuery from automatically transforming the data into a query string
+            contentType: false, // Ensure that FormData is used as the content type
+            success: function(response) {
+                if (response === 'success') {
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Account added',
+                        icon: 'success',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: response,
+                        icon: 'error',
+                    });
+                }
+            },
+
+            error: function() {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'An error occurred while processing your request.',
+                    icon: 'error',
+                });
+            }
+        });
+    });
+});
+
+</script>
 
 </html>

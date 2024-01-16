@@ -1,7 +1,7 @@
 <?php
 include("php/php-userinfo.php");
 
-$email=$_SESSION['email'];
+$email = $_SESSION['email'];
 if (isset($_FILES['profile']) && $_FILES['profile']['error'] === 0) {
     $profile = $_FILES['profile']['name'];
     $tmp_name = $_FILES['profile']['tmp_name'];
@@ -14,11 +14,11 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === 0) {
     if ($stmt) {
         mysqli_stmt_bind_param($stmt, "ss", $profile, $email);
         if (mysqli_stmt_execute($stmt)) {
-            $response= "success";
-            exit;            
+            echo "success";
+            exit;
         } else {
-            $response= "error";
-            exit; 
+            echo "error";
+            exit;
         }
 
         mysqli_stmt_close($stmt);
@@ -27,16 +27,17 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === 0) {
         window.location = 'user-updatephoto.php';        
         </script>
                ";
-        exit; 
+        exit;
     }
+    exit;
 }
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
-<title>Update Photo</title>
-  <link rel="shortcut icon" href="icons/logo.png" type="image/x-icon">
+    <title>Update Photo</title>
+    <link rel="shortcut icon" href="icons/logo.png" type="image/x-icon">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="style.css">
@@ -62,41 +63,48 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === 0) {
     </div>
 
     <div id="main">
-        <div class="row justify-content-center align-items-center g-2">
+    <div class="row justify-content-center align-items-center g-2">
             <div class="col">
                 <div class="card text-center">
                     <div class="card-body">
                         <h4 class="card-title">Update Profile</h4>
                         <p class="card-text">
-                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" id="form" method="post" enctype="multipart/form-data">
+                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" id="form" enctype="multipart/form-data">
                             <img src="uploads/<?php echo $user_profile ?>" alt="Avatar" class="img-fluid my-5" id="imagePreview" name="imagePreview">
                             </p><br>
-                            <input type="file" name="profile" id="profile" onchange="previewImage()" accept="image/*" class="mb-2"  required>
 
-                            <div class="row justify-content-center align-items-center g-2">
-                                <div class="col">
-                                
-                                <a href="user-profile.php"><button type="button" class="btn btn-primary"> Return </button></a></div>
-                                <div class="col">
-                                    <div class="d-grid gap-2">
-                                        <button type="submit" name="" id="" class="btn btn-primary">
-                                            Confirm
-                        </form></button>
+                            <label for="file" class="custum-file-upload">
+                                <div class="icon">
+
+                                    <div class="text">
+                                        <span></span>
+                                    </div>
+                                    <input type="file" name="profile" id="profile" onchange="previewImage()" accept="image/*" required>
+
+                            </label>
                     </div>
                 </div>
+
+                <div class="row justify-content-center align-items-center mt-3 g-2">
+                    <div class="col">
+                        <a href="user-profile.php"><button type="button" class="btn btn-primary"> Return </button></a>
+                    </div>
+                    <div class="col">
+                        <div class="d-grid gap-2">
+                            <button type="submit" name="" id="" class="btn btn-success">
+                                Confirm
+                                </form></button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-
         </div>
-    </div>
-
-    </div>
-    </div>
 
     </div>
 
 </body>
 
-<script src="node_modules/jquery/dist/jquery.min.js"></script>
 <script src="js/logout.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
@@ -105,47 +113,48 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === 0) {
 
 </script>
 <script>
-var response = <?php echo json_encode(isset($response) ? $response : ''); ?>;
-        $(document).ready(function() {
-            $("#form").submit(function(e) {
-                e.preventDefault();
+    $(document).ready(function() {
+        $("#form").submit(function(e) {
+            e.preventDefault();
 
-                $.ajax({
-                    type: "POST",
-                    url: $(this).attr('action'),
-                    data: $(this).serialize(),
-                    success: function(response) {
-                        console.log(response);
-                        if (response === 'success') {
-                            Swal.fire({
-                                title: 'Success',
-                                text: 'Profile updated successfully!',
-                                icon: 'success',
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    location.reload();
-                                }
-                            });
-                        } else {
-                            Swal.fire({
-                                title: 'Error',
-                                text: 'Error updating the profile!',
-                                icon: 'error',
-                            });
-                        }
-                    },
+            var formData = new FormData(this);
 
-                    error: function() {
+            $.ajax({
+                type: "POST",
+                url: $(this).attr('action'),
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response === 'success') {
+                        Swal.fire({
+                            title: 'Success',
+                            text: 'Photo Updated!',
+                            icon: 'success',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        });
+                    } else {
                         Swal.fire({
                             title: 'Error',
-                            text: 'An error occurred while processing your request.',
+                            text: response,
                             icon: 'error',
                         });
                     }
-                });
+                },
+
+                error: function() {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred while processing your request.',
+                        icon: 'error',
+                    });
+                }
             });
         });
-
+    });
 </script>
 
 
@@ -163,6 +172,9 @@ var response = <?php echo json_encode(isset($response) ? $response : ''); ?>;
     #main {
         margin: 0;
     }
+    .card{
+        padding: 5px;
+    }
 
 
     @media screen and (max-width: 600px) {
@@ -175,6 +187,54 @@ var response = <?php echo json_encode(isset($response) ? $response : ''); ?>;
     .col-xl-6 {
         flex: 0 0 auto;
         width: 80%;
+    }
+
+    .custum-file-upload {
+        height: 20px;
+        width: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: space-between;
+        gap: 20px;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        border: 2px dashed #e8e8e8;
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0px 48px 35px -48px #e8e8e8;
+    }
+
+    .custum-file-upload .icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .custum-file-upload .text {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .custum-file-upload .text span {
+        font-weight: 400;
+        color: #e8e8e8;
+    }
+
+    input::file-selector-button {
+        display: none;
+
+    }
+
+    input::-webkit-file-upload-button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        display: inline-block;
     }
 </style>
 

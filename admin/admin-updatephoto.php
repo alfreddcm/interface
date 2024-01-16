@@ -17,9 +17,9 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === 0) {
     if ($stmt) {
         mysqli_stmt_bind_param($stmt, "ss", $profile, $email);
         if (mysqli_stmt_execute($stmt)) {
-            $response= "success";
+            $response = "success";
         } else {
-            $response= "error";
+            $response = "error";
         }
 
         mysqli_stmt_close($stmt);
@@ -30,7 +30,6 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === 0) {
                ";
         exit;
     }
-
 }
 ?>
 <!DOCTYPE html>
@@ -99,22 +98,34 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === 0) {
                         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" id="form" enctype="multipart/form-data">
                             <img src="../adminuploads/<?php echo $profile ?>" alt="Avatar" class="img-fluid my-5" id="imagePreview" name="imagePreview">
                             </p><br>
-                            <input type="file" class="text-center" name="profile" id="profile" onchange="previewImage()" accept="image/*" required> 
-                            <div class="row justify-content-center align-items-center mt-3 g-2">
-                                <div class="col">
-                                    <a href="admin-profile.php"><button type="button" class="btn btn-primary"> Return </button></a>
-                                </div>
-                                <div class="col">
-                                    <div class="d-grid gap-2">
-                                        <button type="submit" name="" id="" class="btn btn-success">
-                                            Confirm
-                        </form></button>
+
+                            <label for="file" class="custum-file-upload">
+                                <div class="icon">
+
+                                    <div class="text">
+                                        <span></span>
+                                    </div>
+                                    <input type="file" name="profile" id="profile" onchange="previewImage()" accept="image/*" required>
+
+                            </label>
                     </div>
                 </div>
-            </div>
 
+                <div class="row justify-content-center align-items-center mt-3 g-2">
+                    <div class="col">
+                        <a href="admin-profile.php"><button type="button" class="btn btn-primary"> Return </button></a>
+                    </div>
+                    <div class="col">
+                        <div class="d-grid gap-2">
+                            <button type="submit" name="" id="" class="btn btn-success">
+                                Confirm
+                                </form></button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
-    </div>
 
     </div>
     </div>
@@ -130,52 +141,25 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === 0) {
 </script>
 
 <script>
-var response = <?php echo json_encode(isset($response) ? $response : ''); ?>;
-        $(document).ready(function() {
-            $("#form").submit(function(e) {
-                e.preventDefault();
-
-                $.ajax({
-                    type: "POST",
-                    url: $(this).attr('action'),
-                    data: $(this).serialize(),
-                    success: function(response) {
-                        console.log(response);
-                        if (response === 'success') {
-                            Swal.fire({
-                                title: 'Success',
-                                text: 'Profile updated successfully!',
-                                icon: 'success',
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    location.reload();
-                                }
-                            });
-                        } else {
-                            Swal.fire({
-                                title: 'Error',
-                                text: 'Error updating the profile!',
-                                icon: 'error',
-                            });
-                        }
-                    },
-
-                    error: function() {
-                        Swal.fire({
-                            title: 'Error',
-                            text: 'An error occurred while processing your request.',
-                            icon: 'error',
-                        });
-                    }
-                });
+    $(document).ready(function() {
+        <?php if ($response === "success") : ?>
+            Swal.fire({
+                title: 'Success',
+                text: 'Profile updated successfully!',
+                icon: 'success',
             });
-        });
-
+        <?php elseif ($response === "error") : ?>
+            Swal.fire({
+                title: 'Error',
+                text: 'Error updating the profile!',
+                icon: 'error',
+            });
+        <?php endif; ?>
+    });
 </script>
 
 <style>
-
-   .card {
+    .card {
         padding: 5px;
         position: absolute;
         top: 50%;
@@ -202,16 +186,65 @@ var response = <?php echo json_encode(isset($response) ? $response : ''); ?>;
             flex: 0 0 auto;
             width: 80%;
         }
-        .card{
-    overflow-x: scroll;
-    height: 65%;
-    width: 80%;
-}
+
+        .card {
+            overflow-x: scroll;
+            height: 65%;
+            width: 80%;
+        }
     }
 
     .col-xl-6 {
         flex: 0 0 auto;
         width: 80%;
+    }
+
+    .custum-file-upload {
+        height: 20px;
+        width: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: space-between;
+        gap: 20px;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        border: 2px dashed #e8e8e8;
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0px 48px 35px -48px #e8e8e8;
+    }
+
+    .custum-file-upload .icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .custum-file-upload .text {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .custum-file-upload .text span {
+        font-weight: 400;
+        color: #e8e8e8;
+    }
+
+    input::file-selector-button {
+        display: none;
+
+    }
+
+    input::-webkit-file-upload-button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        display: inline-block;
     }
 </style>
 

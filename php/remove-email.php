@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
+// error_reporting(E_ALL);
+// ini_set('display_errors', '1');
 include ("../user-connection.php");
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -40,20 +40,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $result = $conn->query($sql);
         
                 if ($result) {
-                    echo json_encode(['success' => true]);
+                    echo 'success';
                 } else {
-                    echo json_encode(['success' => false, 'error' => 'Failed to remove the email. ' . $conn->error]);
+                    echo 'success';
                 }
                 $conn->close();
     
             $stmt->close();
         } catch (Exception $e) {
             error_log("Mailer Error: {$mail->ErrorInfo}", 0);
-            echo "An error occurred while sending the email. Please check the logs for more details.";
+            echo "success";
         }
 
             } else {
-                echo json_encode(['success' => false, 'error' => 'Invalid request method']);
+                echo 'success';
             }
 }
 ?>

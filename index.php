@@ -44,7 +44,7 @@ include("php/php-login.php");
                 <div class="col-lg-5 pb-0 loginform">
                     <div class="row justify-content-center align-items-center g-2">
                         <div class="col">
-                            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" id="log">
+                            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" id="login">
                                 <div class="form-container">
                                     <form class="form">
                                         <div class="title">
@@ -231,6 +231,55 @@ include("php/php-login.php");
     <script src="sweet/jquery-1.10.2.min.js"></script>
     <script src="sweet/sweetalert2.all.min.js"></script>
     <script>
+$(document).ready(function() {
+    $("#login").submit(function(e) {
+        e.preventDefault();
+
+        var formData = new FormData(this);
+
+        Swal.fire({
+            title: 'Logging in...',
+            html: '<div class="spinner-grow text-muted"></div><div class="spinner-grow text-primary"></div> <div class="spinner-grow text-success"></div><div class="spinner-grow text-info"></div><div class="spinner-grow text-warning"></div><div class="spinner-grow text-danger"></div> <div class="spinner-grow text-secondary"></div><div class="spinner-grow text-dark"></div><div class="spinner-grow text-light"></div>',
+            allowOutsideClick: false,
+            showConfirmButton: false,  // Hide the default OK button
+            onBeforeOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('action'),
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function(response) {
+                Swal.close();
+                if (response.error) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: response.error,
+                        icon: 'error',
+                    });
+                } else {
+                    // Redirect on success
+                    window.location.href = response.redirect;
+                }
+            },
+
+            error: function() {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'An error occurred while processing your request.',
+                    icon: 'error',
+                });
+            }
+        });
+    });
+});
+
+
         $(document).ready(function() {
             $("#reg").submit(function(e) {
                 e.preventDefault();

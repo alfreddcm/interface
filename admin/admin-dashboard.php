@@ -62,12 +62,10 @@
 
 
    <!--  -->
-   <div id="main">
+   <div id="main" style="height: 100vh; justify-content:start; align-items:start;">
      <div class="container-fluid pt-2">
        <div class="row justify-content-center align-items-center g-2 mb-3">
-         <h3 class="mb-2" style="color: white;
-  background: #253855b7;
-  border-radius: 3px;">Dashboard</h3>
+         <h3 class="mb-2" style="color: white; background: #253855b7; border-radius: 3px;">Dashboard</h3>
 
          <div class="col">
            <a href="admin-lockerlist.php" style="text-decoration: none;">
@@ -85,7 +83,7 @@
                      </div>
                      <div class="align-self-center">
                        <i class="fa-solid fa-lock">
-                        <img src="../icons/lckes.png" alt="" height="60px">
+                         <img src="../icons/lckes.png" alt="" height="60px">
                        </i>
                      </div>
                    </div>
@@ -113,7 +111,7 @@
                      </div>
                      <div class="align-self-center">
                        <i class="icon-user success font-large-2 float-right">
-                       <img src="../icons/team-icon.png" alt="" height="50px">
+                         <img src="../icons/team-icon.png" alt="" height="50px">
 
                        </i>
                      </div>
@@ -143,7 +141,7 @@
                      </div>
                      <div class="align-self-center">
                        <i class="icon-user success font-large-2 float-right">
-                       <img src="../icons/locker-ico.png" alt="" height="60px">
+                         <img src="../icons/locker-ico.png" alt="" height="60px">
 
                        </i>
                      </div>
@@ -170,7 +168,7 @@
                      </div>
                      <div class="align-self-center">
                        <i class="icon-user success font-large-2 float-right">
-                       <img src="../icons/people.png" alt="" height="60px">
+                         <img src="../icons/people.png" alt="" height="60px">
 
                        </i>
                      </div>
@@ -183,18 +181,21 @@
        </div>
 
        <div class="row row2 justify-content-center align-items-center g-2">
-         <div class="col scroll ">
-           <div class="card  mb-2 text-start border-success">
-             <h6 class="card-header text-center">
+         <div class="col scroll">
+          <div class="card text-start" style="overflow-y: scroll;z-index:1; ">
+          <h6 class="card-header text-center" style="position: sticky; top: 0; display:relative;">
                <img src="../icons/male-add-icon.png" alt="" height="20px">
                Request list
              </h6>
-             <?php
+             <div >
+
+            
+              <?php
               $emailres = mysqli_query($conn, "SELECT * FROM requestlist where department_id = $department_id");
 
               if ($emailres && mysqli_num_rows($emailres) > 0) {
-                echo '<table class="table table-striped">';
-                echo '<thead class="thead-dark">';
+                echo '<table class="table mt-0 table-striped">';
+                echo '<thead class="thead-dark" style="position: sticky; top: 0;">';
                 echo '<tr>';
                 echo '<th>#</th>';
                 echo '<th>Name</th>';
@@ -211,46 +212,50 @@
                   echo '<tr>';
                   echo '<td>' . $counter . '</td>';
                   echo '<td>
-                  <div class="dropdown dropend">
-                    <label class="dropdown-toggle" type="button" id="triggerId' . $row['id'] . '" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $row['fname'] . " " . $row['mi'] . ". " . $row['lname'] . '</label>
-                    <div class="dropdown-menu p-1" aria-labelledby="triggerId' . $row['id'] . '" style="width:200px; font-size:13px;">
-                      <label for="">ID No: </label>
-                      <label for="">' . $row['idno'] . '</label><br>
-                      <label for="">Email: ' . $row['email'] . '</label><br>
-                      <label for="">';
+                              <div class="dropdown dropend">
+                                <label class="dropdown-toggle" type="button" id="triggerId' . $row['id'] . '" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $row['fname'] . " " . $row['mi'] . ". " . $row['lname'] . '</label>
+                                <div class="dropdown-menu p-1" aria-labelledby="triggerId' . $row['id'] . '" style="width:fit-content; z-index:100; font-size:13px;">
+                                  <label for="">ID No: </label>
+                                  <label for="">' . $row['idno'] . '</label><br>
+                                  <label for="">Email: ' . $row['email'] . '</label><br>
+                                  <label for="">';
 
-                  $courseid = $row['course_id'];
-                  $sqlcourse = mysqli_query($conn, "SELECT program FROM course WHERE id = $courseid ");
-                  $course = mysqli_fetch_assoc($sqlcourse);
-                  echo $course['program']   .
+                          $courseid = $row['course_id'];
+                          $sqlcourse = mysqli_query($conn, "SELECT program FROM course WHERE id = $courseid ");
+                          $course = mysqli_fetch_assoc($sqlcourse);
+                          echo $course['program']   .
 
-                    '</label><br>
-
-                    </div>
-                  </div>
-                </td>';
+                            '</label><br>
+                                </div>
+                              </div>
+                        </td>';
                   echo '<td>' . date('M j, Y h:i A', strtotime($row['date_added'])) . '</td>';
 
-                  echo '<td><a
-                    name="" id="acceptButton " class="btn btn-primary accept-button p-1" data-email="' . $row['email'] . '"role="button">Accept</a>
-                    <a name="removeButton" id="removeButton " class="btn btn-danger remove-button p-1" data-email="' . $row['email'] . '" role="button">Remove</a></td>
-                    </td>';
+                  echo '  <td><a
+                            name="" id="acceptButton " class="btn btn-primary accept-button p-1 text-white" data-email="' . $row['email'] . '"role="button">Accept</a>
+                            <a name="removeButton" id="removeButton " class="btn btn-danger remove-button p-1 text-white" data-email="' . $row['email'] . '" role="button">Remove</a>
+                            </td>
+                         ';
                   echo '</tr>';
                   $counter++;
                 }
                 echo '</tbody>';
                 echo '</table>';
               } else {
-                echo '<p class="alert alert-info">No emails found.</p>';
+                echo '<p class="alert alert-info"> No emails found.</p>';
               }
               ?>
-           </div>
-         </div>
+              </div>
+            </div>
+          </div>
+          <!--  -->
 
+  
+<!--  -->
          <div class="col scroll">
-           <div class="card text-start acts border-success">
+           <div class="card text-start  border-success">
              <div class="card-header">
-               <h6 class="text-center act">
+               <h6 class="text-center">
                  <img src="../icons/project-icon.png" alt="" height="20px">
                  Activities
                </h6>
@@ -311,10 +316,14 @@
          }).then((result) => {
            if (result.isConfirmed) {
              // Show loading indicator
-             console.log("Showing loading indicator");
+             Swal.fire({
+           title: 'Please wait..',
+           allowOutsideClick: false,
+           showConfirmButton: false,
+           onBeforeOpen: () => {
              Swal.showLoading();
-             console.log("Ajax request initiated");
-
+           }
+         });
              $.ajax({
                url: '../php/send_email.php',
                type: 'POST',
@@ -323,7 +332,8 @@
                },
                beforeSend: function() {},
                success: function(response) {
-                 console.log("Success response received");
+                 Swal.close();
+
                  Swal.fire({
                    title: 'Success!',
                    text: response,
@@ -369,6 +379,14 @@
          confirmButtonText: 'Yes, remove it!'
        }).then((result) => {
          if (result.isConfirmed) {
+          Swal.fire({
+           title: 'Please wait..',
+           allowOutsideClick: false,
+           showConfirmButton: false,
+           onBeforeOpen: () => {
+             Swal.showLoading();
+           }
+         });
            $.ajax({
              type: 'POST',
              url: '../php/remove-email.php',
@@ -377,14 +395,14 @@
              },
              success: function(response) {
                console.log(response);
-
+               Swal.close();
                Swal.fire('Removed!', 'The email has been removed.', 'success');
                location.reload();
 
              },
              error: function() {
-               Swal.fire('Error!', 'Failed to communicate with the server.', 'error');
-             }
+               Swal.fire('Removed!', 'The email has been removed.', 'success');
+               location.reload();             }
            });
          }
        });

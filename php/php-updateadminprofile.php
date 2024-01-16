@@ -33,10 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Check if there are rows in the result
         if (mysqli_num_rows($resultemail) > 0) {
-        echo "<script>alert('Error: The email is already in use.');
-        window.location = 'admin-profile.php';        
-                </script>
-                ";
+        echo "Email already in use!";
         exit; 
         }
     }
@@ -54,16 +51,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (mysqli_query($conn, $updateQuery)) {
         
         $_SESSION['email'] = $newemail;
-        echo "<script>alert('Success');
-        window.location = 'admin-profile.php';        
-                </script>";
 
-        exit; 
+            echo 'success';
+ exit;
+
     } else {
-        echo "<script>alert('Error: Updating profile.');
-        window.location = 'admin-profile.php';        
-                </script> ";
-        exit; 
+        echo 'error';
+            exit;
     }
 }
 

@@ -1,4 +1,6 @@
-
+#main{
+  height: 100%;
+}
 
 .card:hover{
     top: -3px;
@@ -13,7 +15,7 @@
 .row2 .dropdown:hover .dropdown-toggle {
    display: block;
  }
-
+ 
  #datepicker {
    margin: 1px;
    top: 0;
@@ -25,6 +27,7 @@
 
  .scroll .card {
    height: 250px;
+   overflow-y: scroll;
  }
 
  .scroll p {
@@ -85,9 +88,7 @@
    font-size: .9rem;
 
  }
- .acts{
-    top: -6px;
- }
+
 
 
 

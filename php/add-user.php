@@ -16,6 +16,8 @@ include('php-add-user.php');
 
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="../addcss.css" class="rel">
+  <script src="../sweet/sweetalert2.all.min.js"></script>
+  <script src="../sweet/jquery-1.10.2.min.js"></script>
 
   <title>Register User</title>
 
@@ -50,7 +52,7 @@ include('php-add-user.php');
             <hr>
           </div>
 
-          <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" enctype="multipart/form-data">
+          <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST"  id="form" enctype="multipart/form-data">
             <div class="row">
               <!-- First Column -->
               <div class="col">
@@ -226,6 +228,51 @@ include('php-add-user.php');
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
   <script src="../scripts/regform.js"></script>
+  <script>
+    $(document).ready(function() {
+    $("#form").submit(function(e) {
+        e.preventDefault();
+
+        var formData = new FormData(this);
+
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('action'),
+            data: formData,
+            processData: false, 
+            contentType: false, 
+            success: function(response) {
+                if (response === 'success') {
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Account added',
+                        icon: 'success',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: response,
+                        icon: 'error',
+                    });
+                }
+            },
+
+            error: function() {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'An error occurred while processing your request.',
+                    icon: 'error',
+                });
+            }
+        });
+    });
+});
+
+  </script>
 
 </body>
 

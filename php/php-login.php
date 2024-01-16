@@ -10,7 +10,11 @@ use PHPMailer\PHPMailer\Exception;
 
 require '/Applications/XAMPP/xamppfiles/htdocs/interface/vendor/autoload.php';
 
+$response = array(); // Initialize an array to store the response
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    session_start(); // Start or resume a session
+
     $email = $_POST['email'];
     $pass = $_POST['password'];
 
@@ -22,7 +26,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($row = mysqli_fetch_assoc($checkadmin)) {
         $hashedPassword = $row['password'];
         if (password_verify($pass, $hashedPassword)) {
-            session_start();
             $_SESSION['email'] = $email;
             $_SESSION['token'] = $row['department_id'];
 
@@ -48,18 +51,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $mail->send();
                 
             } catch (Exception $e) {
-                echo "Mailer Error: {$mail->ErrorInfo}";
+                $response['error'] = "Mailer Error: {$mail->ErrorInfo}";
             }
 
-            header('Location: admin/admin-dashboard.php');
-            exit();
+            $response['redirect'] = 'admin/admin-dashboard.php';
         } else {
-            $error = "Incorrect password";
+            $response['error'] = "Incorrect password";
         }
     } elseif ($row = mysqli_fetch_assoc($checkuser)) {
+        if($row['locker_id']==null){
+            $response['error'] = "Sorry, you don't have a locker yet. Please wait for preparations.";
+
+        }else{
+
         $hashedPassword = $row['password'];
         if (password_verify($pass, $hashedPassword)) {
-            session_start();
             $_SESSION['email'] = $email;
 
             // Send an email on successful login using PHPMailer
@@ -84,21 +90,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $mail->send();
                 
             } catch (Exception $e) {
-                echo "Mailer Error: {$mail->ErrorInfo}";
+                $response['error'] = "Mailer Error: {$mail->ErrorInfo}";
             }
 
-            header('Location: user-dashboard.php');
-            exit();
+            $response['redirect'] = 'user-dashboard.php';
         } else {
-            $error = "Incorrect password";
+            $response['error'] = "Incorrect password";
         }
-    } else {
-        $error = "Invalid email: $email! Please click request access for access.";
     }
-}
+    }
+    elseif(mysqli_num_rows($checkuser) > 0){
+        $response['error'] = "Sorry, you don't have a locker yet. Please wait for preparations.";
 
-// Output the error directly on the page
-if (isset($error)) {
-    echo "<script>alert('$error')</script>";
+    }
+     else {
+        $response['error'] = "Invalid email: $email! Please click request access for access.";
+    }
+
+    echo json_encode($response); // Return the JSON response
+    exit;
 }
 ?>
