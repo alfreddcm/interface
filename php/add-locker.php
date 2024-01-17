@@ -57,7 +57,7 @@ file_put_contents('../UIDContainer.php', $Write);
                             <ul class="list-unstyled">
                                 <li><a class="dropdown-item" href="../admin/admin-profile.php">
                                         <img src="../icons/profile-icon.png" style="filter:invert(100)"> Profile</a></li>
-                                <li><a class="dropdown-item" href="../php-logout.php">
+                                <li><a class="dropdown-item" href="#" onclick="confirmLogout();">
                                         <img src="../icons/logout-icon.png" style="filter:invert(100)">Log out</a></li>
                             </ul>
                         </div>
@@ -107,6 +107,22 @@ file_put_contents('../UIDContainer.php', $Write);
             </div>
         </div>
         <script>
+                   function confirmLogout() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You will be logged out!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, log me out!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to the logout script or perform your logout logic here
+                    window.location.href = '../php/php-logout.php';
+                }
+            });
+        }
             $(document).ready(function() {
                 $("#getUID").load("../UIDContainer.php", function(responseText) {
                     console.log("Initial Content:", responseText.trim());

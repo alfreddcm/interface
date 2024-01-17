@@ -33,15 +33,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     mkdir($targetDirectory, 0755, true);
                 }
                 if (move_uploaded_file($tmp_name, $targetDirectory . $profile)) {
-                    echo '<script>';
-                    echo 'console.log("File uploaded successfully!");';
-                    echo '</script>';
                     
                     $insertUserQuery = "INSERT INTO user_data (user_profile, idno, email, password, fname, mi, lname, sex, course_id, department_id, locker_id, yrsec)
                             VALUES ('$profile', '$idno', '$email', '$hashedPassword', '$fname', '$mi', '$lname', '$sex', '$course_id', '$dep_id', '$locker_id', '$ysec')";
                 $sql=mysqli_query($conn, $insertUserQuery);
 
-                echo "succes";
+                echo "success";
 
                 } else {
                     echo "File upload failed!";

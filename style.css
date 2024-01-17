@@ -19,6 +19,8 @@ body {
   position: relative;
 }
 
+
+
 .landing-page:before {
   content: '';
   top: 0;
@@ -207,10 +209,6 @@ ul {
 }
 
 
-.input:invalid {
-  animation: justshake 0.3s forwards;
-  color: red;
-}
 
 @keyframes justshake {
   25% {
