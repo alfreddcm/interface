@@ -89,7 +89,7 @@ include("php/php-login.php");
         <div class="container px-5">
             <div class="text-white-50 small">
                 <div class="mb-0">&copy; Your Website 2023. All Rights Reserved.</div>
-            </div>
+        </div>
         </div>
     </footer>
     <!-- Feedback Modal fix pphpp -->
@@ -131,7 +131,7 @@ include("php/php-login.php");
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group" >
                                                 <hr>
                                                 <center>
                                                     <div class="gender">
@@ -211,9 +211,12 @@ include("php/php-login.php");
                                                     <div class="g-recaptcha mt-2" data-sitekey="6LfQMFEpAAAAAFbPG5GwBk6M81q6Zt76atds9EVM"></div>
                                                 </center>
                                             </div>
+                                            <hr>
+                                            <center>
+                                            <a href="emailveri.php">
+                                            <span> Click here to verify email!</span></a></center>
                                         </div>
                                     </div>
-                                    <hr>
                                     <button type="submit" class="btn btn-primary ">Submit</button>
                                     <button class="btn btn-info" type="button" data-bs-dismiss="modal" aria-label="Close"> Return</button>
                         </form>
@@ -231,58 +234,60 @@ include("php/php-login.php");
     <script src="sweet/jquery-1.10.2.min.js"></script>
     <script src="sweet/sweetalert2.all.min.js"></script>
     <script>
-$(document).ready(function() {
-    $("#login").submit(function(e) {
-        e.preventDefault();
+        $(document).ready(function() {
+            $("#login").submit(function(e) {
+                e.preventDefault();
 
-        var formData = new FormData(this);
+                var formData = new FormData(this);
 
-        Swal.fire({
-            title: 'Logging in...',
-            html: '<div class="spinner-grow text-muted"></div><div class="spinner-grow text-primary"></div> <div class="spinner-grow text-success"></div><div class="spinner-grow text-info"></div><div class="spinner-grow text-warning"></div><div class="spinner-grow text-danger"></div> <div class="spinner-grow text-secondary"></div><div class="spinner-grow text-dark"></div><div class="spinner-grow text-light"></div>',
-            allowOutsideClick: false,
-            showConfirmButton: false,  // Hide the default OK button
-            onBeforeOpen: () => {
-                Swal.showLoading();
-            }
-        });
-
-        $.ajax({
-            type: "POST",
-            url: $(this).attr('action'),
-            data: formData,
-            processData: false,
-            contentType: false,
-            dataType: 'json',
-            success: function(response) {
-                Swal.close();
-                if (response.error) {
-                    Swal.fire({
-                        title: 'Error',
-                        text: response.error,
-                        icon: 'error',
-                    });
-                } else {
-                    // Redirect on success
-                    window.location.href = response.redirect;
-                }
-            },
-
-            error: function() {
                 Swal.fire({
-                    title: 'Error',
-                    text: 'An error occurred while processing your request.',
-                    icon: 'error',
+                    title: 'Logging in...',
+                    html: '<div class="spinner-grow text-muted"></div><div class="spinner-grow text-primary"></div> <div class="spinner-grow text-success"></div><div class="spinner-grow text-info"></div><div class="spinner-grow text-warning"></div><div class="spinner-grow text-danger"></div> <div class="spinner-grow text-secondary"></div><div class="spinner-grow text-dark"></div><div class="spinner-grow text-light"></div>',
+                    allowOutsideClick: false,
+                    showConfirmButton: false, // Hide the default OK button
+                    onBeforeOpen: () => {
+                        Swal.showLoading();
+                    }
                 });
-            }
+
+                $.ajax({
+                    type: "POST",
+                    url: $(this).attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json',
+                    success: function(response) {
+                        Swal.close();
+                        if (response.error) {
+                            Swal.fire({
+                                title: 'Error',
+                                text: response.error,
+                                icon: 'error',
+                            });
+                        } else {
+                            // Redirect on success
+                            window.location.href = response.redirect;
+                        }
+                    },
+
+                    error: function() {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'An error occurred while processing your request.',
+                            icon: 'error',
+                        });
+                    }
+                });
+            });
         });
-    });
-});
 
 
         $(document).ready(function() {
             $("#reg").submit(function(e) {
                 e.preventDefault();
+
+                var email = document.getElementById('email');
 
                 // Check if reCAPTCHA is verified
                 if (grecaptcha.getResponse() === "") {
@@ -299,14 +304,19 @@ $(document).ready(function() {
                     url: $(this).attr('action'),
                     data: $(this).serialize(),
                     success: function(response) {
-                        if (response === 'success') {
+                        if (response.startsWith('success')) {
+
+                            let email = response.substring(7);
+
+                            console.log(email);
                             Swal.fire({
                                 title: 'Success',
-                                text: 'Request Added! Please wait for email confirmation!',
+                                text: 'Success! OTP has been send to your email. ',
                                 icon: 'success',
                             }).then((result) => {
                                 if (result.isConfirmed) {
-                                    location.reload();
+                                    window.location.href = 'emailveri.php?email=' + email;
+
                                 }
                             });
                         } else {
@@ -326,6 +336,7 @@ $(document).ready(function() {
                         });
                     }
                 });
+
             });
         });
 
@@ -356,7 +367,6 @@ $(document).ready(function() {
             }
             input2.value = value;
         }
-        
     </script>
 </body>
 

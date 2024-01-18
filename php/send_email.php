@@ -7,7 +7,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-require '../vendor/autoload.php';
+require '/Applications/XAMPP/xamppfiles/htdocs/integ/vendor/autoload.php';
 
 // Ensure that this PHP script is being accessed via a POST request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

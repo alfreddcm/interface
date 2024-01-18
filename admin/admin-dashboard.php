@@ -191,7 +191,7 @@
              <div>
 
               <?php
-              $emailres = mysqli_query($conn, "SELECT * FROM requestlist where department_id = $department_id");
+              $emailres = mysqli_query($conn, "SELECT * FROM requestlist WHERE department_id = $department_id AND otp IS NULL");
 
               if ($emailres && mysqli_num_rows($emailres) > 0) {
                 echo '<table class="table mt-0 table-striped">';

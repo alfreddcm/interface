@@ -142,7 +142,7 @@ function time_elapsed_string($datetime)
                             Today access: <?php
                                             $today_start = date("Y-m-d 00:00:00");
                                             $today_end = date("Y-m-d 23:59:59");
-                                            $sqlacc = mysqli_query($conn, "SELECT * FROM log_history WHERE locker_id = $locker_id AND date_time BETWEEN '$today_start' AND '$today_end'");
+                                            $sqlacc = mysqli_query($conn, "SELECT * FROM log_history WHERE user_idno = $idno AND date_time BETWEEN '$today_start' AND '$today_end'");
                                             $count = mysqli_num_rows($sqlacc);
                                             echo $count;
                                             ?>
@@ -150,7 +150,7 @@ function time_elapsed_string($datetime)
                             <p class="card-text"><small class="text-muted">
                                     <?php
                                     date_default_timezone_set('Asia/Manila');
-                                    $last_access = mysqli_fetch_assoc(mysqli_query($conn, "SELECT max(date_time) AS last_access FROM Log_history WHERE locker_id = $locker_id"));
+                                    $last_access = mysqli_fetch_assoc(mysqli_query($conn, "SELECT max(date_time) AS last_access FROM Log_history WHERE user_idno = $idno"));
                                     echo "Last updated " . time_elapsed_string($last_access['last_access']);
                                     ?>
                                 </small></p>
@@ -201,7 +201,7 @@ function time_elapsed_string($datetime)
                         <table class="table">
 
                             <?php
-                            $showhistory = mysqli_query($conn, "SELECT * FROM log_history WHERE locker_id = $locker_id ORDER BY date_time DESC");
+                            $showhistory = mysqli_query($conn, "SELECT * FROM log_history WHERE user_idno = $idno ORDER BY date_time DESC");
 
                             $currentDate = '';
                             if ($showhistory->num_rows > 0) {
@@ -273,7 +273,7 @@ function time_elapsed_string($datetime)
                         $logHistoryData = array();
                         $logHistoryQuery = "SELECT DATE(date_time) as day, COUNT(*) as usage_count 
                                                     FROM log_history 
-                                                    WHERE locker_id = $locker_id && access='close'
+                                                    WHERE user_idno = $idno && access='close'
                                                     AND DATE_FORMAT(date_time, '%Y-%m') = '$selectedMonth'
                                                     AND YEAR(date_time) = $selectedYear
                                                     GROUP BY day 

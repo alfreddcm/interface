@@ -8,7 +8,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-require '/Applications/XAMPP/xamppfiles/htdocs/interface/vendor/autoload.php';
+require '/Applications/XAMPP/xamppfiles/htdocs/integ/vendor/autoload.php';
 
 $response = array(); // Initialize an array to store the response
 
